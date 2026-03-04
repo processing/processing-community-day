@@ -162,7 +162,16 @@ onMounted(async () => {
 
   L.control.zoom({ position: 'bottomleft' }).addTo(map);
 
-  map.setView([20, 10], 3);
+  // Try to center on visitor's location, fall back to world view
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => map.setView([pos.coords.latitude, pos.coords.longitude], 5),
+      () => map.setView([20, 10], 3),
+      { timeout: 5000 }
+    );
+  } else {
+    map.setView([20, 10], 3);
+  }
 
   setMapStyle(getInitialStyle(), map, L);
 
