@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import type { Node } from '../lib/nodes';
 import { makePopupContent } from '../lib/popup';
 import NodePanel from './NodePanel.vue';
@@ -13,7 +13,84 @@ const selectedNode = ref<Node | null>(null);
 const listOpen = ref(false);
 
 let mapInstance: import('leaflet').Map | null = null;
+let leafletRef: typeof import('leaflet') | null = null;
 const markerMap = new Map<string, import('leaflet').Marker>();
+
+// --- Tile style config ---
+interface TileLayerConfig { url: string; options: Record<string, unknown>; }
+interface MapStyle { id: string; label: string; layers: TileLayerConfig[]; }
+
+const CARTO_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
+const ESRI_ATTR = 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community';
+
+const MAP_STYLES: MapStyle[] = [
+  {
+    id: 'dark',
+    label: 'Dark',
+    layers: [
+      {
+        url: 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png',
+        options: { attribution: CARTO_ATTR, subdomains: 'abcd', maxZoom: 20, detectRetina: true },
+      },
+      {
+        url: 'https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png',
+        options: { attribution: CARTO_ATTR, subdomains: 'abcd', maxZoom: 20, detectRetina: true, tileSize: 512, zoomOffset: -1 },
+      },
+    ],
+  },
+  {
+    id: 'light',
+    label: 'Light',
+    layers: [
+      {
+        url: 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
+        options: { attribution: CARTO_ATTR, subdomains: 'abcd', maxZoom: 20, detectRetina: true },
+      },
+      {
+        url: 'https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png',
+        options: { attribution: CARTO_ATTR, subdomains: 'abcd', maxZoom: 20, detectRetina: true, tileSize: 512, zoomOffset: -1 },
+      },
+    ],
+  },
+  {
+    id: 'fun',
+    label: 'Fun',
+    layers: [{
+      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',
+      options: { attribution: ESRI_ATTR, maxZoom: 16 },
+    }],
+  },
+];
+
+const STORAGE_KEY = 'pcd-map-style';
+let activeTileLayers: import('leaflet').TileLayer[] = [];
+
+const currentStyle = ref<string>('');
+const availableStyles = computed(() => MAP_STYLES.map(s => ({ id: s.id, label: s.label })));
+
+function getInitialStyle(): string {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (stored && MAP_STYLES.find(s => s.id === stored)) return stored;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function setMapStyle(styleId: string, map: import('leaflet').Map, L: typeof import('leaflet')) {
+  const style = MAP_STYLES.find(s => s.id === styleId);
+  if (!style) return;
+  activeTileLayers.forEach(layer => map.removeLayer(layer));
+  activeTileLayers = [];
+  style.layers.forEach(cfg => {
+    const layer = L.tileLayer(cfg.url, cfg.options);
+    layer.addTo(map);
+    activeTileLayers.push(layer);
+  });
+  currentStyle.value = styleId;
+  localStorage.setItem(STORAGE_KEY, styleId);
+}
+
+function onStyleChange(styleId: string) {
+  if (mapInstance && leafletRef) setMapStyle(styleId, mapInstance, leafletRef);
+}
 
 function openPanel(node: Node) {
   selectedNode.value = node;
@@ -34,12 +111,11 @@ function closeList() {
 }
 
 function onNodeSelect(node: Node) {
-  listOpen.value = false;
   selectedNode.value = null;
 
   const marker = markerMap.get(node.id);
   if (mapInstance && marker) {
-    mapInstance.flyTo([node.lat, node.lng], 12, { duration: 1 });
+    mapInstance.flyTo([node.lat, node.lng], 5, { duration: 1 });
     setTimeout(() => {
       marker.openPopup();
     }, 1100);
@@ -75,30 +151,26 @@ onMounted(async () => {
   await import('@luomus/leaflet-smooth-wheel-zoom');
 
   const map = L.map('map', {
-    zoomControl: true,
+    zoomControl: false,
     scrollWheelZoom: false,
     smoothWheelZoom: true,
     smoothSensitivity: 1,
     minZoom: 1,
   });
   mapInstance = map;
+  leafletRef = L;
+
+  L.control.zoom({ position: 'bottomleft' }).addTo(map);
 
   map.setView([20, 10], 3);
 
-  // CartoDB light-no-labels tile layer (monochrome, no POI)
-  const tileLayer = L.tileLayer(
-    'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
-    {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: 'abcd',
-      maxZoom: 19,
-    }
-  );
-  tileLayer.addTo(map);
+  setMapStyle(getInitialStyle(), map, L);
 
   // Cluster group with Google Maps-style concentric circles
   const clusterGroup = (L as unknown as { markerClusterGroup: (opts?: object) => import('leaflet').LayerGroup }).markerClusterGroup({
     showCoverageOnHover: false,
+    maxClusterRadius: 40,
+    disableClusteringAtZoom: 4,
     iconCreateFunction: (cluster: { getChildCount: () => number }) => {
       const count = cluster.getChildCount();
       const r1 = 24, r2 = 18, r3 = 12;
@@ -175,7 +247,15 @@ onUnmounted(() => {
     ☰
   </button>
   <NodePanel :node="selectedNode" @close="closePanel" />
-  <NodeList :nodes="nodes" :open="listOpen" @close="closeList" @select="onNodeSelect" />
+  <NodeList
+    :nodes="nodes"
+    :open="listOpen"
+    :current-style="currentStyle"
+    :available-styles="availableStyles"
+    @close="closeList"
+    @select="onNodeSelect"
+    @style-change="onStyleChange"
+  />
 </template>
 
 <style scoped>
