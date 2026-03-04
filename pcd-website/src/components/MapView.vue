@@ -79,7 +79,7 @@ onMounted(async () => {
     scrollWheelZoom: false,
     smoothWheelZoom: true,
     smoothSensitivity: 1,
-    minZoom: 2.5,
+    minZoom: 1,
   });
   mapInstance = map;
 
