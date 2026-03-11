@@ -26,11 +26,18 @@ export function makePopupContent(node: Node): string {
       ? `<div class="popup-unconfirmed">&#8505; This event has not been confirmed yet.${node.forum_url ? ` <a href="${escapeHtml(node.forum_url)}" target="_blank" rel="noopener noreferrer">Follow the forum thread</a> for updates.` : ''}</div>`
       : '';
 
+  const addressQuery = node.address
+    ? `${node.venue}, ${node.address}`
+    : `${node.venue}, ${node.city}, ${node.country}`;
+  const osmUrl = `https://www.openstreetmap.org/search?query=${encodeURIComponent(addressQuery)}`;
+  const venueHtml = `<p class="popup-venue">at <a href="${osmUrl}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(addressQuery)}">${escapeHtml(node.venue)}</a></p>`;
+
   return `
     <div class="popup-content">
       ${placeholderBanner}
       <h3 class="popup-name">${escapeHtml(node.name)}</h3>
       <p class="popup-date"><strong>${date}</strong></p>
+      ${venueHtml}
       <div class="popup-body">
         ${descriptionHtml}
         <button class="read-more" data-node-id="${escapeHtml(node.id)}">Read more &rarr;</button>

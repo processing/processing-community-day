@@ -66,12 +66,6 @@ function getOsmUrl(node: Node): string {
   return `https://www.openstreetmap.org/search?query=${encodeURIComponent(query)}`;
 }
 
-function getVenueText(node: Node): string {
-  return node.address
-    ? `${node.venue}, ${node.address}`
-    : `${node.venue}, ${node.city}, ${node.country}`;
-}
-
 function getParagraphs(text: string): string[] {
   return text.split(/\n\n+/).filter(Boolean);
 }
@@ -106,10 +100,9 @@ function getParagraphs(text: string): string[] {
 
         <h2 id="panel-title" class="panel-name">{{ node.name }}</h2>
         <p class="panel-meta">{{ formatDateRange(node.start_date, node.end_date) }}</p>
-
         <p class="panel-venue">
           <Icon icon="bi:geo-alt-fill" class="panel-icon" width="14" height="14" aria-hidden="true" />
-          <a :href="getOsmUrl(node)" target="_blank" rel="noopener noreferrer">{{ getVenueText(node) }}</a>
+          <a :href="getOsmUrl(node)" target="_blank" rel="noopener noreferrer">{{ node.venue }}<br>{{ node.address || `${node.city}, ${node.country}` }}</a>
         </p>
 
         <div class="panel-description">
@@ -244,7 +237,7 @@ function getParagraphs(text: string): string[] {
 
 .panel-venue {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.375rem;
   margin: 0 0 1.25rem;
   font-size: 0.9375rem;
@@ -252,7 +245,6 @@ function getParagraphs(text: string): string[] {
 
 .panel-icon {
   flex-shrink: 0;
-  margin-top: 0.15em;
   color: var(--color-text-muted);
 }
 
