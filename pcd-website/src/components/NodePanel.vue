@@ -100,9 +100,12 @@ function getParagraphs(text: string): string[] {
         <div v-if="node.placeholder" class="panel-placeholder">
           ⚠ This is placeholder data. No real event has been confirmed at this location.
         </div>
+        <div v-else-if="!node.confirmed" class="panel-unconfirmed">
+          ℹ This event has not been confirmed yet.<span v-if="node.forum_url"> <a :href="node.forum_url" target="_blank" rel="noopener noreferrer">Follow the forum thread</a> for updates.</span>
+        </div>
 
         <h2 id="panel-title" class="panel-name">{{ node.name }}</h2>
-        <p class="panel-meta">{{ formatDate(node.date) }}</p>
+        <p class="panel-meta">{{ formatDate(node.start_date) }}</p>
 
         <p class="panel-venue">
           <Icon icon="bi:geo-alt-fill" class="panel-icon" width="14" height="14" aria-hidden="true" />
@@ -137,7 +140,7 @@ function getParagraphs(text: string): string[] {
 
           <div class="panel-link-row">
             <Icon icon="bi:envelope-fill" class="panel-icon" width="14" height="14" aria-hidden="true" />
-            <a :href="`mailto:${node.organizer_email}`" class="panel-link">{{ node.organizer_email }}</a>
+            <a :href="`mailto:${node.contact_email}`" class="panel-link">{{ node.contact_email }}</a>
           </div>
         </div>
       </div>
@@ -208,6 +211,21 @@ function getParagraphs(text: string): string[] {
   line-height: 1.45;
   margin-bottom: 1rem;
   color: #6b4c00;
+}
+
+.panel-unconfirmed {
+  background: #e8f0fe;
+  border: 1px solid #7baaf7;
+  border-radius: 4px;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  margin-bottom: 1rem;
+  color: #1a3a6b;
+}
+
+.panel-unconfirmed a {
+  color: inherit;
 }
 
 .panel-name {

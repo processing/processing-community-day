@@ -9,6 +9,7 @@ export interface Node {
   // Location
   city: string;
   country: string;
+  region: string;
   venue: string;
   address?: string;
   plus_code: string;
@@ -16,11 +17,17 @@ export interface Node {
   lng: number;
 
   // Event
-  date: string;
+  start_date: string;
+  end_date?: string;
   website: string;
   description: string;
   long_description?: string;
-  organizer_email: string;
+  tags: string[];
+  organizers: string[];
+  contact_email: string;
+  submitter_email?: string;
+  forum_url?: string;
+  confirmed: boolean;
   placeholder?: boolean;
 }
 
@@ -29,20 +36,27 @@ interface NodeInput {
   name: string;
   city: string;
   country: string;
+  region: string;
   venue: string;
   address?: string;
   plus_code: string;
-  date: string;
+  start_date: string;
+  end_date?: string;
   website: string;
   description: string;
   long_description?: string;
-  organizer_email: string;
+  tags: string[];
+  organizers: string[];
+  contact_email: string;
+  submitter_email?: string;
+  forum_url?: string;
+  confirmed: boolean;
   placeholder?: boolean;
 }
 
 export function loadNodes(): Node[] {
   const olc = new OpenLocationCode();
-  const data = nodesData as { nodes: NodeInput[] };
+  const data = nodesData as unknown as { nodes: NodeInput[] };
 
   return data.nodes.map((input) => {
     if (!olc.isValid(input.plus_code) || !olc.isFull(input.plus_code)) {

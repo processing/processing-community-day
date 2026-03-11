@@ -126,7 +126,7 @@ function handleKeydown(e: KeyboardEvent) {
         >
           <span class="node-name">{{ node.name }}</span>
           <span class="node-location">{{ node.city }}, {{ node.country }}</span>
-          <span class="node-date">{{ formatDate(node.date) }}</span>
+          <span class="node-date">{{ formatDate(node.start_date) }}</span>
         </button>
       </li>
     </ul>

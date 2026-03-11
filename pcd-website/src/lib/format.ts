@@ -38,8 +38,8 @@ function escapeIcs(str: string): string {
 }
 
 export function calendarLinks(node: Node): { googleCalUrl: string; icsContent: string } {
-  const startDate = toICalDate(node.date);
-  const endDate = nextDay(node.date);
+  const startDate = toICalDate(node.start_date);
+  const endDate = node.end_date ? toICalDate(node.end_date) : nextDay(node.start_date);
   const location = node.address ? `${node.venue}, ${node.address}` : `${node.venue}, ${node.city}, ${node.country}`;
 
   // Google Calendar URL
@@ -64,7 +64,7 @@ export function calendarLinks(node: Node): { googleCalUrl: string; icsContent: s
     'VERSION:2.0',
     'PRODID:-//PCD2026//EN',
     'BEGIN:VEVENT',
-    `UID:${node.id}-${node.date}@pcd2026`,
+    `UID:${node.id}-${node.start_date}@pcd2026`,
     `DTSTAMP:${dtstamp}`,
     `DTSTART;VALUE=DATE:${startDate}`,
     `DTEND;VALUE=DATE:${endDate}`,

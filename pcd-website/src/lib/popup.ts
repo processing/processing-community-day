@@ -36,7 +36,7 @@ export function makePopupContent(node: Node): string {
     ? `${node.venue}, ${node.address}`
     : `${node.venue}, ${node.city}, ${node.country}`;
   const icsDataUri = `data:text/calendar;charset=utf-8,${encodeURIComponent(icsContent)}`;
-  const date = escapeHtml(formatDate(node.date));
+  const date = escapeHtml(formatDate(node.start_date));
   const location = escapeHtml(`${node.city}, ${node.country}`);
   const descriptionParagraphs = node.description
     .split(/\n\n+/)
@@ -46,7 +46,9 @@ export function makePopupContent(node: Node): string {
 
   const placeholderBanner = node.placeholder
     ? `<div class="popup-placeholder">&#9888; This is placeholder data. No real event has been confirmed at this location.</div>`
-    : '';
+    : !node.confirmed
+      ? `<div class="popup-unconfirmed">&#8505; This event has not been confirmed yet.${node.forum_url ? ` <a href="${escapeHtml(node.forum_url)}" target="_blank" rel="noopener noreferrer">Follow the forum thread</a> for updates.` : ''}</div>`
+      : '';
 
   return `
     <div class="popup-content">
@@ -66,7 +68,7 @@ export function makePopupContent(node: Node): string {
           ${ICON_CALENDAR}<a href="${icsDataUri}" download="${escapeHtml(node.id)}.ics" class="popup-link">Download .ics</a>
         </div>
         <div class="popup-link-row">
-          ${ICON_EMAIL}<a href="mailto:${escapeHtml(node.organizer_email)}" class="popup-link">${escapeHtml(node.organizer_email)}</a>
+          ${ICON_EMAIL}<a href="mailto:${escapeHtml(node.contact_email)}" class="popup-link">${escapeHtml(node.contact_email)}</a>
         </div>
       </div>
       <div class="popup-body">

@@ -152,6 +152,21 @@ body {
   color: #6b4c00;
 }
 
+.popup-content .popup-unconfirmed {
+  background: #e8f0fe;
+  border: 1px solid #7baaf7;
+  border-radius: 4px;
+  padding: 0.5rem 0.625rem;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  margin-bottom: 0.625rem;
+  color: #1a3a6b;
+}
+
+.popup-content .popup-unconfirmed a {
+  color: inherit;
+}
+
 .popup-content .popup-venue {
   display: flex;
   align-items: flex-start;
