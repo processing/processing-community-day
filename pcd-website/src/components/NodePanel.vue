@@ -111,7 +111,8 @@ watch(
     hostsExpanded.value = false;
     if (newNode) {
       trap?.activate();
-      if (!newNode.online) initMinimap(newNode);
+      if (!newNode.online && !newNode.location_tbd) initMinimap(newNode);
+      else destroyMinimap();
     } else {
       trap?.deactivate();
       destroyMinimap();
@@ -307,8 +308,8 @@ async function share(node: Node) {
           </div>
         </div>
 
-        <!-- Minimap (hidden for online events) -->
-        <div v-if="!node.online" class="panel-minimap-wrap" aria-hidden="true">
+        <!-- Minimap (hidden for online events and TBD locations) -->
+        <div v-if="!node.online && !node.location_tbd" class="panel-minimap-wrap" aria-hidden="true">
           <div ref="minimapRef" class="panel-minimap"></div>
           <div class="panel-minimap-shield"></div>
         </div>
