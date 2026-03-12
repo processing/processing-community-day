@@ -17,11 +17,15 @@ export interface Node {
   lng: number;
 
   // Event
-  start_date: string;
+  start_date?: string;
   end_date?: string;
   start_time?: string;
   end_time?: string;
   timezone?: string;
+  date_tbd?: boolean;
+  time_tbd?: boolean;
+  online?: boolean;
+  online_url?: string;
   website: string;
   short_description: string;
   long_description?: string;
@@ -45,11 +49,15 @@ interface NodeInput {
   venue: string;
   address?: string;
   plus_code: string;
-  start_date: string;
+  start_date?: string;
   end_date?: string;
   start_time?: string;
   end_time?: string;
   timezone?: string;
+  date_tbd?: boolean;
+  time_tbd?: boolean;
+  online?: boolean;
+  online_url?: string;
   website: string;
   short_description: string;
   long_description?: string;

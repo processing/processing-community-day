@@ -13,7 +13,9 @@ export function escapeHtml(str: string): string {
 const POPUP_PREVIEW_LENGTH = 120;
 
 export function makePopupContent(node: Node): string {
-  const date = escapeHtml(formatPopupDate(node.start_date, node.end_date));
+  const date = node.date_tbd
+    ? 'Date TBD'
+    : escapeHtml(formatPopupDate(node.start_date ?? '', node.end_date));
 
   const rawText = node.short_description.trim() || ((node.long_description ?? '').split(/\n\n+/)[0] ?? '');
   const blurb = rawText.length > POPUP_PREVIEW_LENGTH
@@ -37,7 +39,7 @@ export function makePopupContent(node: Node): string {
       <h3 class="popup-name">${escapeHtml(node.name)}</h3>
       ${organizingEntityHtml}
       <div class="popup-info-card">
-        <p class="popup-date">${date} at ${escapeHtml(node.venue)}</p>
+        <p class="popup-date">${node.online ? 'Online Event' : `${date} at ${escapeHtml(node.venue)}`}${node.time_tbd && !node.date_tbd ? ' · Time TBD' : ''}</p>
       </div>
       <div class="popup-body">
         ${descriptionHtml}

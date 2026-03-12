@@ -111,7 +111,7 @@ watch(
     hostsExpanded.value = false;
     if (newNode) {
       trap?.activate();
-      initMinimap(newNode);
+      if (!newNode.online) initMinimap(newNode);
     } else {
       trap?.deactivate();
       destroyMinimap();
@@ -221,6 +221,10 @@ async function share(node: Node) {
           </button>
         </div>
         <div class="panel-byline">
+          <p v-if="node.online" class="panel-online-badge">
+            <Icon icon="bi:wifi" width="13" height="13" aria-hidden="true" />
+            Online Event
+          </p>
           <p v-if="node.organizing_entity" class="panel-organizing-entity">
             <span class="panel-label">by</span> {{ node.organizing_entity }}
           </p>
@@ -239,20 +243,31 @@ async function share(node: Node) {
           <div class="info-card-row">
             <Icon icon="bi:calendar-event" width="18" height="18" aria-hidden="true" class="info-card-icon" />
             <div>
-              <span class="info-card-date">{{ formatDateRange(node.start_date, node.end_date) }}</span>
-              <span v-if="node.start_time" class="info-card-time">
+              <span v-if="node.date_tbd" class="info-card-date info-card-tbd">Date TBD</span>
+              <span v-else class="info-card-date">{{ formatDateRange(node.start_date ?? '', node.end_date) }}</span>
+              <span v-if="!node.date_tbd && node.time_tbd" class="info-card-time info-card-tbd">· Time TBD</span>
+              <span v-else-if="!node.date_tbd && node.start_time" class="info-card-time">
                 · {{ formatTimeRange(node.start_time, node.end_time, node.timezone) }}
               </span>
             </div>
           </div>
           <hr class="info-card-divider" aria-hidden="true" />
 
-          <!-- Row 2: Venue + address (OSM link) -->
+          <!-- Row 2: Venue + address (OSM link) or Online platform -->
           <div class="info-card-row">
-            <Icon icon="bi:geo-alt-fill" width="18" height="18" aria-hidden="true" class="info-card-icon" />
+            <Icon :icon="node.online ? 'bi:wifi' : 'bi:geo-alt-fill'" width="18" height="18" aria-hidden="true" class="info-card-icon" />
             <div class="info-card-venue">
-              <span class="info-card-venue-name">{{ node.venue }}</span>
+              <span class="info-card-venue-name">{{ node.online ? 'Online Event' : node.venue }}</span>
               <a
+                v-if="node.online && node.online_url"
+                :href="node.online_url"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="info-card-venue-address"
+                title="Join the online event"
+              >{{ node.online_url }}</a>
+              <a
+                v-else-if="!node.online"
                 :href="getOsmUrl(node)"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -263,8 +278,8 @@ async function share(node: Node) {
           </div>
           <hr class="info-card-divider" aria-hidden="true" />
 
-          <!-- Row 3: Add to calendar -->
-          <div class="info-card-row info-card-calendar-row">
+          <!-- Row 3: Add to calendar (hidden when date is TBD) -->
+          <div v-if="!node.date_tbd" class="info-card-row info-card-calendar-row">
             <Icon icon="bi:calendar-plus" width="18" height="18" aria-hidden="true" class="info-card-icon" />
             <div class="info-card-cal-trigger-wrap">
               <button
@@ -290,8 +305,8 @@ async function share(node: Node) {
           </div>
         </div>
 
-        <!-- Minimap -->
-        <div class="panel-minimap-wrap" aria-hidden="true">
+        <!-- Minimap (hidden for online events) -->
+        <div v-if="!node.online" class="panel-minimap-wrap" aria-hidden="true">
           <div ref="minimapRef" class="panel-minimap"></div>
           <div class="panel-minimap-shield"></div>
         </div>
@@ -320,6 +335,7 @@ async function share(node: Node) {
         <div v-if="node.website || node.contact_email" class="panel-links">
           <hr class="panel-separator" aria-hidden="true" />
           <a
+            v-if="!node.online"
             :href="getOsmUrl(node)"
             target="_blank"
             rel="noopener noreferrer"
@@ -328,6 +344,17 @@ async function share(node: Node) {
           >
             <Icon icon="bi:map" width="16" height="16" aria-hidden="true" class="panel-link-icon" />
             <span>Get directions</span>
+          </a>
+          <a
+            v-if="node.online && node.online_url"
+            :href="node.online_url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="panel-link-row"
+            title="Join the online event"
+          >
+            <Icon icon="bi:wifi" width="16" height="16" aria-hidden="true" class="panel-link-icon" />
+            <span>Join online event</span>
           </a>
           <a
             v-if="node.contact_email"
@@ -544,6 +571,27 @@ async function share(node: Node) {
   font-size: 1.875rem;
   font-weight: 600;
   line-height: 1.3;
+}
+
+.panel-online-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  margin: 0 0 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+  border-radius: 4px;
+  padding: 0.2em 0.55em;
+}
+
+.info-card-tbd {
+  font-style: italic;
+  color: var(--color-text-muted);
 }
 
 .panel-organizing-entity {

@@ -220,9 +220,23 @@ onMounted(async () => {
     popupAnchor: [0, -12],
   });
 
+  const onlineMarkerIcon = L.divIcon({
+    className: 'marker-node marker-node--online',
+    html: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
+      <circle cx="11" cy="11" r="10" fill="#5601A4" stroke="#fff" stroke-width="2"/>
+      <path d="M11 15.5a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z" fill="#fff"/>
+      <path d="M7.5 12.2a4.95 4.95 0 0 1 7 0" stroke="#fff" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <path d="M5 9.7a8.0 8.0 0 0 1 12 0" stroke="#fff" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.7"/>
+    </svg>`,
+    iconSize: [22, 22],
+    iconAnchor: [11, 11],
+    popupAnchor: [0, -13],
+  });
+
   // Add markers
   props.nodes.forEach((node) => {
-    const marker = L.marker([node.lat, node.lng], { icon: markerIcon });
+    const icon = node.online ? onlineMarkerIcon : markerIcon;
+    const marker = L.marker([node.lat, node.lng], { icon });
     marker.bindPopup(() => makePopupContent(node), { maxWidth: 340 });
     markerMap.set(node.id, marker);
     clusterGroup.addLayer(marker);

@@ -67,8 +67,8 @@ function escapeIcs(str: string): string {
 }
 
 export function calendarLinks(node: Node): { googleCalUrl: string; icsContent: string } {
-  const startDate = toICalDate(node.start_date);
-  const endDate = node.end_date ? toICalDate(node.end_date) : nextDay(node.start_date);
+  const startDate = toICalDate(node.start_date ?? '');
+  const endDate = node.end_date ? toICalDate(node.end_date) : nextDay(node.start_date ?? '');
   const location = node.address ? `${node.venue}, ${node.address}` : `${node.venue}, ${node.city}, ${node.country}`;
 
   // Google Calendar URL
