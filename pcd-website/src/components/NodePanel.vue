@@ -3,7 +3,7 @@ import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
 import { createFocusTrap, type FocusTrap } from 'focus-trap';
 import { Icon } from '@iconify/vue';
 import type { Node } from '../lib/nodes';
-import { formatDateRange, formatTimeRange, calendarLinks } from '../lib/format';
+import { formatDateRange, formatTimeRange, calendarLinks, onlinePlatformName } from '../lib/format';
 const props = defineProps<{
   node: Node | null;
 }>();
@@ -223,7 +223,7 @@ async function share(node: Node) {
         <div class="panel-byline">
           <p v-if="node.online" class="panel-online-badge">
             <Icon icon="bi:wifi" width="13" height="13" aria-hidden="true" />
-            Online Event
+            {{ onlinePlatformName(node.online_url) }}
           </p>
           <p v-if="node.organizing_entity" class="panel-organizing-entity">
             <span class="panel-label">by</span> {{ node.organizing_entity }}
@@ -257,7 +257,7 @@ async function share(node: Node) {
           <div class="info-card-row">
             <Icon :icon="node.online ? 'bi:wifi' : 'bi:geo-alt-fill'" width="18" height="18" aria-hidden="true" class="info-card-icon" />
             <div class="info-card-venue">
-              <span class="info-card-venue-name">{{ node.online ? 'Online Event' : node.venue }}</span>
+              <span class="info-card-venue-name">{{ node.online ? onlinePlatformName(node.online_url) : node.venue }}</span>
               <a
                 v-if="node.online && node.online_url"
                 :href="node.online_url"

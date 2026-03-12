@@ -120,6 +120,34 @@ export function formatPopupDate(startDate: string, endDate?: string): string {
   return formatDateRange(startDate, endDate, true);
 }
 
+const PLATFORM_PATTERNS: [RegExp, string][] = [
+  [/zoom\.us/i, 'Zoom'],
+  [/meet\.google\.com/i, 'Google Meet'],
+  [/teams\.microsoft\.com|teams\.live\.com/i, 'Microsoft Teams'],
+  [/webex\.com/i, 'Webex'],
+  [/whereby\.com/i, 'Whereby'],
+  [/jitsi\.(org|meet)/i, 'Jitsi'],
+  [/discord\.(gg|com)/i, 'Discord'],
+  [/twitch\.tv/i, 'Twitch'],
+  [/youtube\.com|youtu\.be/i, 'YouTube'],
+  [/streamyard\.com/i, 'StreamYard'],
+  [/hopin\.com/i, 'Hopin'],
+  [/airmeet\.com/i, 'Airmeet'],
+  [/gather\.town/i, 'Gather'],
+  [/spatial\.chat/i, 'Spatial Chat'],
+  [/crowdcast\.io/i, 'Crowdcast'],
+  [/eventbrite\.com/i, 'Eventbrite'],
+  [/lu\.ma/i, 'Luma'],
+];
+
+export function onlinePlatformName(url?: string): string {
+  if (!url) return 'Online';
+  for (const [pattern, name] of PLATFORM_PATTERNS) {
+    if (pattern.test(url)) return name;
+  }
+  return 'Online';
+}
+
 export function formatTimeRange(startTime?: string, endTime?: string, tz?: string): string {
   if (!startTime) return '';
   const fmt = (t: string) => {

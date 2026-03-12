@@ -1,5 +1,5 @@
 import type { Node } from './nodes';
-import { formatPopupDate } from './format';
+import { formatPopupDate, onlinePlatformName } from './format';
 
 export function escapeHtml(str: string): string {
   return str
@@ -39,7 +39,7 @@ export function makePopupContent(node: Node): string {
       <h3 class="popup-name">${escapeHtml(node.name)}</h3>
       ${organizingEntityHtml}
       <div class="popup-info-card">
-        <p class="popup-date">${node.online ? 'Online Event' : `${date} at ${escapeHtml(node.venue)}`}${node.time_tbd && !node.date_tbd ? ' · Time TBD' : ''}</p>
+        <p class="popup-date">${node.online ? onlinePlatformName(node.online_url) : `${date} at ${escapeHtml(node.venue)}`}${node.time_tbd && !node.date_tbd ? ' · Time TBD' : ''}</p>
       </div>
       <div class="popup-body">
         ${descriptionHtml}
