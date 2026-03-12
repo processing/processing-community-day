@@ -259,6 +259,12 @@ onUnmounted(() => {
 
 <template>
   <div id="map" tabindex="-1" aria-label="World map of PCD 2026 nodes"></div>
+  <a
+    id="host-btn"
+    href="https://discourse.processing.org/t/pcd-worldwide-2026/48081"
+    target="_blank"
+    rel="noopener noreferrer"
+  >Want to host a PCD?</a>
   <button
     id="burger-btn"
     :aria-expanded="listOpen"
