@@ -13,7 +13,7 @@ const emit = defineEmits<{
 }>();
 
 const panelRef = ref<HTMLElement | null>(null);
-const closeButtonRef = ref<HTMLButtonElement | null>(null);
+const tabButtonRef = ref<HTMLButtonElement | null>(null);
 const minimapRef = ref<HTMLDivElement | null>(null);
 const calDropdownOpen = ref(false);
 const descExpanded = ref(false);
@@ -36,7 +36,12 @@ function handleOutsideClick(e: MouseEvent) {
 onMounted(() => {
   if (panelRef.value) {
     trap = createFocusTrap(panelRef.value, {
-      initialFocus: () => closeButtonRef.value ?? panelRef.value!,
+      initialFocus: () => {
+        if (tabButtonRef.value && tabButtonRef.value.offsetParent !== null) {
+          return tabButtonRef.value;
+        }
+        return panelRef.value!;
+      },
       onDeactivate: () => emit('close'),
       returnFocusOnDeactivate: false,
       escapeDeactivates: true,
@@ -179,16 +184,23 @@ async function share(node: Node) {
     :class="['node-panel', { 'node-panel--open': node !== null }]"
   >
     <button
-      ref="closeButtonRef"
-      class="panel-close"
+      v-if="node !== null"
+      ref="tabButtonRef"
+      class="panel-tab"
       aria-label="Close event details"
-      title="Close"
       @click="emit('close')"
     >
-      ×
+      <Icon icon="bi:chevron-right" width="20" height="20" aria-hidden="true" />
     </button>
 
+    <div class="panel-scroll">
     <template v-if="node">
+      <div class="panel-mobile-back">
+        <button class="panel-back-btn" @click="emit('close')">
+          <Icon icon="bi:chevron-left" width="16" height="16" aria-hidden="true" />
+          Back to map
+        </button>
+      </div>
       <div class="panel-content">
         <div v-if="node.placeholder" class="panel-placeholder">
           ⚠ This is placeholder data. No real event has been confirmed at this location.
@@ -340,6 +352,7 @@ async function share(node: Node) {
         </div>
       </div>
     </template>
+    </div>
   </aside>
 </template>
 
@@ -350,12 +363,12 @@ async function share(node: Node) {
   right: 0;
   height: 100%;
   width: clamp(320px, 40vw, 520px);
-  background: var(--color-bg-panel);
-  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  background: transparent;
+  filter: drop-shadow(-4px 0 16px rgba(0, 0, 0, 0.18));
   z-index: var(--z-panel);
   transform: translateX(100%);
   transition: var(--transition-panel);
-  overflow-y: auto;
+  overflow: visible;
   display: flex;
   flex-direction: column;
 }
@@ -364,37 +377,86 @@ async function share(node: Node) {
   transform: translateX(0);
 }
 
-@media (max-width: 720px) {
-  .node-panel {
-    width: 100vw;
-  }
+.panel-scroll {
+  flex: 1;
+  overflow-y: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-panel);
+  position: relative;
+  z-index: 1; /* sit above the tab so it covers the tab's right edge junction */
 }
 
-.panel-close {
+.panel-tab {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  width: 36px;
-  height: 36px;
-  background: transparent;
-  border: 1px solid var(--color-border);
-  border-radius: 4px;
-  font-size: 1.5rem;
-  line-height: 1;
-  cursor: pointer;
+  /* Extend 4px into the panel so the right edge is hidden under .panel-scroll */
+  left: 4px;
+  top: 50%;
+  transform: translate(-100%, -50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-text);
+  width: 36px;
+  height: 96px;
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-border);
+  border-right: none;
+  border-radius: 12px 0 0 12px;
+  cursor: pointer;
+  color: var(--color-text-muted);
   padding: 0;
+  z-index: 0;
+  transition: background-color 0.12s ease, color 0.12s ease;
 }
 
-.panel-close:hover {
+.panel-tab:hover {
   background: var(--color-border);
+  color: var(--color-text);
+}
+
+.panel-tab:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.panel-mobile-back {
+  display: none;
+  padding: 0.75rem 1rem 0;
+}
+
+.panel-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: none;
+  border: none;
+  padding: 0.25rem 0;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.panel-back-btn:hover {
+  color: var(--color-text);
+}
+
+@media (max-width: 720px) {
+  .node-panel {
+    width: 100vw;
+    overflow: hidden;
+  }
+  .panel-tab {
+    display: none;
+  }
+  .panel-mobile-back {
+    display: block;
+  }
 }
 
 .panel-content {
-  padding: 3rem 1.5rem 2rem;
+  padding: 1.5rem 1.5rem 2rem;
 }
 
 .panel-placeholder {
