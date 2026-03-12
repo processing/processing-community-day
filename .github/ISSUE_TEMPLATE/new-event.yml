@@ -82,14 +82,14 @@ body:
     id: start_date
     attributes:
       label: Start date
-      placeholder: 2026-10-17
+      placeholder: "2026-10-17"
     validations:
       required: true
   - type: input
     id: end_date
     attributes:
       label: End date
-      placeholder: 2026-10-17
+      placeholder: "2026-10-17"
     validations:
       required: true
   - type: input
