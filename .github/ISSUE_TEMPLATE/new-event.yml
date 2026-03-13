@@ -9,10 +9,6 @@ body:
     attributes:
       value: |
         <!-- new-event-template -->
-        Please fill out all required fields as completely as possible. Dates should use `YYYY-MM-DD`, times should use 24-hour `HH:MM`, and links should include `https://`.
-
-        The information you provide will be used to create an event entry on the PCD map. Submissions are reviewed by the PCD team before they are published. If something is unclear, we may contact you for a quick clarification.
-
         Everything submitted here will be publicly visible online. Please avoid including any private or sensitive information in the form.
 
         If you have questions about the submission process, please ask in the [PCD 2026 forum thread](https://discourse.processing.org/t/pcd-worldwide-2026/48081).
@@ -208,3 +204,7 @@ body:
     attributes:
       label: Additional notes
       description: Optional context that should not appear publicly on the map.
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for submitting your event! The PCD team will review the information provided and may reach out if we have any questions.
