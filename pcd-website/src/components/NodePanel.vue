@@ -391,18 +391,7 @@ async function copyLink(node: Node) {
             <Icon icon="bi:map" width="16" height="16" aria-hidden="true" class="panel-link-icon" />
             <span>Get directions</span>
           </a>
-          <a
-            v-if="node.online_event && node.event_url"
-            :href="node.event_url"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="panel-link-row"
-            title="Join the online event"
-          >
-            <Icon icon="bi:wifi" width="16" height="16" aria-hidden="true" class="panel-link-icon" />
-            <span>Join online event</span>
-          </a>
-          <a
+<a
             v-if="node.primary_contact.email"
             :href="`mailto:${node.primary_contact.email}`"
             class="panel-link-row"
