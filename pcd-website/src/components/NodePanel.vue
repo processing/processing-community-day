@@ -234,12 +234,12 @@ async function copyLink(node: Node) {
               </button>
               <hr class="share-menu-divider" />
               <a
-                :href="`https://mastodon.social/share?text=${encodeURIComponent(node.event_name + ' ' + getShareUrl(node))}`"
+                :href="`https://mastodon.social/share?text=${encodeURIComponent('Join me at ' + node.event_name + ' ' + getShareUrl(node))}`"
                 target="_blank" rel="noopener noreferrer" role="menuitem"
                 @click="shareDropdownOpen = false"
               >Share on Mastodon</a>
               <a
-                :href="`https://bsky.app/intent/compose?text=${encodeURIComponent(node.event_name + ' ' + getShareUrl(node))}`"
+                :href="`https://bsky.app/intent/compose?text=${encodeURIComponent('Join me at ' + node.event_name + ' ' + getShareUrl(node))}`"
                 target="_blank" rel="noopener noreferrer" role="menuitem"
                 @click="shareDropdownOpen = false"
               >Share on Bluesky</a>
