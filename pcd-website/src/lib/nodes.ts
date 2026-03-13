@@ -31,7 +31,6 @@ export interface Node {
   event_long_description?: string;
   details_markdown: string;
   details_text: string;
-  event_page_path?: string;
   event_activities: string[];
   organizers: { name: string }[];
   organization_name?: string;
@@ -143,7 +142,6 @@ export async function loadNodes(): Promise<Node[]> {
       event_long_description: normalizeOptionalText(input.event_long_description),
       details_markdown,
       details_text,
-      event_page_path: eventEntry ? `${import.meta.env.BASE_URL}/events/${eventEntry.slug}/` : undefined,
       event_activities: input.event_activities ?? [],
       organizers: input.organizers,
       organization_name: normalizeOptionalText(input.organization_name),

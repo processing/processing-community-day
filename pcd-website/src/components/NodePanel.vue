@@ -392,15 +392,6 @@ async function copyLink(node: Node) {
             <span>Join online event</span>
           </a>
           <a
-            v-if="node.event_page_path"
-            :href="node.event_page_path"
-            class="panel-link-row"
-            :title="`Open the event page for ${node.event_name}`"
-          >
-            <Icon icon="bi:file-earmark-text" width="16" height="16" aria-hidden="true" class="panel-link-icon" />
-            <span>Open event page</span>
-          </a>
-          <a
             v-if="node.primary_contact.email"
             :href="`mailto:${node.primary_contact.email}`"
             class="panel-link-row"
@@ -611,8 +602,8 @@ async function copyLink(node: Node) {
 .panel-name {
   flex: 1;
   min-width: 0;
-  margin: 0;
-  font-size: 1.875rem;
+  margin: 0 0 0.2rem;
+  font-size: 1.75rem;
   font-weight: 600;
   line-height: 1.3;
 }
