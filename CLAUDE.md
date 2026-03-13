@@ -27,6 +27,11 @@ TypeScript 5.x / Node.js 20+: Follow standard conventions
 - 001-pcd-website-v2: Added TypeScript 5.x / Node.js 20+ + Astro 5.x (static output), Vue 3, Leaflet 1.9, leaflet.markercluster, open-location-code, focus-trap, IBM Plex Sans (Google Fonts)
 
 <!-- MANUAL ADDITIONS START -->
+## Architecture: Astro + Vue roles
+
+- **Astro** provides the single entry point (`src/pages/index.astro`) — a thin static HTML shell with `<head>`, font/CSS links, and BASE_URL injection. No new Astro pages should be added; all UI lives in Vue.
+- **Vue** handles all interactive UI as `client:only="vue"` island components (map, node panel, node list, etc.). New UI features should be implemented as Vue components, not Astro pages.
+
 ## UI Guidelines
 
 - Always support both light and dark mode for any new or modified UI elements.
