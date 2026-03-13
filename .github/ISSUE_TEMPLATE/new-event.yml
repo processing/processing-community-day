@@ -30,7 +30,7 @@ body:
   - type: input
     id: online_event_url
     attributes:
-      label: Online event URL
+      label: Event URL (only for online events)
       description: For online events, provide the URL where the event will take place (e.g. Zoom link, YouTube live stream, etc.).
       placeholder: https://zoom.us/j/123456789
   - type: input
