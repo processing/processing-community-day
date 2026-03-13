@@ -12,7 +12,8 @@
   "event_url": "",
   "event_name": "PCD @ Example",
   "event_location": {
-    "address": "",
+    "name": "Spiaggia di Santa Maria Navarrese",
+    "address": "08040 Santa Maria Navarrese, Italy",
     "plus_code": "8FFFXMPQ+WJ"
   },
   "event_date": "",
