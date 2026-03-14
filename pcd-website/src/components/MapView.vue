@@ -230,6 +230,7 @@ onMounted(async () => {
     if (attribution) {
       mapContainer.appendChild(attribution);
     }
+
   });
 
   // Try to center on visitor's location, fall back to world view
@@ -327,7 +328,19 @@ onMounted(async () => {
     clusters.forEach(el => pane.insertBefore(el, pane.firstChild));
   }
 
-  setTimeout(() => { applyMarkerLabels(); sortMarkerPane(); }, 0);
+  // Watch the marker pane for DOM changes on initial load — marker elements are
+  // created lazily by the cluster group after the first setView, so we can't
+  // rely on a fixed timeout. Disconnect after the first batch of markers appear.
+  const markerPane = map.getPanes().markerPane;
+  if (markerPane) {
+    const observer = new MutationObserver(() => {
+      applyMarkerLabels();
+      sortMarkerPane();
+      observer.disconnect();
+    });
+    observer.observe(markerPane, { childList: true, subtree: false });
+  }
+
   clusterGroup.on('animationend', () => { applyMarkerLabels(); sortMarkerPane(); });
 
   // When a cluster spiderfies, move its child marker elements immediately after
@@ -399,6 +412,7 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <div role="banner">
   <button
     id="burger-btn"
     :aria-expanded="listOpen"
@@ -411,7 +425,6 @@ onUnmounted(() => {
     id="host-btn"
     :href="SUBMIT_EVENT_URL"
   >Submit your event</a>
-  <NodePanel :node="selectedNode" @close="closePanel" />
   <button
     id="theme-toggle"
     :aria-label="currentStyle === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
@@ -426,6 +439,8 @@ onUnmounted(() => {
       <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
     </svg>
   </button>
+  </div>
+  <NodePanel :node="selectedNode" @close="closePanel" />
   <NodeList
     :nodes="nodes"
     :open="listOpen"
