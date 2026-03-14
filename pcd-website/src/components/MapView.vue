@@ -145,7 +145,18 @@ function handleKeydown(e: KeyboardEvent) {
       const mapEl = document.getElementById('map');
       if (mapEl && (mapEl === document.activeElement || mapEl.contains(document.activeElement))) {
         e.preventDefault();
-        document.getElementById('burger-btn')?.focus();
+        mapEl.focus();
+      }
+    }
+  } else if (!isTextInput && /^[0-9]$/.test(e.key)) {
+    const mapEl = document.getElementById('map');
+    if (mapEl && (mapEl.contains(document.activeElement) || document.activeElement === mapEl)) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.key === '0') {
+        mapInstance?.setView([20, 10], 3);
+      } else {
+        mapInstance?.setZoom(parseInt(e.key));
       }
     }
   } else if (e.key === 'M' || e.key === 'm') {
@@ -174,6 +185,13 @@ onMounted(async () => {
   });
   mapInstance = map;
   leafletRef = L;
+
+  // Remove digit keyCodes (48–57) from Leaflet's built-in zoom handler so our
+  // number-key zoom shortcuts don't conflict (e.g. keyCode 54 = '6' is zoom-out).
+  const kb = (map as any).keyboard;
+  if (kb?._zoomKeys) {
+    for (let code = 48; code <= 57; code++) delete kb._zoomKeys[code];
+  }
 
   L.control.zoom({ position: 'bottomleft' }).addTo(map);
 
