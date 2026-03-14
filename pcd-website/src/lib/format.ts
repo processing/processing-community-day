@@ -1,11 +1,27 @@
 import type { Node } from './nodes';
 
-export function formatDate(dateString: string, abbrev = false): string {
+const INTL_LOCALE_MAP: Record<string, string> = {
+  en: 'en-US',
+  es: 'es-ES',
+  de: 'de-DE',
+  fr: 'fr-FR',
+  pt: 'pt-PT',
+  'zh-TW': 'zh-TW',
+  'zh-CN': 'zh-CN',
+  ja: 'ja-JP',
+  ko: 'ko-KR',
+};
+
+function toIntlLocale(locale: string): string {
+  return INTL_LOCALE_MAP[locale] ?? locale;
+}
+
+export function formatDate(dateString: string, abbrev = false, locale = 'en'): string {
   try {
     // Parse as UTC to avoid timezone issues with date-only strings
     const [year, month, day] = dateString.split('-').map(Number);
     const date = new Date(Date.UTC(year, month - 1, day));
-    return date.toLocaleDateString('en-US', {
+    return date.toLocaleDateString(toIntlLocale(locale), {
       weekday: abbrev ? 'short' : undefined,
       year: 'numeric',
       month: abbrev ? 'short' : 'long',
@@ -17,31 +33,32 @@ export function formatDate(dateString: string, abbrev = false): string {
   }
 }
 
-export function formatDateRange(startDate: string, endDate?: string, abbrev = false): string {
-  if (!endDate || endDate === startDate) return formatDate(startDate, abbrev);
+export function formatDateRange(startDate: string, endDate?: string, abbrev = false, locale = 'en'): string {
+  if (!endDate || endDate === startDate) return formatDate(startDate, abbrev, locale);
   try {
     const [sy, sm, sd] = startDate.split('-').map(Number);
     const [ey, em, ed] = endDate.split('-').map(Number);
     const start = new Date(Date.UTC(sy, sm - 1, sd));
     const end = new Date(Date.UTC(ey, em - 1, ed));
+    const intlLocale = toIntlLocale(locale);
     const monthStyle = abbrev ? 'short' : 'long';
     const sameYear = sy === ey;
     const sameMonth = sameYear && sm === em;
     if (sameMonth) {
       // e.g. "October 17–18, 2026" / "Oct 17–18, 2026"
-      const month = start.toLocaleDateString('en-US', { month: monthStyle, timeZone: 'UTC' });
+      const month = start.toLocaleDateString(intlLocale, { month: monthStyle, timeZone: 'UTC' });
       return `${month} ${sd}–${ed}, ${sy}`;
     } else if (sameYear) {
       // e.g. "October 30 – November 1, 2026" / "Oct 30 – Nov 1, 2026"
-      const s = start.toLocaleDateString('en-US', { month: monthStyle, day: 'numeric', timeZone: 'UTC' });
-      const e = end.toLocaleDateString('en-US', { month: monthStyle, day: 'numeric', timeZone: 'UTC' });
+      const s = start.toLocaleDateString(intlLocale, { month: monthStyle, day: 'numeric', timeZone: 'UTC' });
+      const e = end.toLocaleDateString(intlLocale, { month: monthStyle, day: 'numeric', timeZone: 'UTC' });
       return `${s} – ${e}, ${sy}`;
     } else {
       // e.g. "December 31, 2026 – January 1, 2027"
-      return `${formatDate(startDate, abbrev)} – ${formatDate(endDate, abbrev)}`;
+      return `${formatDate(startDate, abbrev, locale)} – ${formatDate(endDate, abbrev, locale)}`;
     }
   } catch {
-    return formatDate(startDate, abbrev);
+    return formatDate(startDate, abbrev, locale);
   }
 }
 
@@ -122,16 +139,16 @@ export function calendarLinks(node: Node): { googleCalUrl: string; outlookCalUrl
   return { googleCalUrl, outlookCalUrl, icsContent };
 }
 
-export function formatShortDate(dateStr: string): string {
+export function formatShortDate(dateStr: string, locale = 'en'): string {
   const [y, m, d] = dateStr.split('-').map(Number);
   const date = new Date(Date.UTC(y, m - 1, d));
-  return date.toLocaleDateString('en-US', {
+  return date.toLocaleDateString(toIntlLocale(locale), {
     weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC',
   });
 }
 
-export function formatPopupDate(startDate: string, endDate?: string): string {
-  return formatDateRange(startDate, endDate, true);
+export function formatPopupDate(startDate: string, endDate?: string, locale = 'en'): string {
+  return formatDateRange(startDate, endDate, true, locale);
 }
 
 const PLATFORM_PATTERNS: [RegExp, string][] = [

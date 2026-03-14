@@ -55,12 +55,44 @@ Event data lives in `src/content/events/<event-id>/`:
 | `src/components/MapView.vue` | Leaflet map, marker clustering, keyboard shortcuts, tile layer switching |
 | `src/components/NodePanel.vue` | Slide-in event detail panel with minimap, calendar links, share button |
 | `src/components/NodeList.vue` | Alphabetical event list overlay with map style switcher + dark mode toggle |
+| `src/components/LanguageSwitcher.vue` | Language selector dropdown in the top bar |
 | `src/lib/nodes.ts` | `Node` interface + `loadNodes()` |
 | `src/lib/format.ts` | `formatDate()`, `formatDateRange()`, `calendarLinks()`, etc. |
 | `src/lib/popup.ts` | Leaflet popup HTML generation (`makePopupContent()`) |
 | `src/styles/global.css` | Design tokens (CSS custom properties), IBM Plex Sans, Leaflet overrides |
 | `src/content.config.ts` | Astro content collection Zod schema for events |
 | `src/config.ts` | Global static constants (contact email, etc.) |
+| `src/i18n/index.ts` | Creates the `vue-i18n` instance and exports `syncLocale()` |
+| `src/i18n/localeState.ts` | Reactive `currentLocale` ref, browser detection, localStorage persistence |
+| `src/i18n/vuePlugin.ts` | Astro `appEntrypoint` — installs `vue-i18n` on every Vue island |
+| `src/i18n/locales/en.json` | Source-of-truth translation file (all keys must exist here) |
+| `src/i18n/locales/*.json` | Per-language translations (es, de, fr, pt, zh-TW, zh-CN, ja, ko) |
+
+## Internationalization (i18n)
+
+The site uses `vue-i18n@11` with 9 supported locales: `en`, `es`, `de`, `fr`, `pt`, `zh-TW`, `zh-CN`, `ja`, `ko`.
+
+### How it's wired up
+
+- `vue-i18n` is installed globally via `astro.config.mjs` → `vue({ appEntrypoint: '/src/i18n/vuePlugin' })`.
+- Locale detection order: localStorage (`pcd-locale`) → `navigator.language` → `'en'`.
+- The active locale is a reactive singleton (`currentLocale` ref in `localeState.ts`) shared across all components.
+
+### Adding or changing UI strings
+
+1. **Always add the key to `en.json` first.** It is the source of truth and the fallback for all other locales.
+2. Add the same key to every other locale file in `src/i18n/locales/`. Missing keys fall back to English silently.
+3. In Vue components, use `const { t, locale } = useI18n()` and replace hardcoded text with `t('key')`.
+4. In non-component TS files (e.g. `popup.ts`), use `i18n.global.t('key')` imported from `src/i18n/index.ts`.
+5. Pass `locale` (or `locale.value` as a string) to `formatDateRange()`, `formatDate()`, etc. for locale-aware date formatting.
+
+### What NOT to translate
+
+Event data coming from content files — `event_name`, `details_text`, `city`, `country`, `organization_name`, organizer names, URLs — must never be wrapped in `t()`. Only static UI strings get translated.
+
+### Non-English word choices
+
+Non-English locales use "Events" (not "Nodes") in list/dialog labels, since "Nodes" is a technical term that doesn't translate naturally.
 
 ## Global Configuration (`src/config.ts`)
 

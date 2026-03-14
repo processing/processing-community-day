@@ -1,0 +1,86 @@
+{
+  "map": {
+    "aria_label": "PCD 2026 イベントの世界地図"
+  },
+  "nav": {
+    "open_node_list": "イベントリストを開く",
+    "close_node_list": "イベントリストを閉じる",
+    "submit_event": "イベントを登録する",
+    "switch_to_light": "ライトモードに切り替える",
+    "switch_to_dark": "ダークモードに切り替える",
+    "change_language": "言語を変更"
+  },
+  "node_list": {
+    "dialog_label": "イベントリスト",
+    "heading": "PCD 2026 イベント",
+    "close": "イベントリストを閉じる",
+    "online_event": "オンラインイベント",
+    "date_tbd": "日程未定"
+  },
+  "panel": {
+    "close_details": "イベント詳細を閉じる",
+    "back_to_map": "地図に戻る",
+    "placeholder_warning": "⚠ これはプレースホルダーデータです。この場所では実際のイベントはまだ確認されていません。",
+    "share": {
+      "link_copied": "リンクをコピーしました！",
+      "share_event": "イベントをシェア",
+      "copy_link": "リンクをコピー",
+      "mastodon": "Mastodon でシェア",
+      "mastodon_new_tab": "Mastodon でシェア（新しいタブで開く）",
+      "bluesky": "Bluesky でシェア",
+      "bluesky_new_tab": "Bluesky でシェア（新しいタブで開く）",
+      "facebook": "Facebook でシェア",
+      "facebook_new_tab": "Facebook でシェア（新しいタブで開く）",
+      "linkedin": "LinkedIn でシェア",
+      "linkedin_new_tab": "LinkedIn でシェア（新しいタブで開く）"
+    },
+    "by": "主催：",
+    "hosts_label": "主催者：",
+    "show_all_hosts": "すべての主催者を表示",
+    "more": "もっと見る",
+    "visit_event_page": "イベントページを見る",
+    "visit_event_page_new_tab": "イベントページを見る（新しいタブで開く）",
+    "visit_forum_thread": "フォームスレッドを見る",
+    "visit_forum_thread_new_tab": "フォームスレッドを見る（新しいタブで開く）",
+    "date_tbd": "日程未定",
+    "time_tbd": "時間未定",
+    "local_time": "現地時間",
+    "location_tbd": "場所未定",
+    "online_event": "オンラインイベント",
+    "join_online": "オンラインイベントに参加",
+    "get_directions_osm": "OpenStreetMap でルートを見る",
+    "view_osm": "OpenStreetMap で見る",
+    "get_directions": "ルートを見る",
+    "add_to_calendar": "カレンダーに追加",
+    "google_calendar": "Google カレンダー",
+    "google_calendar_new_tab": "Google カレンダー（新しいタブで開く）",
+    "outlook": "Outlook",
+    "outlook_new_tab": "Outlook（新しいタブで開く）",
+    "download_ics": ".ics をダウンロード",
+    "read_more": "もっと読む…",
+    "show_less": "折りたたむ",
+    "disclaimer_with_org": "このイベントは {org} が主催しており、Processing Foundation とは関係ありません。このイベントに関するご質問・ご不明点は、主催者に直接お問い合わせください。",
+    "disclaimer_without_org": "このイベントは独自に主催されており、Processing Foundation とは関係ありません。このイベントに関するご質問・ご不明点は、主催者に直接お問い合わせください。",
+    "report_issue": "このページの問題を報告する",
+    "email_subject": "【報告】「{name}」ページの問題",
+    "email_body": "PCD チームの皆様、\n\n以下のページに関する問題を報告します：\n\n- 名前：「{name}」\n- リンク：{link}\n\n[問題の詳細をここに記入してください]。\n\nよろしくお願いします。"
+  },
+  "popup": {
+    "date_tbd": "日程未定",
+    "time_tbd": "時間未定",
+    "online_event": "オンラインイベント",
+    "location_tbd": "場所未定",
+    "join_online": "オンラインイベントに参加",
+    "get_directions_osm": "OpenStreetMap でルートを見る",
+    "see_details": "詳細を見る",
+    "placeholder_warning": "⚠ これはプレースホルダーデータです。この場所では実際のイベントはまだ確認されていません。"
+  },
+  "page": {
+    "skip_to_map": "地図へスキップ",
+    "title": "Processing Community Day 2026",
+    "description": "世界中の Processing Community Day 2026 ノードを探索しましょう。インタラクティブマップでお近くのイベントを見つけてください。"
+  },
+  "language_switcher": {
+    "label": "言語"
+  }
+}

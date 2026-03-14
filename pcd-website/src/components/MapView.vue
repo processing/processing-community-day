@@ -1,14 +1,20 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, watch, onMounted, onUnmounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import type { Node } from '../lib/nodes';
 import { makePopupContent } from '../lib/popup';
 import NodePanel from './NodePanel.vue';
 import NodeList from './NodeList.vue';
+import LanguageSwitcher from './LanguageSwitcher.vue';
 import { SUBMIT_EVENT_URL } from '../config';
+import { currentLocale } from '../i18n/localeState';
+import { i18n } from '../i18n/index';
 
 const props = defineProps<{
   nodes: Node[];
 }>();
+
+const { t } = useI18n();
 
 const selectedNode = ref<Node | null>(null);
 const listOpen = ref(false);
@@ -403,6 +409,14 @@ onMounted(async () => {
     const node = props.nodes.find((n) => n.id === eventId);
     if (node) openPanel(node);
   }
+
+  // Update document-level text when locale changes
+  watch(currentLocale, () => {
+    document.title = i18n.global.t('page.title');
+    document.querySelector('meta[name="description"]')?.setAttribute('content', i18n.global.t('page.description'));
+    const skipLink = document.getElementById('skip-link');
+    if (skipLink) skipLink.textContent = i18n.global.t('page.skip_to_map');
+  }, { immediate: true });
 });
 
 onUnmounted(() => {
@@ -416,7 +430,7 @@ onUnmounted(() => {
   <button
     id="burger-btn"
     :aria-expanded="listOpen"
-    :aria-label="listOpen ? 'Close node list' : 'Open node list'"
+    :aria-label="listOpen ? t('nav.close_node_list') : t('nav.open_node_list')"
     @click="listOpen ? closeList() : openList()"
   >
     ☰
@@ -424,11 +438,12 @@ onUnmounted(() => {
   <a
     id="host-btn"
     :href="SUBMIT_EVENT_URL"
-  >Submit your event</a>
+  >{{ t('nav.submit_event') }}</a>
+  <LanguageSwitcher />
   <button
     id="theme-toggle"
-    :aria-label="currentStyle === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
-    :title="currentStyle === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+    :aria-label="currentStyle === 'dark' ? t('nav.switch_to_light') : t('nav.switch_to_dark')"
+    :title="currentStyle === 'dark' ? t('nav.switch_to_light') : t('nav.switch_to_dark')"
     @click="toggleTheme"
   >
     <svg v-if="currentStyle === 'dark'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -447,7 +462,7 @@ onUnmounted(() => {
     @close="closeList"
     @select="onNodeSelect"
   />
-  <div id="map" tabindex="-1" aria-label="World map of PCD 2026 nodes"></div>
+  <div id="map" tabindex="-1" :aria-label="t('map.aria_label')"></div>
 </template>
 
 <style scoped>

@@ -1,0 +1,86 @@
+{
+  "map": {
+    "aria_label": "Mapa mundial de eventos de PCD 2026"
+  },
+  "nav": {
+    "open_node_list": "Abrir lista de eventos",
+    "close_node_list": "Cerrar lista de eventos",
+    "submit_event": "Enviar tu evento",
+    "switch_to_light": "Cambiar a modo claro",
+    "switch_to_dark": "Cambiar a modo oscuro",
+    "change_language": "Cambiar idioma"
+  },
+  "node_list": {
+    "dialog_label": "Lista de eventos",
+    "heading": "Eventos PCD 2026",
+    "close": "Cerrar lista de eventos",
+    "online_event": "Evento en línea",
+    "date_tbd": "Fecha por confirmar"
+  },
+  "panel": {
+    "close_details": "Cerrar detalles del evento",
+    "back_to_map": "Volver al mapa",
+    "placeholder_warning": "⚠ Estos son datos de ejemplo. No se ha confirmado ningún evento real en esta ubicación.",
+    "share": {
+      "link_copied": "¡Enlace copiado!",
+      "share_event": "Compartir evento",
+      "copy_link": "Copiar enlace",
+      "mastodon": "Compartir en Mastodon",
+      "mastodon_new_tab": "Compartir en Mastodon (abre en nueva pestaña)",
+      "bluesky": "Compartir en Bluesky",
+      "bluesky_new_tab": "Compartir en Bluesky (abre en nueva pestaña)",
+      "facebook": "Compartir en Facebook",
+      "facebook_new_tab": "Compartir en Facebook (abre en nueva pestaña)",
+      "linkedin": "Compartir en LinkedIn",
+      "linkedin_new_tab": "Compartir en LinkedIn (abre en nueva pestaña)"
+    },
+    "by": "por",
+    "hosts_label": "Organizadores:",
+    "show_all_hosts": "Mostrar todos los organizadores",
+    "more": "más",
+    "visit_event_page": "Visitar página del evento",
+    "visit_event_page_new_tab": "Visitar página del evento (abre en nueva pestaña)",
+    "visit_forum_thread": "Visitar el hilo del foro",
+    "visit_forum_thread_new_tab": "Visitar el hilo del foro (abre en nueva pestaña)",
+    "date_tbd": "Fecha por confirmar",
+    "time_tbd": "Hora por confirmar",
+    "local_time": "Hora local",
+    "location_tbd": "Ubicación por confirmar",
+    "online_event": "Evento en línea",
+    "join_online": "Unirse al evento en línea",
+    "get_directions_osm": "Cómo llegar en OpenStreetMap",
+    "view_osm": "Ver en OpenStreetMap",
+    "get_directions": "Cómo llegar",
+    "add_to_calendar": "Añadir al calendario",
+    "google_calendar": "Google Calendar",
+    "google_calendar_new_tab": "Google Calendar (abre en nueva pestaña)",
+    "outlook": "Outlook",
+    "outlook_new_tab": "Outlook (abre en nueva pestaña)",
+    "download_ics": "Descargar .ics",
+    "read_more": "Leer más…",
+    "show_less": "Mostrar menos",
+    "disclaimer_with_org": "Este evento está organizado por {org} y no está afiliado con la Processing Foundation. Para cualquier pregunta o inquietud sobre este evento, comuníquese directamente con los organizadores.",
+    "disclaimer_without_org": "Este evento está organizado de forma independiente y no está afiliado con la Processing Foundation. Para cualquier pregunta o inquietud sobre este evento, comuníquese directamente con los organizadores.",
+    "report_issue": "Reportar un problema con esta página",
+    "email_subject": "[Reporte] Problema con la página \"{name}\"",
+    "email_body": "Hola equipo PCD,\n\nMe gustaría reportar un problema con la siguiente página:\n\n- Nombre: \"{name}\"\n- Enlace: {link}\n\n[Por favor describa el problema aquí].\n\n¡Gracias!"
+  },
+  "popup": {
+    "date_tbd": "Fecha por confirmar",
+    "time_tbd": "Hora por confirmar",
+    "online_event": "Evento en línea",
+    "location_tbd": "Ubicación por confirmar",
+    "join_online": "Unirse al evento en línea",
+    "get_directions_osm": "Cómo llegar en OpenStreetMap",
+    "see_details": "Ver detalles",
+    "placeholder_warning": "⚠ Estos son datos de ejemplo. No se ha confirmado ningún evento real en esta ubicación."
+  },
+  "page": {
+    "skip_to_map": "Ir al mapa",
+    "title": "Processing Community Day 2026",
+    "description": "Explora los nodos de Processing Community Day 2026 alrededor del mundo. Encuentra tu evento local en el mapa interactivo."
+  },
+  "language_switcher": {
+    "label": "Idioma"
+  }
+}

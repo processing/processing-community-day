@@ -9,7 +9,7 @@ export default defineConfig({
   output: 'static',
   site: isNetlify ? 'https://processing-community-day.netlify.app' : 'https://processing.github.io',
   base: isNetlify ? '/' : '/pcd-website-mvp-2',
-  integrations: [vue()],
+  integrations: [vue({ appEntrypoint: '/src/i18n/vuePlugin' })],
   vite: {
     build: {
       rollupOptions: {

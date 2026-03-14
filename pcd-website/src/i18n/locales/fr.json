@@ -1,0 +1,86 @@
+{
+  "map": {
+    "aria_label": "Carte mondiale des événements PCD 2026"
+  },
+  "nav": {
+    "open_node_list": "Ouvrir la liste des événements",
+    "close_node_list": "Fermer la liste des événements",
+    "submit_event": "Soumettre votre événement",
+    "switch_to_light": "Passer au mode clair",
+    "switch_to_dark": "Passer au mode sombre",
+    "change_language": "Changer de langue"
+  },
+  "node_list": {
+    "dialog_label": "Liste des événements",
+    "heading": "Événements PCD 2026",
+    "close": "Fermer la liste des événements",
+    "online_event": "Événement en ligne",
+    "date_tbd": "Date à confirmer"
+  },
+  "panel": {
+    "close_details": "Fermer les détails de l'événement",
+    "back_to_map": "Retour à la carte",
+    "placeholder_warning": "⚠ Données fictives. Aucun événement réel n'a été confirmé à cet endroit.",
+    "share": {
+      "link_copied": "Lien copié !",
+      "share_event": "Partager l'événement",
+      "copy_link": "Copier le lien",
+      "mastodon": "Partager sur Mastodon",
+      "mastodon_new_tab": "Partager sur Mastodon (ouvre dans un nouvel onglet)",
+      "bluesky": "Partager sur Bluesky",
+      "bluesky_new_tab": "Partager sur Bluesky (ouvre dans un nouvel onglet)",
+      "facebook": "Partager sur Facebook",
+      "facebook_new_tab": "Partager sur Facebook (ouvre dans un nouvel onglet)",
+      "linkedin": "Partager sur LinkedIn",
+      "linkedin_new_tab": "Partager sur LinkedIn (ouvre dans un nouvel onglet)"
+    },
+    "by": "par",
+    "hosts_label": "Organisateurs :",
+    "show_all_hosts": "Afficher tous les organisateurs",
+    "more": "plus",
+    "visit_event_page": "Visiter la page de l'événement",
+    "visit_event_page_new_tab": "Visiter la page de l'événement (ouvre dans un nouvel onglet)",
+    "visit_forum_thread": "Visiter le fil du forum",
+    "visit_forum_thread_new_tab": "Visiter le fil du forum (ouvre dans un nouvel onglet)",
+    "date_tbd": "Date à confirmer",
+    "time_tbd": "Heure à confirmer",
+    "local_time": "Heure locale",
+    "location_tbd": "Lieu à confirmer",
+    "online_event": "Événement en ligne",
+    "join_online": "Rejoindre l'événement en ligne",
+    "get_directions_osm": "Itinéraire sur OpenStreetMap",
+    "view_osm": "Voir sur OpenStreetMap",
+    "get_directions": "Itinéraire",
+    "add_to_calendar": "Ajouter au calendrier",
+    "google_calendar": "Google Agenda",
+    "google_calendar_new_tab": "Google Agenda (ouvre dans un nouvel onglet)",
+    "outlook": "Outlook",
+    "outlook_new_tab": "Outlook (ouvre dans un nouvel onglet)",
+    "download_ics": "Télécharger .ics",
+    "read_more": "Lire la suite…",
+    "show_less": "Afficher moins",
+    "disclaimer_with_org": "Cet événement est organisé par {org} et n'est pas affilié à la Processing Foundation. Pour toute question ou préoccupation concernant cet événement, veuillez contacter directement les organisateurs.",
+    "disclaimer_without_org": "Cet événement est organisé de manière indépendante et n'est pas affilié à la Processing Foundation. Pour toute question ou préoccupation concernant cet événement, veuillez contacter directement les organisateurs.",
+    "report_issue": "Signaler un problème avec cette page",
+    "email_subject": "[Signalement] Problème avec la page \"{name}\"",
+    "email_body": "Bonjour équipe PCD,\n\nJe souhaite signaler un problème avec la page suivante :\n\n- Nom : \"{name}\"\n- Lien : {link}\n\n[Veuillez décrire le problème ici].\n\nMerci !"
+  },
+  "popup": {
+    "date_tbd": "Date à confirmer",
+    "time_tbd": "Heure à confirmer",
+    "online_event": "En ligne",
+    "location_tbd": "Lieu à confirmer",
+    "join_online": "Rejoindre l'événement en ligne",
+    "get_directions_osm": "Itinéraire sur OpenStreetMap",
+    "see_details": "Voir les détails",
+    "placeholder_warning": "⚠ Données fictives. Aucun événement réel n'a été confirmé à cet endroit."
+  },
+  "page": {
+    "skip_to_map": "Aller à la carte",
+    "title": "Processing Community Day 2026",
+    "description": "Explorez les événements de Processing Community Day 2026 à travers le monde. Trouvez votre événement local sur la carte interactive."
+  },
+  "language_switcher": {
+    "label": "Langue"
+  }
+}

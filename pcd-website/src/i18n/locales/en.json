@@ -1,0 +1,86 @@
+{
+  "map": {
+    "aria_label": "World map of PCD 2026 nodes"
+  },
+  "nav": {
+    "open_node_list": "Open node list",
+    "close_node_list": "Close node list",
+    "submit_event": "Submit your event",
+    "switch_to_light": "Switch to light mode",
+    "switch_to_dark": "Switch to dark mode",
+    "change_language": "Change language"
+  },
+  "node_list": {
+    "dialog_label": "Node list",
+    "heading": "PCD 2026 Nodes",
+    "close": "Close node list",
+    "online_event": "Online event",
+    "date_tbd": "Date TBD"
+  },
+  "panel": {
+    "close_details": "Close event details",
+    "back_to_map": "Back to map",
+    "placeholder_warning": "⚠ This is placeholder data. No real event has been confirmed at this location.",
+    "share": {
+      "link_copied": "Link copied!",
+      "share_event": "Share event",
+      "copy_link": "Copy link",
+      "mastodon": "Share on Mastodon",
+      "mastodon_new_tab": "Share on Mastodon (opens in new tab)",
+      "bluesky": "Share on Bluesky",
+      "bluesky_new_tab": "Share on Bluesky (opens in new tab)",
+      "facebook": "Share on Facebook",
+      "facebook_new_tab": "Share on Facebook (opens in new tab)",
+      "linkedin": "Share on LinkedIn",
+      "linkedin_new_tab": "Share on LinkedIn (opens in new tab)"
+    },
+    "by": "by",
+    "hosts_label": "Hosts:",
+    "show_all_hosts": "Show all hosts",
+    "more": "more",
+    "visit_event_page": "Visit event page",
+    "visit_event_page_new_tab": "Visit event page (opens in new tab)",
+    "visit_forum_thread": "Visit the forum thread",
+    "visit_forum_thread_new_tab": "Visit the forum thread (opens in new tab)",
+    "date_tbd": "Date TBD",
+    "time_tbd": "Time TBD",
+    "local_time": "Local time",
+    "location_tbd": "Location TBD",
+    "online_event": "Online Event",
+    "join_online": "Join the online event",
+    "get_directions_osm": "Get directions on OpenStreetMap",
+    "view_osm": "View on OpenStreetMap",
+    "get_directions": "Get directions",
+    "add_to_calendar": "Add to calendar",
+    "google_calendar": "Google Calendar",
+    "google_calendar_new_tab": "Google Calendar (opens in new tab)",
+    "outlook": "Outlook",
+    "outlook_new_tab": "Outlook (opens in new tab)",
+    "download_ics": "Download .ics",
+    "read_more": "Read more…",
+    "show_less": "Show less",
+    "disclaimer_with_org": "This event is organized by {org} and is not affiliated with the Processing Foundation. For any questions or concerns about this event, please contact the organizers directly.",
+    "disclaimer_without_org": "This event is independently organized and is not affiliated with the Processing Foundation. For any questions or concerns about this event, please contact the organizers directly.",
+    "report_issue": "Report an issue with this page",
+    "email_subject": "[Report] Issue with \"{name}\" page",
+    "email_body": "Hi PCD team,\n\nI would like to report an issue with the following page:\n\n- Name: \"{name}\"\n- Link: {link}\n\n[Please describe the issue here].\n\nThank you!"
+  },
+  "popup": {
+    "date_tbd": "Date TBD",
+    "time_tbd": "Time TBD",
+    "online_event": "Online Event",
+    "location_tbd": "Location TBD",
+    "join_online": "Join the online event",
+    "get_directions_osm": "Get directions on OpenStreetMap",
+    "see_details": "See details",
+    "placeholder_warning": "⚠ This is placeholder data. No real event has been confirmed at this location."
+  },
+  "page": {
+    "skip_to_map": "Skip to map",
+    "title": "Processing Community Day 2026",
+    "description": "Explore Processing Community Day 2026 nodes around the world. Find your local event on the interactive map."
+  },
+  "language_switcher": {
+    "label": "Language"
+  }
+}

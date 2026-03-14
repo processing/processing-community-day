@@ -1,5 +1,7 @@
 import type { Node } from './nodes';
 import { formatPopupDate } from './format';
+import { i18n } from '../i18n/index';
+import { currentLocale } from '../i18n/localeState';
 
 export function escapeHtml(str: string): string {
   return str
@@ -8,6 +10,10 @@ export function escapeHtml(str: string): string {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+function t(key: string, params?: Record<string, string>): string {
+  return i18n.global.t(key, params ?? {});
 }
 
 const POPUP_PREVIEW_LENGTH = 120;
@@ -20,9 +26,11 @@ function getOsmUrl(node: Node): string {
 }
 
 export function makePopupContent(node: Node): string {
+  const locale = currentLocale.value;
+
   const date = node.date_tbd
-    ? 'Date TBD'
-    : escapeHtml(formatPopupDate(node.event_date ?? '', node.event_end_date));
+    ? t('popup.date_tbd')
+    : escapeHtml(formatPopupDate(node.event_date ?? '', node.event_end_date, locale));
 
   const rawText = node.event_short_description.trim();
   const blurb = rawText.length > POPUP_PREVIEW_LENGTH
@@ -31,26 +39,26 @@ export function makePopupContent(node: Node): string {
   const descriptionHtml = blurb ? `<p class="popup-description">${blurb}</p>` : '';
 
   const placeholderBanner = node.placeholder
-    ? `<div class="popup-placeholder">&#9888; This is placeholder data. No real event has been confirmed at this location.</div>`
+    ? `<div class="popup-placeholder">&#9888; ${escapeHtml(t('popup.placeholder_warning').replace(/^⚠\s*/, ''))}</div>`
     : '';
 
   const organizingEntityHtml = node.organization_name
     ? `<p class="popup-organizing-entity">by ${escapeHtml(node.organization_name)}</p>`
     : '';
 
-  const onlineBadgeHtml = node.online_event ? '<span class="popup-online-badge">Online Event</span>' : '';
-  const timeHint = !node.date_tbd && node.time_tbd ? ' · Time TBD' : '';
+  const onlineBadgeHtml = node.online_event ? `<span class="popup-online-badge">${t('popup.online_event')}</span>` : '';
+  const timeHint = !node.date_tbd && node.time_tbd ? ` · ${t('popup.time_tbd')}` : '';
   const dateLineContent = `${date}${timeHint}`;
 
   const venueNameHtml = node.online_event
     ? ''
     : node.location_tbd
-      ? '<span class="popup-venue-name popup-venue-tbd">Location TBD</span>'
+      ? `<span class="popup-venue-name popup-venue-tbd">${t('popup.location_tbd')}</span>`
       : node.location_name
         ? `<span class="popup-venue-name">${escapeHtml(node.location_name)}</span>`
         : '';
 
-  const onlineAddressText = node.event_url ? escapeHtml(node.event_url) : 'Online Event';
+  const onlineAddressText = node.event_url ? escapeHtml(node.event_url) : t('popup.online_event');
 
   const venueAddressHtml = node.online_event
     ? node.event_url
@@ -59,7 +67,7 @@ export function makePopupContent(node: Node): string {
           target="_blank"
           rel="noopener noreferrer"
           class="popup-venue-address"
-          title="Join the online event"
+          title="${escapeHtml(t('popup.join_online'))}"
         >${onlineAddressText}</a>`
       : `<span class="popup-venue-address">${onlineAddressText}</span>`
     : node.location_tbd
@@ -70,7 +78,7 @@ export function makePopupContent(node: Node): string {
           target="_blank"
           rel="noopener noreferrer"
           class="popup-venue-address"
-          title="Get directions on OpenStreetMap"
+          title="${escapeHtml(t('popup.get_directions_osm'))}"
         >${escapeHtml(node.address)}</a>`
       : '';
 
@@ -91,7 +99,7 @@ export function makePopupContent(node: Node): string {
       </div>
       <div class="popup-body">
         ${descriptionHtml}
-        <button class="read-more" data-node-id="${escapeHtml(node.id)}" aria-label="See details for ${escapeHtml(node.event_name)}">See details &rarr;</button>
+        <button class="read-more" data-node-id="${escapeHtml(node.id)}" aria-label="${escapeHtml(t('popup.see_details'))} ${escapeHtml(node.event_name)}">${t('popup.see_details')} &rarr;</button>
       </div>
     </div>
   `.trim();

@@ -1,0 +1,86 @@
+{
+  "map": {
+    "aria_label": "Weltkarte der PCD 2026-Veranstaltungen"
+  },
+  "nav": {
+    "open_node_list": "Veranstaltungsliste öffnen",
+    "close_node_list": "Veranstaltungsliste schließen",
+    "submit_event": "Event einreichen",
+    "switch_to_light": "Zum hellen Modus wechseln",
+    "switch_to_dark": "Zum dunklen Modus wechseln",
+    "change_language": "Sprache ändern"
+  },
+  "node_list": {
+    "dialog_label": "Veranstaltungsliste",
+    "heading": "PCD 2026-Veranstaltungen",
+    "close": "Veranstaltungsliste schließen",
+    "online_event": "Online-Veranstaltung",
+    "date_tbd": "Datum noch offen"
+  },
+  "panel": {
+    "close_details": "Veranstaltungsdetails schließen",
+    "back_to_map": "Zurück zur Karte",
+    "placeholder_warning": "⚠ Dies sind Platzhalterdaten. An diesem Ort wurde noch keine echte Veranstaltung bestätigt.",
+    "share": {
+      "link_copied": "Link kopiert!",
+      "share_event": "Veranstaltung teilen",
+      "copy_link": "Link kopieren",
+      "mastodon": "Auf Mastodon teilen",
+      "mastodon_new_tab": "Auf Mastodon teilen (öffnet in neuem Tab)",
+      "bluesky": "Auf Bluesky teilen",
+      "bluesky_new_tab": "Auf Bluesky teilen (öffnet in neuem Tab)",
+      "facebook": "Auf Facebook teilen",
+      "facebook_new_tab": "Auf Facebook teilen (öffnet in neuem Tab)",
+      "linkedin": "Auf LinkedIn teilen",
+      "linkedin_new_tab": "Auf LinkedIn teilen (öffnet in neuem Tab)"
+    },
+    "by": "von",
+    "hosts_label": "Gastgeber:",
+    "show_all_hosts": "Alle Gastgeber anzeigen",
+    "more": "mehr",
+    "visit_event_page": "Zur Veranstaltungsseite",
+    "visit_event_page_new_tab": "Zur Veranstaltungsseite (öffnet in neuem Tab)",
+    "visit_forum_thread": "Zum Forum-Thread",
+    "visit_forum_thread_new_tab": "Zum Forum-Thread (öffnet in neuem Tab)",
+    "date_tbd": "Datum noch offen",
+    "time_tbd": "Uhrzeit noch offen",
+    "local_time": "Ortszeit",
+    "location_tbd": "Ort noch offen",
+    "online_event": "Online-Veranstaltung",
+    "join_online": "An der Online-Veranstaltung teilnehmen",
+    "get_directions_osm": "Route auf OpenStreetMap",
+    "view_osm": "Auf OpenStreetMap ansehen",
+    "get_directions": "Route berechnen",
+    "add_to_calendar": "Zum Kalender hinzufügen",
+    "google_calendar": "Google Kalender",
+    "google_calendar_new_tab": "Google Kalender (öffnet in neuem Tab)",
+    "outlook": "Outlook",
+    "outlook_new_tab": "Outlook (öffnet in neuem Tab)",
+    "download_ics": ".ics herunterladen",
+    "read_more": "Mehr lesen…",
+    "show_less": "Weniger anzeigen",
+    "disclaimer_with_org": "Diese Veranstaltung wird von {org} organisiert und ist nicht mit der Processing Foundation verbunden. Bei Fragen oder Bedenken zu dieser Veranstaltung wenden Sie sich bitte direkt an die Veranstalter.",
+    "disclaimer_without_org": "Diese Veranstaltung wird unabhängig organisiert und ist nicht mit der Processing Foundation verbunden. Bei Fragen oder Bedenken zu dieser Veranstaltung wenden Sie sich bitte direkt an die Veranstalter.",
+    "report_issue": "Ein Problem mit dieser Seite melden",
+    "email_subject": "[Meldung] Problem mit der Seite \"{name}\"",
+    "email_body": "Hallo PCD-Team,\n\nIch möchte ein Problem mit der folgenden Seite melden:\n\n- Name: \"{name}\"\n- Link: {link}\n\n[Bitte beschreiben Sie das Problem hier].\n\nVielen Dank!"
+  },
+  "popup": {
+    "date_tbd": "Datum noch offen",
+    "time_tbd": "Uhrzeit noch offen",
+    "online_event": "Online-Veranstaltung",
+    "location_tbd": "Ort noch offen",
+    "join_online": "An der Online-Veranstaltung teilnehmen",
+    "get_directions_osm": "Route auf OpenStreetMap",
+    "see_details": "Details anzeigen",
+    "placeholder_warning": "⚠ Dies sind Platzhalterdaten. An diesem Ort wurde noch keine echte Veranstaltung bestätigt."
+  },
+  "page": {
+    "skip_to_map": "Zur Karte springen",
+    "title": "Processing Community Day 2026",
+    "description": "Entdecke Processing Community Day 2026-Veranstaltungen auf der ganzen Welt. Finde deine lokale Veranstaltung auf der interaktiven Karte."
+  },
+  "language_switcher": {
+    "label": "Sprache"
+  }
+}

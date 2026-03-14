@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { createFocusTrap, type FocusTrap } from 'focus-trap';
 import { Icon } from '@iconify/vue';
 import type { Node } from '../lib/nodes';
@@ -13,6 +14,7 @@ const emit = defineEmits<{
   close: [];
 }>();
 
+const { t, locale } = useI18n();
 const panelRef = ref<HTMLElement | null>(null);
 const tabButtonRef = ref<HTMLButtonElement | null>(null);
 const minimapRef = ref<HTMLDivElement | null>(null);
@@ -182,8 +184,8 @@ async function copyLink(node: Node) {
 }
 
 function getReportIssueHref(node: Node): string {
-  const subject = `[Report] Issue with "${node.event_name}" page`;
-  const body = `Hi PCD team,\n\nI would like to report an issue with the following page:\n\n- Name: "${node.event_name}"\n- Link: ${getShareUrl(node)}\n\n[Please describe the issue here].\n\nThank you!`;
+  const subject = t('panel.email_subject', { name: node.event_name });
+  const body = t('panel.email_body', { name: node.event_name, link: getShareUrl(node) });
   return `mailto:${PCD_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 </script>
@@ -202,7 +204,7 @@ function getReportIssueHref(node: Node): string {
       v-if="node !== null"
       ref="tabButtonRef"
       class="panel-tab"
-      aria-label="Close event details"
+      :aria-label="t('panel.close_details')"
       @click="emit('close')"
     >
       <Icon icon="bi:chevron-right" width="1em" height="1em" aria-hidden="true" />
@@ -213,12 +215,12 @@ function getReportIssueHref(node: Node): string {
       <div class="panel-mobile-back">
         <button class="panel-back-btn" @click="emit('close')">
           <Icon icon="bi:chevron-left" width="1em" height="1em" aria-hidden="true" />
-          Back to map
+          {{ t('panel.back_to_map') }}
         </button>
       </div>
       <div class="panel-content">
         <div v-if="node.placeholder" class="panel-placeholder">
-          ⚠ This is placeholder data. No real event has been confirmed at this location.
+          {{ t('panel.placeholder_warning') }}
         </div>
 
         <div class="panel-header-row">
@@ -226,8 +228,8 @@ function getReportIssueHref(node: Node): string {
           <div class="share-btn-wrap">
             <button
               class="quick-action-btn"
-              :aria-label="linkCopied ? 'Link copied!' : 'Share event'"
-              :title="linkCopied ? 'Link copied!' : 'Share event'"
+              :aria-label="linkCopied ? t('panel.share.link_copied') : t('panel.share.share_event')"
+              :title="linkCopied ? t('panel.share.link_copied') : t('panel.share.share_event')"
                 aria-haspopup="menu"
               :aria-expanded="shareDropdownOpen"
               @click.stop="shareDropdownOpen = !shareDropdownOpen"
@@ -238,44 +240,44 @@ function getReportIssueHref(node: Node): string {
             <div v-show="shareDropdownOpen" class="quick-action-menu share-menu" role="menu">
               <button role="menuitem" class="copy-link-btn" @click="copyLink(node)">
                 <Icon icon="bi:copy" width="1em" height="1em" aria-hidden="true" />
-                Copy link
+                {{ t('panel.share.copy_link') }}
               </button>
               <hr class="share-menu-divider" />
               <a
                 :href="`https://mastodon.social/share?text=${encodeURIComponent('Join me at ' + node.event_name + ' ' + getShareUrl(node))}`"
                 target="_blank" rel="noopener noreferrer" role="menuitem"
-                aria-label="Share on Mastodon (opens in new tab)"
+                :aria-label="t('panel.share.mastodon_new_tab')"
                 @click="shareDropdownOpen = false"
-              >Share on Mastodon</a>
+              >{{ t('panel.share.mastodon') }}</a>
               <a
                 :href="`https://bsky.app/intent/compose?text=${encodeURIComponent('Join me at ' + node.event_name + ' ' + getShareUrl(node))}`"
                 target="_blank" rel="noopener noreferrer" role="menuitem"
-                aria-label="Share on Bluesky (opens in new tab)"
+                :aria-label="t('panel.share.bluesky_new_tab')"
                 @click="shareDropdownOpen = false"
-              >Share on Bluesky</a>
+              >{{ t('panel.share.bluesky') }}</a>
               <a
                 :href="`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getShareUrl(node))}`"
                 target="_blank" rel="noopener noreferrer" role="menuitem"
-                aria-label="Share on Facebook (opens in new tab)"
+                :aria-label="t('panel.share.facebook_new_tab')"
                 @click="shareDropdownOpen = false"
-              >Share on Facebook</a>
+              >{{ t('panel.share.facebook') }}</a>
               <a
                 :href="`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(getShareUrl(node))}`"
                 target="_blank" rel="noopener noreferrer" role="menuitem"
-                aria-label="Share on LinkedIn (opens in new tab)"
+                :aria-label="t('panel.share.linkedin_new_tab')"
                 @click="shareDropdownOpen = false"
-              >Share on LinkedIn</a>
+              >{{ t('panel.share.linkedin') }}</a>
             </div>
           </div>
         </div>
         <div class="panel-byline">
           <p v-if="node.organization_name" class="panel-organizing-entity">
-            <span class="panel-label">by</span> {{ node.organization_name }}
+            <span class="panel-label">{{ t('panel.by') }}</span> {{ node.organization_name }}
           </p>
           <p v-if="node.organizers.some(o => o.name)" class="panel-hosts">
-            <span class="panel-label">Hosts:</span>
+            <span class="panel-label">{{ t('panel.hosts_label') }}</span>
             <span v-if="!hostsExpanded" class="panel-hosts-line">
-              <span class="panel-hosts-names">{{ formatOrganizers(node.organizers, false) }}</span><template v-if="hasMoreHosts(node.organizers)"><span class="panel-hosts-more-wrap">…&nbsp;<button class="panel-hosts-more" aria-label="Show all hosts" @click="hostsExpanded = true">more</button></span></template>
+              <span class="panel-hosts-names">{{ formatOrganizers(node.organizers, false) }}</span><template v-if="hasMoreHosts(node.organizers)"><span class="panel-hosts-more-wrap">…&nbsp;<button class="panel-hosts-more" :aria-label="t('panel.show_all_hosts')" @click="hostsExpanded = true">{{ t('panel.more') }}</button></span></template>
             </span>
             <span v-else>{{ formatOrganizers(node.organizers, true) }}</span>
           </p>
@@ -288,16 +290,16 @@ function getReportIssueHref(node: Node): string {
           target="_blank"
           rel="noopener noreferrer"
           class="panel-event-website-btn"
-          aria-label="Visit event page (opens in new tab)"
-        >Visit event page <Icon icon="bi:box-arrow-up-right" width="1em" height="1em" aria-hidden="true" style="margin-left: 0.5rem; vertical-align: -0.1em;" /></a>
+          :aria-label="t('panel.visit_event_page_new_tab')"
+        >{{ t('panel.visit_event_page') }} <Icon icon="bi:box-arrow-up-right" width="1em" height="1em" aria-hidden="true" style="margin-left: 0.5rem; vertical-align: -0.1em;" /></a>
         <a
           v-else-if="node.forum_thread_url"
           :href="node.forum_thread_url"
           target="_blank"
           rel="noopener noreferrer"
           class="panel-event-website-btn"
-          aria-label="Visit the forum thread (opens in new tab)"
-        >Visit the forum thread <Icon icon="bi:box-arrow-up-right" width="1em" height="1em" aria-hidden="true" style="margin-left: 0.5rem; vertical-align: -0.1em;" /></a>
+          :aria-label="t('panel.visit_forum_thread_new_tab')"
+        >{{ t('panel.visit_forum_thread') }} <Icon icon="bi:box-arrow-up-right" width="1em" height="1em" aria-hidden="true" style="margin-left: 0.5rem; vertical-align: -0.1em;" /></a>
 
         <!-- Info Card -->
         <div class="panel-info-card">
@@ -305,13 +307,13 @@ function getReportIssueHref(node: Node): string {
           <div class="info-card-row">
             <Icon icon="bi:calendar-event" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
             <div>
-              <span v-if="node.date_tbd" class="info-card-date info-card-tbd">Date TBD</span>
-              <span v-else class="info-card-date">{{ formatDateRange(node.event_date ?? '', node.event_end_date) }}</span>
-              <span v-if="!node.date_tbd && node.time_tbd" class="info-card-time info-card-tbd">· Time TBD</span>
+              <span v-if="node.date_tbd" class="info-card-date info-card-tbd">{{ t('panel.date_tbd') }}</span>
+              <span v-else class="info-card-date">{{ formatDateRange(node.event_date ?? '', node.event_end_date, false, locale) }}</span>
+              <span v-if="!node.date_tbd && node.time_tbd" class="info-card-time info-card-tbd">· {{ t('panel.time_tbd') }}</span>
               <span v-else-if="!node.date_tbd && node.event_start_time" class="info-card-time">
                 · {{ formatTimeRange(node.event_start_time, node.event_end_time) }}
               </span>
-              <span v-if="!node.date_tbd && node.event_start_time" class="info-card-time-note">Local time</span>
+              <span v-if="!node.date_tbd && node.event_start_time" class="info-card-time-note">{{ t('panel.local_time') }}</span>
             </div>
           </div>
           <hr class="info-card-divider" aria-hidden="true" />
@@ -321,14 +323,14 @@ function getReportIssueHref(node: Node): string {
             <div class="info-card-row-leading">
               <Icon icon="bi:link-45deg" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
               <div class="info-card-venue">
-                <span class="info-card-venue-name">{{ node.online_event ? onlinePlatformName(node.event_url) : node.location_tbd ? 'Location TBD' : (node.location_name || node.address) }}</span>
+                <span class="info-card-venue-name">{{ node.online_event ? onlinePlatformName(node.event_url) : node.location_tbd ? t('panel.location_tbd') : (node.location_name || node.address) }}</span>
                 <a
                   v-if="node.online_event && node.event_url"
                   :href="node.event_url"
                   target="_blank"
                   rel="noopener noreferrer"
                   class="info-card-venue-address"
-                  title="Join the online event"
+                  :title="t('panel.join_online')"
                 >{{ node.event_url }}</a>
                 <a
                   v-else-if="!node.online_event && !node.location_tbd && node.address"
@@ -336,13 +338,13 @@ function getReportIssueHref(node: Node): string {
                   target="_blank"
                   rel="noopener noreferrer"
                   class="info-card-venue-address"
-                  title="Get directions on OpenStreetMap"
-                >{{ node.location_name ? node.address : 'View on OpenStreetMap' }}</a>
+                  :title="t('panel.get_directions_osm')"
+                >{{ node.location_name ? node.address : t('panel.view_osm') }}</a>
               </div>
             </div>
             <p v-if="node.online_event" class="panel-online-badge info-card-online-badge">
               <Icon icon="bi:wifi" width="1em" height="1em" aria-hidden="true" />
-              Online Event
+              {{ t('panel.online_event') }}
             </p>
           </div>
           <hr class="info-card-divider" aria-hidden="true" />
@@ -353,12 +355,12 @@ function getReportIssueHref(node: Node): string {
             <div class="info-card-cal-trigger-wrap">
               <button
                 class="info-card-cal-trigger"
-                aria-label="Add to calendar"
+                :aria-label="t('panel.add_to_calendar')"
                 aria-haspopup="menu"
                 :aria-expanded="calDropdownOpen"
                 @click.stop="calDropdownOpen = !calDropdownOpen"
               >
-                Add to calendar
+                {{ t('panel.add_to_calendar') }}
               </button>
               <div v-show="calDropdownOpen" class="quick-action-menu" role="menu">
                 <a
@@ -366,19 +368,19 @@ function getReportIssueHref(node: Node): string {
                   target="_blank"
                   rel="noopener noreferrer"
                   role="menuitem"
-                  aria-label="Google Calendar (opens in new tab)"
+                  :aria-label="t('panel.google_calendar_new_tab')"
                   @click="calDropdownOpen = false"
-                >Google Calendar</a>
+                >{{ t('panel.google_calendar') }}</a>
                 <a
                   :href="calendarLinks(node).outlookCalUrl"
                   target="_blank"
                   rel="noopener noreferrer"
                   role="menuitem"
-                  aria-label="Outlook (opens in new tab)"
+                  :aria-label="t('panel.outlook_new_tab')"
                   @click="calDropdownOpen = false"
-                >Outlook</a>
+                >{{ t('panel.outlook') }}</a>
                 <button role="menuitem" @click="downloadIcs(node); calDropdownOpen = false">
-                  Download .ics
+                  {{ t('panel.download_ics') }}
                 </button>
               </div>
             </div>
@@ -408,7 +410,7 @@ function getReportIssueHref(node: Node): string {
             :aria-expanded="descExpanded"
             @click="descExpanded = !descExpanded"
           >
-            {{ descExpanded ? 'Show less' : 'Read more…' }}
+            {{ descExpanded ? t('panel.show_less') : t('panel.read_more') }}
           </button>
         </div>
 
@@ -421,10 +423,10 @@ function getReportIssueHref(node: Node): string {
             target="_blank"
             rel="noopener noreferrer"
             class="panel-link-row"
-            title="Get directions on OpenStreetMap"
+            :title="t('panel.get_directions_osm')"
           >
             <Icon icon="bi:map" width="1em" height="1em" aria-hidden="true" class="panel-link-icon" />
-            <span>Get directions</span>
+            <span>{{ t('panel.get_directions') }}</span>
           </a>
           <a
             v-if="node.primary_contact.email"
@@ -452,10 +454,10 @@ function getReportIssueHref(node: Node): string {
         <template v-if="!node.organization_name?.toLowerCase().includes('processing foundation')">
           <hr class="panel-separator" aria-hidden="true" />
           <p v-if="node.organization_name" class="panel-disclaimer">
-            This event is organized by {{ node.organization_name }} and is not affiliated with the Processing Foundation. For any questions or concerns about this event, please contact the organizers directly.
+            {{ t('panel.disclaimer_with_org', { org: node.organization_name }) }}
           </p>
           <p v-else class="panel-disclaimer">
-            This event is independently organized and is not affiliated with the Processing Foundation. For any questions or concerns about this event, please contact the organizers directly.
+            {{ t('panel.disclaimer_without_org') }}
           </p>
         </template>
 
@@ -465,10 +467,10 @@ function getReportIssueHref(node: Node): string {
           <a
             :href="getReportIssueHref(node)"
             class="panel-link-row panel-report-link"
-            title="Report an issue with this page"
+            :title="t('panel.report_issue')"
           >
             <Icon icon="bi:flag" width="1em" height="1em" aria-hidden="true" class="panel-link-icon" />
-            <span>Report an issue with this page</span>
+            <span>{{ t('panel.report_issue') }}</span>
           </a>
         </div>
       </div>

@@ -39,7 +39,7 @@ const nodes = await loadNodes();
     </script>
   </head>
   <body>
-    <a href="#map" class="skip-link">Skip to map</a>
+    <a href="#map" class="skip-link" id="skip-link">Skip to map</a>
     <MapView nodes={nodes} client:only="vue" />
   </body>
 </html>

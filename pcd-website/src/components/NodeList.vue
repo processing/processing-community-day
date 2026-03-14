@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { createFocusTrap, type FocusTrap } from 'focus-trap';
 import type { Node } from '../lib/nodes';
 import { formatDateRange } from '../lib/format';
@@ -14,6 +15,7 @@ const emit = defineEmits<{
   select: [node: Node];
 }>();
 
+const { t, locale } = useI18n();
 const containerRef = ref<HTMLElement | null>(null);
 let trap: FocusTrap | null = null;
 
@@ -82,7 +84,7 @@ function handleKeydown(e: KeyboardEvent) {
     ref="containerRef"
     role="dialog"
     :aria-modal="open"
-    aria-label="Node list"
+    :aria-label="t('node_list.dialog_label')"
     tabindex="-1"
     v-show="open"
     :inert="!open"
@@ -90,10 +92,10 @@ function handleKeydown(e: KeyboardEvent) {
     @keydown="handleKeydown"
   >
     <div class="list-header">
-      <h2 class="list-title">PCD 2026 Nodes</h2>
+      <h2 class="list-title">{{ t('node_list.heading') }}</h2>
       <button
         class="list-close"
-        aria-label="Close node list"
+        :aria-label="t('node_list.close')"
         @click="emit('close')"
       >
         ×
@@ -104,12 +106,12 @@ function handleKeydown(e: KeyboardEvent) {
       <li v-for="node in sortedNodes" :key="node.id">
         <button
           class="node-item"
-          :aria-label="`${node.event_name}, ${node.online_event ? 'Online event' : `${node.city}, ${node.country}`}, ${node.event_date ? formatDateRange(node.event_date, node.event_end_date) : 'Date TBD'}`"
+          :aria-label="`${node.event_name}, ${node.online_event ? t('node_list.online_event') : `${node.city}, ${node.country}`}, ${node.event_date ? formatDateRange(node.event_date, node.event_end_date, false, locale) : t('node_list.date_tbd')}`"
           @click="emit('select', node)"
         >
           <span class="node-name">{{ node.event_name }}</span>
-          <span class="node-location">{{ node.online_event ? 'Online event' : `${node.city}, ${node.country}` }}</span>
-          <span class="node-date">{{ node.event_date ? formatDateRange(node.event_date, node.event_end_date) : 'Date TBD' }}</span>
+          <span class="node-location">{{ node.online_event ? t('node_list.online_event') : `${node.city}, ${node.country}` }}</span>
+          <span class="node-date">{{ node.event_date ? formatDateRange(node.event_date, node.event_end_date, false, locale) : t('node_list.date_tbd') }}</span>
         </button>
       </li>
     </ul>
