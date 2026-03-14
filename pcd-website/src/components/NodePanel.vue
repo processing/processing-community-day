@@ -109,11 +109,12 @@ async function initMinimap(node: Node) {
 
 watch(
   () => props.node,
-  (newNode) => {
+  async (newNode) => {
     calDropdownOpen.value = false;
     descExpanded.value = false;
     hostsExpanded.value = false;
     if (newNode) {
+      await nextTick();
       trap?.activate();
       if (!newNode.online_event && !newNode.location_tbd) initMinimap(newNode);
       else destroyMinimap();
@@ -227,7 +228,7 @@ function getReportIssueHref(node: Node): string {
               class="quick-action-btn"
               :aria-label="linkCopied ? 'Link copied!' : 'Share event'"
               :title="linkCopied ? 'Link copied!' : 'Share event'"
-              aria-haspopup="menu"
+                aria-haspopup="menu"
               :aria-expanded="shareDropdownOpen"
               @click.stop="shareDropdownOpen = !shareDropdownOpen"
             >

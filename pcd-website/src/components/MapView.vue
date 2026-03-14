@@ -121,7 +121,7 @@ function onNodeSelect(node: Node) {
   if (mapInstance && marker) {
     mapInstance.flyTo([node.lat, node.lng], 5, { duration: 1 });
     setTimeout(() => {
-      marker.openPopup();
+      openPanel(node);
     }, 1100);
   }
 }
@@ -177,15 +177,38 @@ onMounted(async () => {
 
   L.control.zoom({ position: 'bottomleft' }).addTo(map);
 
-  // Remove Leaflet-injected elements from tab order — keyboard navigation
-  // is handled by our own controls (burger, theme toggle, etc.)
+  // Manage tab order for Leaflet-injected elements:
+  // - Zoom buttons stay in tab order (they are our primary map keyboard controls)
+  // - Attribution links stay in tab order but move to end of DOM (after markers)
+  // - All other Leaflet controls are removed from tab order
   requestAnimationFrame(() => {
     document.querySelectorAll('.leaflet-control a, .leaflet-control button').forEach(el => {
-      el.setAttribute('tabindex', '-1');
+      const inZoom = el.closest('.leaflet-control-zoom');
+      const inAttribution = el.closest('.leaflet-control-attribution');
+      if (!inZoom && !inAttribution) {
+        el.setAttribute('tabindex', '-1');
+      }
     });
     // Leaflet sets tabindex="0" on the map container — force it back to -1
     // so tab order flows through our own controls instead
     map.getContainer().setAttribute('tabindex', '-1');
+
+    const mapContainer = map.getContainer();
+    const controlContainer = mapContainer.querySelector('.leaflet-control-container');
+    const mapPane = mapContainer.querySelector('.leaflet-map-pane');
+
+    // Move zoom controls before the marker pane so screen readers and tab order
+    // encounter zoom buttons before individual markers
+    if (controlContainer && mapPane) {
+      mapContainer.insertBefore(controlContainer, mapPane);
+    }
+
+    // Move attribution control to the very end of the map container so it
+    // appears last in tab order (after all markers)
+    const attribution = mapContainer.querySelector('.leaflet-control-attribution')?.closest('.leaflet-bottom');
+    if (attribution) {
+      mapContainer.appendChild(attribution);
+    }
   });
 
   // Try to center on visitor's location, fall back to world view
@@ -258,6 +281,52 @@ onMounted(async () => {
   });
 
   map.addLayer(clusterGroup);
+
+  // Apply accessible names to marker elements. Leaflet creates marker DOM elements
+  // lazily, so we apply after layer is added and re-apply whenever the cluster
+  // animates (which shows/hides individual markers as clusters form or dissolve).
+  function applyMarkerLabels() {
+    markerMap.forEach((marker, id) => {
+      const node = props.nodes.find(n => n.id === id);
+      if (node) {
+        marker.getElement()?.setAttribute('aria-label', node.event_name);
+      }
+    });
+  }
+
+  // Sort the marker pane so cluster markers appear before individual markers
+  // in the DOM, giving screen readers a logical order: clusters first, then nodes.
+  function sortMarkerPane() {
+    const pane = map.getPanes().markerPane;
+    if (!pane) return;
+    const clusters = Array.from(pane.querySelectorAll<HTMLElement>('.marker-cluster-custom'));
+    const markers = Array.from(pane.querySelectorAll<HTMLElement>('.marker-node'));
+    clusters.forEach(el => pane.appendChild(el));
+    markers.forEach(el => pane.appendChild(el));
+    clusters.forEach(el => pane.insertBefore(el, pane.firstChild));
+  }
+
+  setTimeout(() => { applyMarkerLabels(); sortMarkerPane(); }, 0);
+  clusterGroup.on('animationend', () => { applyMarkerLabels(); sortMarkerPane(); });
+
+  // When a cluster spiderfies, move its child marker elements immediately after
+  // the cluster's own element in the DOM so screen readers encounter them next.
+  clusterGroup.on('spiderfied', (e: { cluster: import('leaflet').Layer; markers: import('leaflet').Marker[] }) => {
+    applyMarkerLabels();
+    const pane = map.getPanes().markerPane;
+    if (!pane) return;
+    const clusterEl = (e.cluster as import('leaflet').Marker).getElement?.();
+    if (!clusterEl) return;
+    // Insert each child element right after the cluster element
+    let insertAfter: Element = clusterEl;
+    e.markers.forEach((m) => {
+      const el = m.getElement?.();
+      if (el && el !== insertAfter) {
+        insertAfter.after(el);
+        insertAfter = el;
+      }
+    });
+  });
 
   // Move focus into popup content when it opens
   map.on('popupopen', (e) => {
