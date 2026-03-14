@@ -1,0 +1,7 @@
+[build]
+  base = "pcd-website"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  DEPLOY_TARGET = "netlify"

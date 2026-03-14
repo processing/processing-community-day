@@ -2,11 +2,13 @@
 import { defineConfig } from 'astro/config';
 import vue from '@astrojs/vue';
 
+const isNetlify = process.env.DEPLOY_TARGET === 'netlify';
+
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
-  site: 'https://processing.github.io',
-  base: '/pcd-website-mvp-2',
+  site: isNetlify ? 'https://day.netlify.app' : 'https://processing.github.io',
+  base: isNetlify ? '/' : '/pcd-website-mvp-2',
   integrations: [vue()],
   vite: {
     build: {
