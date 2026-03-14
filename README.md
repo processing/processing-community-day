@@ -1,6 +1,6 @@
 
 > [!NOTE] 
-> This project is in early development. The map and event data are not yet complete, but we welcome contributions from the community!
+> This project is in early development. The map and event data are not yet complete, but we welcome contributions from the community! To add an event, please open a GitHub Issue using the [**New Event**](https://github.com/processing/processing-community-day/issues/new?template=new-event.yml) template.
 
 # Processing Community Day Website
 
@@ -20,7 +20,11 @@ The map site is open source and contributions are welcome!
 
 ## Adding an event
 
-Open a GitHub Issue using the **New Event** template. The intake workflow validates the submission and opens a pull request with the generated event files. The PR must be reviewed and merged by a maintainer before the event appears on the map.
+To add your event to the map, open a GitHub Issue using the [**New Event**](https://github.com/processing/processing-community-day/issues/new?template=new-event.yml) template.
+
+A script will automatically validate your submission and create a pull request. If there are errors (missing fields, invalid dates, etc.), you'll receive friendly error messages. Once the validation passes, a maintainer will review and merge the PR, and your event will appear on the map.
+
+If you have any questions or need help, feel free to ask in the [forum thread](https://discourse.processing.org/t/pcd-worldwide-2026/48081) or join the [Processing Foundation Discord server](https://discord.gg/q5NksnwGsY).
 
 ## Tech
 
