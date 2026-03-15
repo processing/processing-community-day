@@ -5,7 +5,7 @@
   "nav": {
     "open_node_list": "Ouvrir la liste des événements",
     "close_node_list": "Fermer la liste des événements",
-    "submit_event": "Soumettre votre événement",
+    "submit_event": "Soumettre un événement",
     "switch_to_light": "Passer au mode clair",
     "switch_to_dark": "Passer au mode sombre",
     "change_language": "Changer de langue"
@@ -20,7 +20,7 @@
   "panel": {
     "close_details": "Fermer les détails de l'événement",
     "back_to_map": "Retour à la carte",
-    "placeholder_warning": "⚠ Données fictives. Aucun événement réel n'a été confirmé à cet endroit.",
+    "placeholder_warning": "⚠ Données fictives. Aucun événement n'a encore été confirmé à cet endroit.",
     "share": {
       "link_copied": "Lien copié !",
       "share_event": "Partager l'événement",
@@ -35,35 +35,35 @@
       "linkedin_new_tab": "Partager sur LinkedIn (ouvre dans un nouvel onglet)"
     },
     "by": "par",
-    "hosts_label": "Organisateurs :",
-    "show_all_hosts": "Afficher tous les organisateurs",
+    "hosts_label": "Organisateur·rice·s :",
+    "show_all_hosts": "Afficher tout",
     "more": "plus",
-    "visit_event_page": "Visiter la page de l'événement",
-    "visit_event_page_new_tab": "Visiter la page de l'événement (ouvre dans un nouvel onglet)",
-    "visit_forum_thread": "Visiter le fil du forum",
-    "visit_forum_thread_new_tab": "Visiter le fil du forum (ouvre dans un nouvel onglet)",
+    "visit_event_page": "Voir la page de l'événement",
+    "visit_event_page_new_tab": "Voir la page de l'événement (ouvre dans un nouvel onglet)",
+    "visit_forum_thread": "Voir la discussion sur le forum",
+    "visit_forum_thread_new_tab": "Voir la discussion sur le forum (ouvre dans un nouvel onglet)",
     "date_tbd": "Date à confirmer",
     "time_tbd": "Heure à confirmer",
     "local_time": "Heure locale",
     "location_tbd": "Lieu à confirmer",
     "online_event": "Événement en ligne",
     "join_online": "Rejoindre l'événement en ligne",
-    "get_directions_osm": "Itinéraire sur OpenStreetMap",
+    "get_directions_osm": "Voir l’itinéraire sur OpenStreetMap",
     "view_osm": "Voir sur OpenStreetMap",
-    "get_directions": "Itinéraire",
+    "get_directions": "Voir l’itinéraire",
     "add_to_calendar": "Ajouter au calendrier",
     "google_calendar": "Google Agenda",
     "google_calendar_new_tab": "Google Agenda (ouvre dans un nouvel onglet)",
     "outlook": "Outlook",
     "outlook_new_tab": "Outlook (ouvre dans un nouvel onglet)",
-    "download_ics": "Télécharger .ics",
-    "read_more": "Lire la suite…",
+    "download_ics": "Télécharger le fichier .ics",
+    "read_more": "Afficher plus…",
     "show_less": "Afficher moins",
-    "disclaimer_with_org": "Cet événement est organisé par {org} et n'est pas affilié à la Processing Foundation. Pour toute question ou préoccupation concernant cet événement, veuillez contacter directement les organisateurs.",
-    "disclaimer_without_org": "Cet événement est organisé de manière indépendante et n'est pas affilié à la Processing Foundation. Pour toute question ou préoccupation concernant cet événement, veuillez contacter directement les organisateurs.",
-    "report_issue": "Signaler un problème avec cette page",
+    "disclaimer_with_org": "Cet événement est organisé de manière indépendante et n'est pas affilié à la Processing Foundation. Pour toute question concernant cet événement, veuillez contacter directement {org}.",
+    "disclaimer_without_org": "Cet événement est organisé de manière indépendante et n'est pas affilié à la Processing Foundation. Pour toute question concernant cet événement, veuillez contacter directement les organisateur·rice·s.",
+    "report_issue": "Signaler un problème sur cette page",
     "email_subject": "[Signalement] Problème avec la page \"{name}\"",
-    "email_body": "Bonjour équipe PCD,\n\nJe souhaite signaler un problème avec la page suivante :\n\n- Nom : \"{name}\"\n- Lien : {link}\n\n[Veuillez décrire le problème ici].\n\nMerci !"
+    "email_body": "Bonjour l’équipe PCD,\n\nJe souhaite signaler un problème avec la page suivante :\n\n- Nom : \"{name}\"\n- Lien : {link}\n\n[Veuillez décrire le problème ici].\n\nMerci !"
   },
   "popup": {
     "date_tbd": "Date à confirmer",
@@ -71,14 +71,14 @@
     "online_event": "En ligne",
     "location_tbd": "Lieu à confirmer",
     "join_online": "Rejoindre l'événement en ligne",
-    "get_directions_osm": "Itinéraire sur OpenStreetMap",
+    "get_directions_osm": "Voir l’itinéraire sur OpenStreetMap",
     "see_details": "Voir les détails",
-    "placeholder_warning": "⚠ Données fictives. Aucun événement réel n'a été confirmé à cet endroit."
+    "placeholder_warning": "⚠ Données fictives. Aucun événement n'a encore été confirmé à cet endroit."
   },
   "page": {
     "skip_to_map": "Aller à la carte",
     "title": "Processing Community Day 2026",
-    "description": "Explorez les événements de Processing Community Day 2026 à travers le monde. Trouvez votre événement local sur la carte interactive."
+    "description": "Explorez les événements Processing Community Day 2026 à travers le monde et trouvez celui près de chez vous sur la carte interactive."
   },
   "language_switcher": {
     "label": "Langue"
