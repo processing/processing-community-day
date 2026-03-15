@@ -414,6 +414,9 @@ onMounted(async () => {
         insertAfter = el;
       }
     });
+    // Move focus to the first child marker so Tab continues from there
+    const firstChildEl = e.markers[0]?.getElement?.();
+    firstChildEl?.focus();
   });
 
   // Sliding window: pan just enough to keep focused markers in the safe zone
