@@ -225,6 +225,9 @@ function handleKeydown(e: KeyboardEvent) {
     e.preventDefault();
     listOpen.value = !listOpen.value;
     if (listOpen.value) selectedNode.value = null;
+  } else if (!isTextInput && (e.key === 'L' || e.key === 'l')) {
+    e.preventDefault();
+    document.getElementById('map')?.focus();
   }
 }
 
