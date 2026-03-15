@@ -173,7 +173,8 @@ function getDescPreview(node: Node): { text: string; hasMore: boolean } {
 }
 
 function getShareUrl(node: Node): string {
-  return `${window.location.origin}${window.location.pathname}?event=${node.id}`;
+  const base = window.location.pathname.replace(/\/$/, '');
+  return `${window.location.origin}${base}/event/${node.id}/`;
 }
 
 async function copyLink(node: Node) {

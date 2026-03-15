@@ -1,0 +1,51 @@
+---
+import { loadNodes } from '../../lib/nodes';
+import type { Node } from '../../lib/nodes';
+import ogImage from '../../images/og-image.png';
+
+export async function getStaticPaths() {
+  const nodes = await loadNodes();
+  return nodes.map((node) => ({ params: { id: node.id }, props: { node } }));
+}
+
+interface Props { node: Node; }
+const { node } = Astro.props;
+
+const siteUrl = Astro.site ? Astro.site.href.replace(/\/$/, '') : '';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const ogImageUrl = `${siteUrl}${ogImage.src}`;
+const spaUrl = `${siteUrl}${base}/?event=${node.id}`;
+
+const title = `${node.event_name} — Processing Community Day 2026`;
+const description = node.event_short_description;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex" />
+    <meta http-equiv="refresh" content={`0;url=${spaUrl}`} />
+    <link rel="canonical" href={spaUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={spaUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+  </head>
+  <body>
+    <script is:inline define:vars={{ spaUrl }}>
+      window.location.replace(spaUrl);
+    </script>
+    <a href={spaUrl}>{`View ${node.event_name} on the PCD 2026 map`}</a>
+  </body>
+</html>
