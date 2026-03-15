@@ -42,5 +42,10 @@
   "forum_thread_url": "https://discourse.processing.org/t/pcd-worldwide-2026/48081",
   "city": "Berlin",
   "country": "Germany",
-  "placeholder": true
+  "placeholder": true,
+  "intake": {
+    "issue_number": 42,
+    "submitted_by_github": "SableRaf",
+    "submitted_date": "2026-01-15"
+  }
 }

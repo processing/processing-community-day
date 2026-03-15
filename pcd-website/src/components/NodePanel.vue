@@ -1079,4 +1079,5 @@ function getReportIssueHref(node: Node): string {
   flex-shrink: 0;
   color: var(--color-text-muted);
 }
+
 </style>

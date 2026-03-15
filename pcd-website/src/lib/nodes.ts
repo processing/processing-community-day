@@ -61,6 +61,12 @@ interface NodeInput {
   city?: string;
   country?: string;
   placeholder?: boolean;
+  intake?: {
+    issue_number?: number;
+    submitted_by_github?: string;
+    submitted_date?: string;
+    maintainer_notes?: string;
+  };
 }
 
 interface MetadataModule {

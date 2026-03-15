@@ -13,6 +13,7 @@ const eventPayload = JSON.parse(await fs.readFile(EVENT_PATH, 'utf8'));
 const issue = eventPayload.issue;
 const issueNumber = issue.number;
 const issueBody = issue.body ?? '';
+const submitterLogin = issue.user?.login ?? '';
 
 async function setOutput(key, value) {
   if (!OUTPUT_PATH) return;
@@ -262,6 +263,8 @@ const nodeRecord = {
   placeholder: false,
   intake: {
     issue_number: issueNumber,
+    submitted_by_github: submitterLogin,
+    submitted_date: new Date().toISOString().slice(0, 10),
     maintainer_notes: maintainerNotes,
   },
 };
