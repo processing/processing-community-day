@@ -148,7 +148,7 @@ function buildPrBody(number, name, submitterLogin, isOnlineEvent, eventDate, sta
   const noteBlock = plusCodeNote
     ? [
         '> [!NOTE]',
-        `> The Plus Code was auto-recovered from the user's input (\`${rawPlusCode}\`) using the city as a reference. Please verify the map pin placement is correct (https://plus.codes/${plusCodeNote.code}).`
+        `> The Plus Code was auto-recovered from the user's input (\`${rawPlusCode}\`) using the city as a reference. Please verify the map pin placement is correct (https://plus.codes/${plusCodeNote.code}).`,
         '',
       ]
     : [];
