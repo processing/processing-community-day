@@ -19,6 +19,14 @@ body:
     validations:
       required: true
   - type: input
+    id: forum_thread_url
+    attributes:
+      label: Forum discussion URL
+      description: Post a thread in the [Processing forum](https://discourse.processing.org/c/pcd/pcd-worldwide-2026) (`PCD @ Your City 2026`) as a public discussion space for your event. Paste the URL to that thread here.
+      placeholder: https://discourse.processing.org/t/pcd-worldwide-2026/48081
+    validations:
+      required: true
+  - type: input
     id: plus_code
     attributes:
       label: Map placement
@@ -170,12 +178,6 @@ body:
         - label: Student project presentations
         - label: Screening
         - label: Other
-  - type: input
-    id: forum_thread_url
-    attributes:
-      label: Forum discussion URL
-      description: Optional Processing forum thread with updates.
-      placeholder: https://discourse.processing.org/t/pcd-worldwide-2026/48081
   - type: textarea
     id: maintainer_notes
     attributes:
