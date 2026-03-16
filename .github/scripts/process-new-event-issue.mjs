@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { createRequire } from 'node:module';
+import { resolvePlusCode } from './plus-code.mjs';
 
 const WORKSPACE = process.cwd();
 const RUNNER_TEMP = process.env.RUNNER_TEMP ?? path.join(WORKSPACE, '.tmp');
@@ -9,15 +9,6 @@ const EVENT_PATH = process.env.GITHUB_EVENT_PATH;
 const YEAR = '2026';
 const PCD_FORUM_THREAD_URL = 'https://discourse.processing.org/t/pcd-worldwide-2026-call-for-organizers/48081';
 const PCD_CONTACT_EMAIL = 'day@processingfoundation.org';
-
-const require = createRequire(import.meta.url);
-let olc = null;
-try {
-  const { OpenLocationCode } = require('/tmp/script-deps/node_modules/open-location-code/openlocationcode.js');
-  olc = new OpenLocationCode();
-} catch {
-  console.log('[process-new-event-issue] open-location-code not available — smart plus_code recovery disabled');
-}
 
 await fs.mkdir(RUNNER_TEMP, { recursive: true });
 
@@ -76,11 +67,6 @@ function isValidHttpUrl(value) {
   } catch {
     return false;
   }
-}
-
-function isValidPlusCode(value) {
-  const normalized = value.replace(/\s+/g, '').toUpperCase();
-  return /^[23456789CFGHJMPQRVWX]{8}\+[23456789CFGHJMPQRVWX]{2,3}$/.test(normalized);
 }
 
 function slugify(value) {
@@ -183,84 +169,6 @@ function buildPrBody(number, name, submitterLogin, isOnlineEvent, eventDate, sta
     locationLine,
     '- [ ] Check the map and event details page in the **Netlify preview** (link posted below by the Netlify bot)',
   ].join('\n');
-}
-
-async function resolvePlusCode(rawValue, city, country) {
-  const normalized = rawValue.replace(/\s+/g, '').toUpperCase();
-
-  if (!normalized) return { code: null, note: null };
-
-  // Fast path: already a valid full global OLC
-  if (isValidPlusCode(normalized)) return { code: normalized, note: null };
-
-  if (!olc) return { code: null, note: null };
-
-  // Try to extract a Plus Code from anywhere in the input (e.g. "My code: QX5Q+C5DENVER").
-  // No leading anchor so we match even with arbitrary prefix text.
-  // Minimum 2 chars before '+' to support short codes like "5Q+C5DENVER".
-  // Greedy 2–3 chars after '+' may over-capture when the city starts with OLC-valid chars
-  // (e.g. Vancouver → V); we resolve that below by trying progressively shorter suffixes.
-  const EXTRACT_RE = /([23456789CFGHJMPQRVWX]{2,8}\+[23456789CFGHJMPQRVWX]{2,3})/i;
-  const match = normalized.match(EXTRACT_RE);
-
-  let shortCode = normalized;
-  let locationHint = '';
-
-  if (match) {
-    const [fullMatch, candidate] = match;
-    const plusIdx = candidate.indexOf('+');
-    const codePrefix = candidate.slice(0, plusIdx);
-    const greedySuffix = candidate.slice(plusIdx + 1);
-
-    // Try suffix lengths from longest (greedy) down to 2; take first that isShort().
-    shortCode = candidate;
-    for (let len = greedySuffix.length; len >= 2; len--) {
-      const probe = `${codePrefix}+${greedySuffix.slice(0, len)}`;
-      if (olc.isShort(probe)) {
-        shortCode = probe;
-        break;
-      }
-    }
-
-    // Extract any trailing non-OLC text as a location hint (e.g. "DENVER,COLORADO").
-    // Used only when the city/country form fields are empty.
-    const afterCode = normalized.slice(match.index + fullMatch.length);
-    if (afterCode) {
-      locationHint = afterCode
-        .replace(/,/g, ' ')
-        .trim()
-        .toLowerCase()
-        .replace(/\b\w/g, (c) => c.toUpperCase());
-    }
-  }
-
-  // Attempt recovery if we have a short OLC and a location reference.
-  // Prefer explicit city/country fields; fall back to the hint extracted from the input.
-  const locationRef = (city || country)
-    ? [city, country].filter(Boolean).join(' ')
-    : locationHint;
-
-  if (olc.isShort(shortCode) && locationRef) {
-    try {
-      const query = encodeURIComponent(locationRef);
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1`,
-        { headers: { 'User-Agent': 'PCD-Event-Intake/1.0' } },
-      );
-      const results = await response.json();
-      if (results.length > 0) {
-        const { lat, lon } = results[0];
-        const recovered = olc.recoverNearest(shortCode, parseFloat(lat), parseFloat(lon));
-        if (isValidPlusCode(recovered)) {
-          return { code: recovered, note: 'auto-recovered from short code + city' };
-        }
-      }
-    } catch (err) {
-      console.log(`[process-new-event-issue] plus_code recovery failed: ${err.message}`);
-    }
-  }
-
-  return { code: null, note: null };
 }
 
 console.log(`[process-new-event-issue] issue #${issueNumber}, body length: ${issueBody.length}`);
