@@ -97,6 +97,14 @@ describe('resolvePlusCode — short code recovery', () => {
     assertRecovered(await resolvePlusCode('My code: V9H4+MC,PARIS', '', ''));
   });
 
+  test('space-separated city hint', async () => {
+    assertRecovered(await resolvePlusCode('V9H4+MC PARIS', '', ''));
+  });
+
+  test('space-separated city and country hint', async () => {
+    assertRecovered(await resolvePlusCode('V9H4+MC PARIS FRANCE', '', ''));
+  });
+
   test('short code with no location ref → null', async () => {
     const r = await resolvePlusCode('V9H4+MC', '', '');
     assert.deepEqual(r, { code: null, note: null });

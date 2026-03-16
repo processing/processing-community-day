@@ -40,11 +40,17 @@ export async function resolvePlusCode(rawValue, city, country) {
 
   if (!olc) return { code: null, note: null };
 
+  // Use the uppercased-but-space-preserved form for extraction so that a
+  // space between the code and city (e.g. "QX5Q+C5 DENVER") is still visible
+  // to the word-boundary guard below. Stripping spaces first would turn that
+  // into "QX5Q+C5DENVER" and make a valid input look like a bleed-in case.
+  const uppercased = rawValue.toUpperCase();
+
   // Try to extract a Plus Code from anywhere in the input (e.g. "My code: QX5Q+C5,DENVER").
   // No leading anchor so we match even with arbitrary prefix text.
   // Captures the full run of OLC chars after '+'; the suffix length check below
   // rejects cases where city chars bleed into the suffix (see suffix.length > 3).
-  const match = normalized.match(EXTRACT_RE);
+  const match = uppercased.match(EXTRACT_RE);
 
   let shortCode = normalized;
   let locationHint = '';
@@ -63,13 +69,13 @@ export async function resolvePlusCode(rawValue, city, country) {
     // Non-OLC chars in the city name can truncate the suffix early, e.g. V9H4+MCPARIS
     // matches as V9H4+MCP (stops at 'A') but 'ARIS' follows — the code is embedded
     // in a longer token and must be rejected.
-    const afterCode = normalized.slice(match.index + fullMatch.length);
+    const afterCode = uppercased.slice(match.index + fullMatch.length);
     if (/^\w/.test(afterCode)) {
       console.log(`[plus-code] rejected "${rawValue}": extracted "${fullMatch}" is followed by word chars "${afterCode}"`);
       return { code: null, note: null };
     }
 
-    shortCode = prefix + suffix;
+    shortCode = (prefix + suffix).replace(/\s+/g, '');
 
     // Extract any trailing non-OLC text as a location hint (e.g. ",DENVER,COLORADO").
     // Used only when the city/country form fields are empty.
