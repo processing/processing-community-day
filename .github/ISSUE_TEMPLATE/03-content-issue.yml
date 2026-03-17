@@ -1,0 +1,49 @@
+name: 📋 Content Issue
+description: Report incorrect, outdated, or missing information on an event page.
+labels: [content]
+body:
+  - type: input
+    id: event
+    attributes:
+      label: Event
+      description: Name of the event with the content issue.
+      placeholder: PCD @ Example City
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: Type of issue
+      multiple: true
+      options:
+        - Incorrect information (wrong date, time, location, etc.)
+        - Outdated information
+        - Missing information
+        - Broken or incorrect URL
+        - Other (specify below)
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What is wrong or missing? Include what the correct information should be if you know it.
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Any other information, links, or screenshots that could help.
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        > [!NOTE]
+        > PCD is a community-driven project. If you have time and interest to help, your contribution would be greatly appreciated!
+        > For questions, visit the [PCD 2026 forum thread](https://discourse.processing.org/t/pcd-worldwide-2026/48081).
