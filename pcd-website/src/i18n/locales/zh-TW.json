@@ -63,8 +63,7 @@
     "disclaimer_without_org": "本活動為獨立主辦，與 Processing Foundation 無關。如對本活動有任何疑問，請直接聯繫主辦單位。",
     "activities_label": "活動類型",
     "report_issue": "回報此頁面的問題",
-    "email_subject": "[回報] 「{name}」頁面問題",
-    "email_body": "您好，PCD 團隊，\n\n我想回報以下頁面的問題：\n\n- 名稱：「{name}」\n- 連結：{link}\n\n[請在此描述問題]。\n\n謝謝！"
+    "edit_event": "編輯此活動資料"
   },
   "popup": {
     "date_tbd": "日期待定",

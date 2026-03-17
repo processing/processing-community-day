@@ -6,7 +6,7 @@ import { Icon } from '@iconify/vue';
 import type { Node } from '../lib/nodes';
 import { formatDateRange, formatTimeRange, calendarLinks, onlinePlatformName } from '../lib/format';
 import { getOsmUrl } from '../lib/popup';
-import { PCD_EMAIL } from '../config';
+import { GITHUB_EVENTS_BASE_URL, GITHUB_CONTENT_ISSUE_URL } from '../config';
 const props = defineProps<{
   node: Node | null;
 }>();
@@ -182,9 +182,11 @@ async function copyLink(node: Node) {
 }
 
 function getReportIssueHref(node: Node): string {
-  const subject = t('panel.email_subject', { name: node.event_name });
-  const body = t('panel.email_body', { name: node.event_name, link: getShareUrl(node) });
-  return `mailto:${PCD_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  return `${GITHUB_CONTENT_ISSUE_URL}&event=${encodeURIComponent(node.event_name)}&event_page_url=${encodeURIComponent(getShareUrl(node))}`;
+}
+
+function getEditEventHref(node: Node): string {
+  return `${GITHUB_EVENTS_BASE_URL}/${node.id}`;
 }
 
 const descPreview = computed(() => props.node ? getDescPreview(props.node) : null);
@@ -476,17 +478,31 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
           </p>
         </template>
 
-        <!-- Report issue -->
+        <!-- Report issue / Edit event -->
         <div class="panel-report">
           <hr class="panel-separator" aria-hidden="true" />
-          <a
-            :href="getReportIssueHref(node)"
-            class="panel-link-row panel-report-link"
-            :title="t('panel.report_issue')"
-          >
-            <Icon icon="bi:flag" width="1em" height="1em" aria-hidden="true" class="panel-link-icon" />
-            <span>{{ t('panel.report_issue') }}</span>
-          </a>
+          <div class="panel-report-row">
+            <a
+              :href="getEditEventHref(node)"
+              class="panel-link-row panel-report-link"
+              :title="t('panel.edit_event')"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Icon icon="bi:github" width="1em" height="1em" aria-hidden="true" class="panel-link-icon" />
+              <span>{{ t('panel.edit_event') }}</span>
+            </a>
+            <a
+              :href="getReportIssueHref(node)"
+              class="panel-link-row panel-report-link"
+              :title="t('panel.report_issue')"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Icon icon="bi:flag" width="1em" height="1em" aria-hidden="true" class="panel-link-icon" />
+              <span>{{ t('panel.report_issue') }}</span>
+            </a>
+          </div>
         </div>
       </div>
     </template>
@@ -1039,6 +1055,12 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
 
 .panel-links {
   margin-bottom: 0.75rem;
+}
+
+.panel-report-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
 }
 
 .panel-report-link {

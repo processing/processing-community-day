@@ -62,9 +62,8 @@
     "disclaimer_with_org": "Este evento está organizado de forma independiente y no está afiliado con la Processing Foundation.Para cualquier pregunta o inquietud sobre este evento, comuníquese directamente con {org}.",
     "disclaimer_without_org": "Este evento está organizado de forma independiente y no está afiliado con la Processing Foundation. Para cualquier pregunta o inquietud sobre este evento, comuníquese directamente con los/as organizadores/as.",
     "activities_label": "Actividades",
-    "report_issue": "Reportar un problema con esta página",
-    "email_subject": "[Reporte] Problema con la página \"{name}\"",
-    "email_body": "Hola equipo PCD,\n\nMe gustaría reportar un problema con la siguiente página:\n\n- Nombre: \"{name}\"\n- Enlace: {link}\n\n[Por favor describa el problema aquí].\n\n¡Gracias!"
+    "report_issue": "Reportar un problema en esta página",
+    "edit_event": "Editar los datos de este evento"
   },
   "popup": {
     "date_tbd": "Fecha por confirmar",

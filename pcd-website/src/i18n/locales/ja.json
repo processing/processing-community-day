@@ -63,8 +63,7 @@
     "disclaimer_without_org": "このイベントは独自に主催されており、Processing Foundation とは関係ありません。このイベントに関するご質問・ご不明点は、主催者に直接お問い合わせください。",
     "activities_label": "アクティビティ",
     "report_issue": "このページの問題を報告する",
-    "email_subject": "【報告】「{name}」ページの問題",
-    "email_body": "PCD チームの皆様、\n\n以下のページに関する問題を報告します：\n\n- 名前：「{name}」\n- リンク：{link}\n\n[問題の詳細をここに記入してください]。\n\nよろしくお願いします。"
+    "edit_event": "このイベントのデータを編集"
   },
   "popup": {
     "date_tbd": "日程未定",
