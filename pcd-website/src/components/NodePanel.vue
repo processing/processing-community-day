@@ -107,7 +107,10 @@ async function initMinimap(node: Node) {
     iconSize: [28, 36],
     iconAnchor: [14, 36],
   });
-  L.marker([node.lat, node.lng], { icon: pinIcon }).addTo(minimap);
+  const marker = L.marker([node.lat, node.lng], { icon: pinIcon }).addTo(minimap);
+  // The minimap is aria-hidden; remove keyboard focusability from the marker element.
+  const markerEl = marker.getElement();
+  if (markerEl) markerEl.setAttribute('tabindex', '-1');
 }
 
 watch(
