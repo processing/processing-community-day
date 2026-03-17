@@ -29,7 +29,7 @@ body:
   - type: input
     id: plus_code
     attributes:
-      label: Plus Code for map placement
+      label: Plus Code (for map placement)
       description: Find or verify the plus code for your event location at https://plus.codes. Full codes (e.g. 9F4MFCCM+JF) are preferred, but most standard plus code formats are accepted.
       placeholder: XXXXXXXX+XX
     validations:
