@@ -39,7 +39,8 @@ body:
       value: |
         > [!NOTE]
         > Full codes of 10 or 11 characters long (e.g. 9F4MFCCM+JF) are preferred, but most standard plus code formats are accepted. This code is used to accurately place your event on the map.
-        > If your event is online or the location is still to be determined, use a general location such as the city center or a relevant landmark. 
+        
+        If your event is online or the location is still to be determined, use a general location such as the city center or a relevant landmark. 
   - type: dropdown
     id: format
     attributes:
