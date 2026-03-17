@@ -1,0 +1,89 @@
+name: 🐛 Bug Report
+description: Report a bug or broken behavior on the PCD website or event submission workflow.
+labels: [bug]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Which part of the project is affected? You may select more than one.
+      multiple: true
+      options:
+        - I'm not sure
+        - Map display / Leaflet
+        - Event list / filtering
+        - Event detail panel
+        - Event submission (issue form)
+        - Event intake workflow (GitHub Actions / scripts)
+        - Internationalization / translations
+        - Dark mode / theming
+        - Accessibility
+        - Build / deployment
+        - Other (specify below)
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      description: "E.g. Chrome 123, Firefox 124, Safari 17"
+    validations:
+      required: false
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      description: "E.g. macOS 15, Windows 11, Ubuntu 24.04, iOS 18, Android 15"
+    validations:
+      required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug description
+      description: |
+        Describe the bug. Include what you expected to happen and what actually happened.
+        Attach screenshots if helpful.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      value: |
+        1.
+
+        2.
+
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Any other information, links, console errors, or screenshots that could help.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: contribution
+    attributes:
+      label: Would you like to work on this?
+      options:
+        - No, I'm just reporting it
+        - Yes, I'd like to help fix it
+        - I'm not sure yet
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        > [!NOTE]
+        > PCD is a community-driven project. If you have time and interest to help, your contribution would be greatly appreciated!
+        > For questions, visit the [PCD 2026 forum thread](https://discourse.processing.org/t/pcd-worldwide-2026/48081).
