@@ -35,8 +35,8 @@ body:
     id: forum_thread_url
     attributes:
       label: Forum discussion URL
-      description: Post a thread in the [Processing forum](https://discourse.processing.org/c/pcd/pcd-worldwide-2026) (`PCD @ Your City 2026`) as a public discussion space for your event. Paste the URL to that thread here.
-      placeholder: https://discourse.processing.org/t/pcd-worldwide-2026/48081
+      description: Post a thread in the [Processing forum](https://discourse.processing.org/tag/pcd/) as `PCD @ Your City 2026` and paste the URL to that thread here.
+      placeholder: https://discourse.processing.org/t/pcd-mycity-2026/48081
     validations:
       required: true
   - type: input
