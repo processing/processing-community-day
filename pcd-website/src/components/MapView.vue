@@ -14,6 +14,7 @@ import { i18n } from '../i18n/index';
 const props = defineProps<{
   nodes: Node[];
   initialEventId?: string;
+  bannerImageUrl?: string;
 }>();
 
 const { t } = useI18n();
@@ -636,7 +637,7 @@ onUnmounted(() => {
       @click="infoModalOpen = true"
     >i</button>
   </div>
-  <InfoModal :open="infoModalOpen" @close="infoModalOpen = false" />
+  <InfoModal :open="infoModalOpen" :bannerImageUrl="props.bannerImageUrl" @close="infoModalOpen = false" />
   <div class="banner-controls-right">
     <button
       id="theme-toggle"

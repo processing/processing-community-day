@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { ref, watch, nextTick, onUnmounted } from 'vue';
+import { ref, watch, nextTick, onUnmounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Icon } from '@iconify/vue';
 import { createFocusTrap, type FocusTrap } from 'focus-trap';
 import { PCD_FORUM_THREAD_URL } from '../config';
-import bannerImage from '../images/community_background_2x.png?url';
+import fallbackBannerImage from '../images/community_background_2x.png?url';
 
-const props = defineProps<{ open: boolean }>();
+const props = defineProps<{ open: boolean; bannerImageUrl?: string }>();
+const bannerImage = computed(() => props.bannerImageUrl ?? fallbackBannerImage);
 const emit = defineEmits<{ close: [] }>();
 
 const { t } = useI18n();

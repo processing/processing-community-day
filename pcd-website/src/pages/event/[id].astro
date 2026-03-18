@@ -3,7 +3,8 @@ import { loadNodes, canonicalEventId } from '../../lib/nodes';
 import type { Node } from '../../lib/nodes';
 import MapView from '../../components/MapView.vue';
 import '../../styles/global.css';
-import ogImage from '../../images/og-image.png';
+import { getImage } from 'astro:assets';
+import ogImageSrc from '../../images/og-image.png';
 
 export async function getStaticPaths() {
   const nodes = await loadNodes();
@@ -30,7 +31,9 @@ const canonicalId = canonicalEventId(node);
 const canonicalUrl = `${siteUrl}${base}/event/${canonicalId}/`;
 const redirectUrl = redirectTo ? `${base}/event/${redirectTo}/` : null;
 
-const ogImageUrl = `${siteUrl}${ogImage.src}`;
+const ogImageUrl = redirectUrl
+  ? ''
+  : `${siteUrl}${(await getImage({ src: ogImageSrc, format: 'jpeg', quality: 85 })).src}`;
 const title = `${node.event_name} — Processing Community Day 2026`;
 const description = node.event_short_description || `Join Processing Community Day 2026 in ${node.city ?? node.country ?? 'your city'}.`;
 ---
