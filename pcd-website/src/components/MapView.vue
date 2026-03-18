@@ -26,6 +26,8 @@ const markerMap = new Map<string, import('leaflet').Marker>();
 const nodeMap = new Map<string, Node>(); // id → Node, for O(1) lookups
 let openPopupNodeId: string | null = null;
 let slidingWindowHandler: ((e: FocusEvent) => void) | null = null;
+let pendingPopupMarker: import('leaflet').Marker | null = null;
+let teardownMarkerPopupListeners: (() => void) | null = null;
 
 // --- Tile style config ---
 interface TileLayerConfig { url: string; options: Record<string, unknown>; }
@@ -377,8 +379,10 @@ onMounted(async () => {
   function applyMarkerLabels() {
     markerMap.forEach((marker, id) => {
       const node = nodeMap.get(id);
-      if (node) {
-        marker.getElement()?.setAttribute('aria-label', node.event_name);
+      const el = marker.getElement();
+      if (node && el) {
+        el.setAttribute('aria-label', node.event_name);
+        el.dataset.nodeId = id;
       }
     });
   }
@@ -454,6 +458,95 @@ onMounted(async () => {
   };
   map.getContainer().addEventListener('focusin', slidingWindowHandler);
 
+  // Open popup on the first pointerdown even when the map doesn't have focus.
+  // Browsers normally require a first click to focus the page, and a second to
+  // trigger Leaflet's click handler. By calling openPopup() on pointerdown we
+  // bypass that two-click requirement.
+  //
+  // State management: pendingPopupMarker is set on pointerdown (when we open the
+  // popup ourselves) and consumed by the capture-phase click handler, which calls
+  // stopImmediatePropagation() to prevent Leaflet's _handleDOMEvent from toggling
+  // the popup closed again. Two reset paths handle the case where no click follows:
+  //   1. pointercancel — browser aborted the gesture (scroll, system dialog, etc.)
+  //   2. document pointerup — pointer released anywhere on the document.
+  //      - Released inside the pane: a click will follow in the same task, so we
+  //        defer the clear via setTimeout(0) (a macrotask) to let onMarkerClick
+  //        consume the flag first. Microtasks (Promise.resolve) run before the
+  //        next event and would incorrectly race ahead of the click.
+  //      - Released outside the pane: no click follows, so clear immediately.
+  //
+  // Pointer capture: we call setPointerCapture on the actual event target (the SVG
+  // or circle child, not the .marker-node ancestor) because the spec requires the
+  // element that received the pointerdown. This improves pointercancel delivery
+  // when the pointer leaves the element, though capture may still fail on some
+  // SVG internals — the document pointerup path covers that fallback.
+
+  const onMarkerPointerdown = (e: PointerEvent) => {
+    const target = e.target as HTMLElement;
+    const markerEl = target.closest('.marker-node') as HTMLElement | null;
+    if (!markerEl) return;
+    // O(1) lookup via data-nodeId set in applyMarkerLabels()
+    const marker = markerMap.get(markerEl.dataset.nodeId ?? '');
+    if (!marker) return;
+    if (!marker.isPopupOpen()) {
+      marker.openPopup();
+      pendingPopupMarker = marker;
+      // Request pointer capture on the real event target so that pointercancel
+      // is delivered here even after the pointer leaves the element.
+      try { target.setPointerCapture(e.pointerId); } catch (_) { /* ignore */ }
+    }
+  };
+
+  const onMarkerClick = (e: MouseEvent) => {
+    if (pendingPopupMarker) {
+      // Stop all further listeners and prevent the event reaching the bubble phase.
+      // This blocks Leaflet's _handleDOMEvent from toggling the popup closed.
+      e.stopImmediatePropagation();
+      pendingPopupMarker = null;
+    }
+  };
+
+  const clearPendingOnPointerup = (e: PointerEvent) => {
+    // Pointer was released somewhere on the document. Two cases:
+    //
+    // a) Release inside the markerPane: a click event follows in the next task.
+    //    setTimeout(..., 0) schedules a macrotask that runs after the click task
+    //    completes, so onMarkerClick gets to consume and clear the flag first.
+    //    (A microtask would run before the click event and clear the flag too early.)
+    //
+    // b) Release outside the markerPane: no click will follow, so clear
+    //    immediately without deferring.
+    const insidePane = markerPane?.contains(e.target as globalThis.Node) ?? false;
+    if (insidePane) {
+      setTimeout(() => { pendingPopupMarker = null; }, 0);
+    } else {
+      pendingPopupMarker = null;
+    }
+  };
+
+  const onMarkerPointercancel = () => {
+    // Browser aborted the gesture (scroll, system interrupt). No click follows.
+    pendingPopupMarker = null;
+  };
+
+  const onPopupClose = () => {
+    openPopupNodeId = null;
+  };
+
+  markerPane?.addEventListener('pointerdown', onMarkerPointerdown, { capture: true });
+  markerPane?.addEventListener('click', onMarkerClick, { capture: true });
+  markerPane?.addEventListener('pointercancel', onMarkerPointercancel, { capture: true });
+  document.addEventListener('pointerup', clearPendingOnPointerup);
+  map.on('popupclose', onPopupClose);
+
+  teardownMarkerPopupListeners = () => {
+    markerPane?.removeEventListener('pointerdown', onMarkerPointerdown, { capture: true });
+    markerPane?.removeEventListener('click', onMarkerClick, { capture: true });
+    markerPane?.removeEventListener('pointercancel', onMarkerPointercancel, { capture: true });
+    document.removeEventListener('pointerup', clearPendingOnPointerup);
+    map.off('popupclose', onPopupClose);
+  };
+
   // Move focus into popup content when it opens
   map.on('popupopen', (e) => {
     const container = e.popup.getElement();
@@ -463,10 +556,6 @@ onMounted(async () => {
     openPopupNodeId = btn?.getAttribute('data-node-id') ?? null;
     const focusTarget = container.querySelector<HTMLElement>('button, a, [tabindex]');
     focusTarget?.focus();
-  });
-
-  map.on('popupclose', () => {
-    openPopupNodeId = null;
   });
 
   // Delegated click for .read-more buttons in popups
@@ -515,6 +604,8 @@ onUnmounted(() => {
     mapInstance.getContainer().removeEventListener('focusin', slidingWindowHandler);
     slidingWindowHandler = null;
   }
+  teardownMarkerPopupListeners?.();
+  teardownMarkerPopupListeners = null;
   mapInstance?.remove();
 });
 </script>
