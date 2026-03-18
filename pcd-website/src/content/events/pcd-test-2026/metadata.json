@@ -1,0 +1,38 @@
+{
+  "id": "pcd-test-2026",
+  "uid": "fbee073",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Raphaël de Courville",
+    "email": "raphael@processingfoundation.org"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ TEST",
+  "event_location": {
+    "address": "",
+    "plus_code": "8FW4V86Q+63"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [
+    "Live coding",
+    "Panel discussions"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-worldwide-2026-call-for-organizers/48081/14",
+  "city": "",
+  "country": "",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 21,
+    "submitted_by_github": "SableRaf",
+    "submitted_date": "2026-03-18",
+    "maintainer_notes": ""
+  }
+}
