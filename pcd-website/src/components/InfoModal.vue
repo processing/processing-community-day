@@ -6,9 +6,16 @@ import { createFocusTrap, type FocusTrap } from 'focus-trap';
 import { PCD_FORUM_THREAD_URL } from '../config';
 import fallbackBannerImage from '../images/community_background_2x.png?url';
 
-const props = defineProps<{ open: boolean; bannerImageUrl?: string }>();
+const props = defineProps<{ open: boolean; bannerImageUrl?: string; autoOpened?: boolean }>();
 const bannerImage = computed(() => props.bannerImageUrl ?? fallbackBannerImage);
-const emit = defineEmits<{ close: [] }>();
+const emit = defineEmits<{ close: []; suppress: [] }>();
+
+const dontShowAgain = ref(false);
+
+function handleClose() {
+  if (dontShowAgain.value) emit('suppress');
+  emit('close');
+}
 
 const { t } = useI18n();
 const modalRef = ref<HTMLElement | null>(null);
@@ -21,7 +28,7 @@ watch(
       await nextTick();
       if (modalRef.value) {
         trap = createFocusTrap(modalRef.value, {
-          onDeactivate: () => emit('close'),
+          onDeactivate: () => handleClose(),
           escapeDeactivates: true,
           allowOutsideClick: true,
           fallbackFocus: () => modalRef.value!,
@@ -31,6 +38,7 @@ watch(
     } else {
       trap?.deactivate();
       trap = null;
+      dontShowAgain.value = false;
     }
   },
 );
@@ -45,7 +53,7 @@ onUnmounted(() => {
     <div
       v-if="open"
       class="info-modal-backdrop"
-      @click.self="emit('close')"
+      @click.self="handleClose()"
     >
       <div
         ref="modalRef"
@@ -57,7 +65,7 @@ onUnmounted(() => {
         <button
           class="info-modal-close"
           :aria-label="t('nav.info_modal_close')"
-          @click="emit('close')"
+          @click="handleClose()"
         >
           <Icon icon="bi:x-lg" width="1.125em" height="1.125em" aria-hidden="true" />
         </button>
@@ -81,6 +89,10 @@ onUnmounted(() => {
             {{ t('nav.info_modal_forum_btn') }}
             <Icon icon="bi:box-arrow-up-right" width="1em" height="1em" aria-hidden="true" style="margin-left: 0.5rem; vertical-align: -0.1em;" />
           </a>
+          <label v-if="props.autoOpened" class="info-modal-suppress">
+            <input type="checkbox" v-model="dontShowAgain" />
+            {{ t('nav.info_modal_dont_show_again') }}
+          </label>
         </div>
       </div>
     </div>
@@ -173,5 +185,24 @@ onUnmounted(() => {
 
 .info-modal-forum-btn:hover {
   opacity: 0.85;
+}
+
+.info-modal-suppress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: var(--spacing-md);
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.info-modal-suppress input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  accent-color: var(--color-primary);
 }
 </style>

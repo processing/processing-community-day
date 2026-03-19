@@ -21,7 +21,19 @@ const { t } = useI18n();
 
 const selectedNode = ref<Node | null>(null);
 const listOpen = ref(false);
+
+const INFO_MODAL_SUPPRESS_KEY = 'pcd-info-modal-suppressed';
 const infoModalOpen = ref(false);
+const infoModalAutoOpened = ref(false);
+
+function shouldAutoOpenInfoModal(): boolean {
+  return localStorage.getItem(INFO_MODAL_SUPPRESS_KEY) !== 'true';
+}
+
+function suppressInfoModal() {
+  localStorage.setItem(INFO_MODAL_SUPPRESS_KEY, 'true');
+  infoModalOpen.value = false;
+}
 
 function preloadBannerImage() {
   const url = props.bannerImageUrl;
@@ -636,6 +648,12 @@ onMounted(async () => {
   document.addEventListener('keydown', handleKeydown);
 
 
+  // Auto-open info modal on first visit
+  if (shouldAutoOpenInfoModal()) {
+    infoModalOpen.value = true;
+    infoModalAutoOpened.value = true;
+  }
+
   // Update document-level text when locale changes
   watch(currentLocale, () => {
     document.title = i18n.global.t('page.title');
@@ -683,10 +701,10 @@ onUnmounted(() => {
       id="info-btn"
       :aria-label="t('nav.info_button_label')"
       @mouseenter="preloadBannerImage"
-      @click="infoModalOpen = true"
+      @click="infoModalOpen = true; infoModalAutoOpened = false"
     >i</button>
   </div>
-  <InfoModal :open="infoModalOpen" :bannerImageUrl="props.bannerImageUrl" @close="infoModalOpen = false" />
+  <InfoModal :open="infoModalOpen" :bannerImageUrl="props.bannerImageUrl" :autoOpened="infoModalAutoOpened" @close="infoModalOpen = false" @suppress="suppressInfoModal" />
   <div class="banner-controls-right">
     <button
       id="theme-toggle"
