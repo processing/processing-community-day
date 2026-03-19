@@ -72,8 +72,7 @@ onUnmounted(() => {
         <img
           :src="bannerImage"
           class="info-modal-banner"
-          alt=""
-          aria-hidden="true"
+          alt="Processing Community Day 2026 banner with bold text and collage of community photos showing groups of people at events, alongside the Processing Foundation logo."
           loading="lazy"
         />
         <div class="info-modal-body">
@@ -155,10 +154,15 @@ onUnmounted(() => {
 }
 
 .info-modal-title {
-  margin: 0 0 var(--spacing-sm);
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--color-text);
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .info-modal-description {
