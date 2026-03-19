@@ -7,7 +7,7 @@ import NodePanel from './NodePanel.vue';
 import NodeList from './NodeList.vue';
 import LanguageSwitcher from './LanguageSwitcher.vue';
 import InfoModal from './InfoModal.vue';
-import { SUBMIT_EVENT_URL } from '../config';
+import SubmitModal from './SubmitModal.vue';
 import { currentLocale } from '../i18n/localeState';
 import { i18n } from '../i18n/index';
 
@@ -25,6 +25,7 @@ const listOpen = ref(false);
 const INFO_MODAL_SUPPRESS_KEY = 'pcd-info-modal-suppressed';
 const infoModalOpen = ref(false);
 const infoModalAutoOpened = ref(false);
+const submitModalOpen = ref(false);
 
 function shouldAutoOpenInfoModal(): boolean {
   return localStorage.getItem(INFO_MODAL_SUPPRESS_KEY) !== 'true';
@@ -231,6 +232,8 @@ function onNodeSelect(node: Node) {
 }
 
 function handleKeydown(e: KeyboardEvent) {
+  if (infoModalOpen.value || submitModalOpen.value) return;
+
   const tag = (document.activeElement as HTMLElement)?.tagName?.toLowerCase();
   const isTextInput = tag === 'input' || tag === 'textarea' ||
     (document.activeElement as HTMLElement)?.isContentEditable;
@@ -693,10 +696,10 @@ onUnmounted(() => {
     <LanguageSwitcher />
   </div>
   <div class="host-btn-group">
-    <a
+    <button
       id="host-btn"
-      :href="SUBMIT_EVENT_URL"
-    >{{ t('nav.submit_event') }}</a>
+      @click="submitModalOpen = true"
+    >{{ t('nav.submit_event') }}</button>
     <button
       id="info-btn"
       :aria-label="t('nav.info_button_label')"
@@ -705,6 +708,7 @@ onUnmounted(() => {
     >i</button>
   </div>
   <InfoModal :open="infoModalOpen" :bannerImageUrl="props.bannerImageUrl" :autoOpened="infoModalAutoOpened" @close="infoModalOpen = false" @suppress="suppressInfoModal" />
+  <SubmitModal :open="submitModalOpen" @close="submitModalOpen = false" />
   <div class="banner-controls-right">
     <button
       id="theme-toggle"
