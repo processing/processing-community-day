@@ -1,0 +1,39 @@
+{
+  "id": "pcd-the-hague-2026",
+  "uid": "9fd412c",
+  "organizers": [
+    {
+      "name": "Edwin Jakobs"
+    }
+  ],
+  "primary_contact": {
+    "name": "Edwin Jakobs",
+    "email": "edwin@openrndr.org"
+  },
+  "organization_name": "RNDR",
+  "organization_url": "https://rndr.studio",
+  "organization_type": "Studio, tech company, startup",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ The Hague",
+  "event_location": {
+    "address": "Paviljoensgracht 20",
+    "plus_code": "9F4638F6+RQ"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "Processing Community Day",
+  "event_activities": [],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-the-hague-2026/48233",
+  "city": "The Hague",
+  "country": "The Netherlands",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 38,
+    "submitted_by_github": "edwinRNDR",
+    "submitted_date": "2026-03-19",
+    "maintainer_notes": ""
+  }
+}
