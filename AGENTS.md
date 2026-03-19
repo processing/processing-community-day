@@ -34,6 +34,9 @@ node --test .github/scripts/event-issue-helpers.test.mjs
 node --test .github/scripts/process-new-event-issue.test.mjs
 node --test .github/scripts/process-edit-event-issue.test.mjs
 node --test .github/scripts/plus-code.test.mjs
+
+# Requires npm run build from pcd-website/ first:
+node --test .github/scripts/data-json.test.mjs
 ```
 
 No install needed — `open-location-code` is already available at `pcd-website/node_modules/`.
@@ -62,6 +65,8 @@ Event data lives in `src/content/events/<event-id>/`:
 
 **If a plus_code is invalid or too short, the build fails with a clear error — this is intentional.**
 
+**"Confirmed" events in data.json:** An event is included in the `/data.json` feed if it is present in `loadNodes()` and has no `placeholder: true` flag. There are currently no other event states (draft, hidden, etc.). If new states are added in future, the filter in `src/pages/data.json.ts` must be updated explicitly.
+
 ### Key implementation details
 
 - **Leaflet CSS** is loaded via `<link>` tags in `index.astro`, NOT via JS imports — avoids SSR issues since MapView is `client:only="vue"`.
@@ -83,6 +88,7 @@ Event data lives in `src/content/events/<event-id>/`:
 | `src/lib/format.ts` | `formatDate()`, `formatDateRange()`, `calendarLinks()`, etc. |
 | `src/lib/popup.ts` | Leaflet popup HTML generation (`makePopupContent()`) |
 | `src/styles/global.css` | Design tokens (CSS custom properties), IBM Plex Sans, Leaflet overrides |
+| `src/pages/data.json.ts` | Static JSON feed of confirmed events, served at /data.json |
 | `src/content.config.ts` | Astro content collection Zod schema for events |
 | `src/config.ts` | Global static constants (contact email, etc.) |
 | `src/i18n/index.ts` | Creates the `vue-i18n` instance and exports `syncLocale()` |

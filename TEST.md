@@ -56,6 +56,24 @@ These tests cover the shared pure functions extracted into `event-issue-helpers.
 
 ---
 
+## data.json build output
+
+**File:** `.github/scripts/data-json.test.mjs`
+**Run:** `node --test .github/scripts/data-json.test.mjs`
+**Requires:** `npm run build` must be run from `pcd-website/` first — this test reads `pcd-website/dist/data.json`.
+
+| Case | Expected |
+|---|---|
+| File exists and is valid JSON | Passes without error |
+| Top-level keys | `schema_version`, `generated_at`, `event_count`, `events` all present |
+| `event_count` vs `events.length` | Equal |
+| No `primary_contact` in any event | Omitted (privacy) |
+| No `placeholder` in any event | Omitted (all feed entries are confirmed) |
+| `canonical_url` shape | Exactly `https://day.processing.org/event/${id}-${uid}/` |
+| `lat` and `lng` | Finite numbers on every event |
+
+---
+
 ## Plus Code functions
 
 **File:** `.github/scripts/plus-code.test.mjs`
