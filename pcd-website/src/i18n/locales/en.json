@@ -14,7 +14,8 @@
     "info_modal_description": "Processing Community Day (PCD) is a worldwide series of community-led events celebrating art, code, and open-source creative tools. Events are organized by local communities around the globe. Find your local event on the map, or start organizing your own!",
     "info_modal_forum_btn": "Learn more on the forum",
     "info_modal_forum_btn_new_tab": "Visit the forum thread (opens in new tab)",
-    "info_modal_close": "Close",
+    "info_modal_go_to_map": "Go to the map",
+    "info_modal_back_to_map": "Back to the map",
     "info_modal_dont_show_again": "Don't show this again"
   },
   "node_list": {

@@ -648,8 +648,8 @@ onMounted(async () => {
   document.addEventListener('keydown', handleKeydown);
 
 
-  // Auto-open info modal on first visit
-  if (shouldAutoOpenInfoModal()) {
+  // Auto-open info modal on first visit, unless arriving via a direct event link
+  if (shouldAutoOpenInfoModal() && !linkedNode) {
     infoModalOpen.value = true;
     infoModalAutoOpened.value = true;
   }

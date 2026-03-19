@@ -14,7 +14,8 @@
     "info_modal_description": "Processing Community Day(PCD)는 예술, 코드, 오픈소스 창작 도구를 기념하는 전 세계 커뮤니티 주도 이벤트 시리즈입니다. 지도에서 가까운 이벤트를 찾거나 직접 이벤트를 조직해 보세요!",
     "info_modal_forum_btn": "포럼에서 자세히 알아보기",
     "info_modal_forum_btn_new_tab": "Visit the forum thread (opens in new tab)",
-    "info_modal_close": "Close",
+    "info_modal_go_to_map": "지도로 이동",
+    "info_modal_back_to_map": "지도로 돌아가기",
     "info_modal_dont_show_again": "다시 표시하지 않기"
   },
   "node_list": {

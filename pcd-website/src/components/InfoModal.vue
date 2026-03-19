@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, nextTick, onUnmounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { Icon } from '@iconify/vue';
 import { createFocusTrap, type FocusTrap } from 'focus-trap';
-import { PCD_FORUM_THREAD_URL } from '../config';
 import fallbackBannerImage from '../images/community_background_2x.png?url';
 
 const props = defineProps<{ open: boolean; bannerImageUrl?: string; autoOpened?: boolean }>();
@@ -14,7 +12,7 @@ const dontShowAgain = ref(false);
 
 function handleClose() {
   if (dontShowAgain.value) emit('suppress');
-  emit('close');
+  else emit('close');
 }
 
 const { t } = useI18n();
@@ -62,13 +60,6 @@ onUnmounted(() => {
         :aria-label="t('nav.info_modal_title')"
         class="info-modal"
       >
-        <button
-          class="info-modal-close"
-          :aria-label="t('nav.info_modal_close')"
-          @click="handleClose()"
-        >
-          <Icon icon="bi:x-lg" width="1.125em" height="1.125em" aria-hidden="true" />
-        </button>
         <img
           :src="bannerImage"
           class="info-modal-banner"
@@ -78,16 +69,12 @@ onUnmounted(() => {
         <div class="info-modal-body">
           <h2 class="info-modal-title">{{ t('nav.info_modal_title') }}</h2>
           <p class="info-modal-description">{{ t('nav.info_modal_description') }}</p>
-          <a
-            :href="PCD_FORUM_THREAD_URL"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="info-modal-forum-btn"
-            :aria-label="t('nav.info_modal_forum_btn_new_tab')"
+          <button
+            class="info-modal-show-map-btn"
+            @click="handleClose()"
           >
-            {{ t('nav.info_modal_forum_btn') }}
-            <Icon icon="bi:box-arrow-up-right" width="1em" height="1em" aria-hidden="true" style="margin-left: 0.5rem; vertical-align: -0.1em;" />
-          </a>
+            {{ props.autoOpened ? t('nav.info_modal_go_to_map') : t('nav.info_modal_back_to_map') }}
+          </button>
           <label v-if="props.autoOpened" class="info-modal-suppress">
             <input type="checkbox" v-model="dontShowAgain" />
             {{ t('nav.info_modal_dont_show_again') }}
@@ -120,28 +107,6 @@ onUnmounted(() => {
   overflow: hidden;
 }
 
-.info-modal-close {
-  position: absolute;
-  top: var(--spacing-sm);
-  right: var(--spacing-sm);
-  z-index: 1;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.35);
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-}
-
-.info-modal-close:hover {
-  background: rgba(0, 0, 0, 0.55);
-}
-
 .info-modal-banner {
   display: block;
   width: 100%;
@@ -172,23 +137,29 @@ onUnmounted(() => {
   color: var(--color-text-muted);
 }
 
-.info-modal-forum-btn {
+.info-modal-show-map-btn {
   display: block;
   width: 100%;
   padding: 0.625rem 1rem;
   background: var(--color-primary);
   color: #fff;
   text-align: center;
-  text-decoration: none;
   font-size: 0.9375rem;
   font-weight: 600;
+  border: none;
   border-radius: 6px;
+  cursor: pointer;
   box-sizing: border-box;
   transition: opacity 0.15s ease;
 }
 
-.info-modal-forum-btn:hover {
+.info-modal-show-map-btn:hover {
   opacity: 0.85;
+}
+
+.info-modal-show-map-btn:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
 .info-modal-suppress {
