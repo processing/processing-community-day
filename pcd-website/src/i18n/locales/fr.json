@@ -28,6 +28,10 @@
     "submit_modal_step2_body": "Démarrez un fil sur le forum pour votre ville/pays/lieu.",
     "submit_modal_step3_heading": "Soumettez via GitHub",
     "submit_modal_step3_body": "Remplissez le formulaire. Nous ajouterons votre événement à la carte.",
+    "submit_modal_tip_title": "Conseil",
+    "submit_modal_recommendation_pre": "Nous vous encourageons à organiser votre événement PCD ",
+    "submit_modal_recommendation_highlight": "en octobre",
+    "submit_modal_recommendation_post": ".",
     "submit_modal_note": "Pas de compte GitHub ? Dites simplement bonjour dans le fil du forum et nous vous aiderons à ajouter votre événement.",
     "submit_modal_close": "Fermer"
   },

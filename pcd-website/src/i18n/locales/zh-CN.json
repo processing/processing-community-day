@@ -28,6 +28,10 @@
     "submit_modal_step2_body": "在论坛上为您的城市／国家／地点开启一个讨论串。",
     "submit_modal_step3_heading": "通过 GitHub 提交",
     "submit_modal_step3_body": "填写表单，我们将把您的活动添加到地图。",
+    "submit_modal_tip_title": "提示",
+    "submit_modal_recommendation_pre": "我们鼓励您在",
+    "submit_modal_recommendation_highlight": "十月",
+    "submit_modal_recommendation_post": "举办 PCD 活动。",
     "submit_modal_note": "没有 GitHub 账号？只需在论坛讨论串打个招呼，我们会从那里为您提供帮助。",
     "submit_modal_close": "关闭"
   },

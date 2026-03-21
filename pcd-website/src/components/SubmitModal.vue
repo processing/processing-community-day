@@ -75,6 +75,10 @@ onUnmounted(() => {
         >×</button>
         <div class="submit-modal-body">
           <h2 id="submit-modal-title" class="submit-modal-title">{{ t('nav.submit_modal_title') }}</h2>
+          <div class="submit-modal-recommendation">
+            <div class="submit-modal-recommendation-titlebar">{{ t('nav.submit_modal_tip_title') }}</div>
+            <div class="submit-modal-recommendation-body">{{ t('nav.submit_modal_recommendation_pre') }}<strong>{{ t('nav.submit_modal_recommendation_highlight') }}</strong>{{ t('nav.submit_modal_recommendation_post') }}</div>
+          </div>
           <ol class="submit-steps">
             <li class="submit-step">
               <span class="step-num" aria-hidden="true">1</span>

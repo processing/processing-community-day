@@ -28,6 +28,10 @@
     "submit_modal_step2_body": "Start a thread on the forum for your city/country/location.",
     "submit_modal_step3_heading": "Submit via GitHub",
     "submit_modal_step3_body": "Fill in the form. We will add your event to the map.",
+    "submit_modal_tip_title": "Tip",
+    "submit_modal_recommendation_pre": "We encourage you to host your PCD event ",
+    "submit_modal_recommendation_highlight": "in October",
+    "submit_modal_recommendation_post": ".",
     "submit_modal_note": "No GitHub account? Just say hi in the forum thread and we'll help you from there.",
     "submit_modal_close": "Close"
   },

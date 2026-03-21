@@ -28,6 +28,10 @@
     "submit_modal_step2_body": "Inicie um tópico no fórum para sua cidade/país/local.",
     "submit_modal_step3_heading": "Envie pelo GitHub",
     "submit_modal_step3_body": "Preencha o formulário. Vamos adicionar seu evento ao mapa.",
+    "submit_modal_tip_title": "Dica",
+    "submit_modal_recommendation_pre": "Encorajamos você a realizar seu evento de PCD ",
+    "submit_modal_recommendation_highlight": "em outubro",
+    "submit_modal_recommendation_post": ".",
     "submit_modal_note": "Sem conta no GitHub? É só dizer oi no tópico do fórum e te ajudamos a partir daí.",
     "submit_modal_close": "Fechar"
   },
