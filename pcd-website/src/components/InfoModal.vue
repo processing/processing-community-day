@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n';
 import { Icon } from '@iconify/vue';
 import { createFocusTrap, type FocusTrap } from 'focus-trap';
 import fallbackBannerImage from '../images/community_background_2x.png?url';
+import { PCD_FORUM_THREAD_URL } from '../config';
 
 const props = defineProps<{ open: boolean; bannerImageUrl?: string; autoOpened?: boolean }>();
 const bannerImage = computed(() => props.bannerImageUrl ?? fallbackBannerImage);
@@ -76,6 +77,19 @@ onUnmounted(() => {
         />
         <div class="info-modal-body">
           <h2 class="info-modal-title">{{ t('nav.info_modal_title') }}</h2>
+          <a
+            class="info-modal-info-box"
+            :href="PCD_FORUM_THREAD_URL"
+            target="_blank"
+            :aria-label="`${t('nav.info_modal_info_box_title')} (${t('nav.opens_in_new_tab')})`"
+            rel="noopener noreferrer"
+          >
+            <div class="info-modal-info-box-titlebar">{{ t('nav.info_modal_info_box_title') }}</div>
+            <div class="info-modal-info-box-body">
+              <span><strong>{{ t('nav.info_modal_info_box_this_october') }}</strong> {{ t('nav.info_modal_info_box') }}</span>
+              <Icon icon="bi:box-arrow-up-right" width="0.875em" height="0.875em" aria-hidden="true" class="info-modal-info-box-icon" />
+            </div>
+          </a>
           <p class="info-modal-description">{{ t('nav.info_modal_description') }}</p>
           <button
             class="info-modal-show-map-btn"
@@ -168,6 +182,7 @@ onUnmounted(() => {
   white-space: nowrap;
   border: 0;
 }
+
 
 .info-modal-description {
   margin: 0 0 var(--spacing-lg);

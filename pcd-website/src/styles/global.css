@@ -207,7 +207,68 @@ html.theme-transition *::after {
   }
 }
 
+/* ─── Info Modal info box ───────────────────────────────────── */
+.info-modal-info-box {
+  display: block;
+  border: 1px solid #b0c4d8;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+.info-modal-info-box:hover {
+  opacity: 0.85;
+}
+
+.info-modal-info-box:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.info-modal-info-box-titlebar {
+  background: #b0c4d8;
+  color: #1e3448;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 1rem;
+}
+
+.info-modal-info-box-body {
+  background: #f0f5fa;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: #2c4a63;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.info-modal-info-box-icon {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
 /* ─── Info Modal dark mode ──────────────────────────────────── */
+[data-theme="dark"] .info-modal-info-box {
+  border-color: #2a3f52;
+}
+
+[data-theme="dark"] .info-modal-info-box-titlebar {
+  background: #1c2d3c;
+  color: #b8cfe0;
+}
+
+[data-theme="dark"] .info-modal-info-box-body {
+  background: #2a3f52;
+  color: #e2ecf4;
+}
+
 [data-theme="dark"] .info-modal-backdrop {
   background: rgba(0, 0, 0, 0.65);
 }
