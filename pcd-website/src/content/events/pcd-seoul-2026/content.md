@@ -1,6 +1,6 @@
 ---
 id: pcd-seoul-2026
-uid: 92524fa
+uid: "92524fa"
 ---
 
 Processing Community Day (PCD) @ Seoul 2026!

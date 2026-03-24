@@ -1,6 +1,6 @@
 ---
 id: pcd-linz-2026
-uid: 6e434d4
+uid: "6e434d4"
 ---
 
 This year, the Processing Foundation is invited by the [Ars Electronica Festival](https://ars.electronica.art/mediaservice/en/2025/09/08/ars-electronica-2025-wrapup/) to host a Processing Community Day and celebrate Processing’s 25th anniversary during the festival.
