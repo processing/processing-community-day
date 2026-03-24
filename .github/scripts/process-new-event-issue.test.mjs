@@ -193,11 +193,19 @@ describe('process-new-event-issue', () => {
       eventId,
       'metadata.json'
     );
+    const contentPath = path.join(
+      path.resolve(SCRIPTS_DIR, '../..'),
+      'pcd-website/src/content/events',
+      eventId,
+      'content.md'
+    );
     try {
       const meta = JSON.parse(await fs.readFile(metaPath, 'utf8'));
       assert.equal(meta.id, eventId);
       assert.match(meta.uid, /^[0-9a-f]{7}$/);
       assert.equal(meta.event_name, 'PCD @ Test City');
+      const contentMd = await fs.readFile(contentPath, 'utf8');
+      assert.match(contentMd, /^uid: "[0-9a-f]{7}"$/m);
     } finally {
       // Clean up the generated event dir
       await fs.rm(path.join(

@@ -60,6 +60,7 @@ No install needed — `open-location-code` is already available at `pcd-website/
 Event data lives in `src/content/events/<event-id>/`:
 - `metadata.json` — event fields (id, uid, name, location, dates, organizers, etc.)
 - `content.md` — markdown body (frontmatter must include `id:` and `uid:`)
+  - `uid:` values in frontmatter **must always be quoted** (`uid: "abc1234"`) because unquoted hex strings like `1e46977` are parsed as scientific notation by YAML, destroying the value.
 
 `src/lib/nodes.ts` loads all events at Astro build time using `import.meta.glob()` + `getCollection('events')`, validates plus codes with `OpenLocationCode`, decodes lat/lng, and returns a sorted `Node[]` array passed as props to `<MapView>`.
 
@@ -84,6 +85,7 @@ Event data lives in `src/content/events/<event-id>/`:
 | `src/components/NodePanel.vue` | Slide-in event detail panel with minimap, calendar links, share button |
 | `src/components/NodeList.vue` | Alphabetical event list overlay with map style switcher + dark mode toggle |
 | `src/components/LanguageSwitcher.vue` | Language selector dropdown in the top bar |
+| `src/lib/analytics.ts` | `trackEvent()` Fathom helper + `AnalyticsEvent` type + event-name constants |
 | `src/lib/nodes.ts` | `Node` interface + `loadNodes()` |
 | `src/lib/format.ts` | `formatDate()`, `formatDateRange()`, `calendarLinks()`, etc. |
 | `src/lib/popup.ts` | Leaflet popup HTML generation (`makePopupContent()`) |

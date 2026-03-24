@@ -1,0 +1,48 @@
+{
+  "id": "pcd-seoul-2026",
+  "uid": "92524fa",
+  "organizers": [
+    {
+      "name": "Jusub Kim"
+    }
+  ],
+  "primary_contact": {
+    "name": "Jusub Kim",
+    "email": "showyourmind@gmail.com"
+  },
+  "organization_name": "Creative Computing Group",
+  "organization_url": "https://creative-computing.org",
+  "organization_type": "School, university, library",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Seoul 2026",
+  "event_location": {
+    "address": "",
+    "plus_code": "8Q98HW2V+H6"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [
+    "Show-and-tell",
+    "Hands-on workshops",
+    "Live coding",
+    "Exhibition",
+    "Panel discussions",
+    "Creative coding jams or hack sessions",
+    "Student project presentations",
+    "Screening"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-seoul-2026/48243",
+  "city": "Seoul",
+  "country": "South Korea",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 42,
+    "submitted_by_github": "showyourmindlab",
+    "submitted_date": "2026-03-20",
+    "maintainer_notes": ""
+  }
+}

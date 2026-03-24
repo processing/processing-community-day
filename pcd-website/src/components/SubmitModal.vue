@@ -3,6 +3,11 @@ import { ref, watch, nextTick, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { createFocusTrap, type FocusTrap } from 'focus-trap';
 import { SUBMIT_EVENT_URL, PCD_FORUM_THREAD_URL, PCD_FORUM_NEW_TOPIC_URL } from '../config';
+import { trackEvent, SUBMIT_STEP_1, SUBMIT_STEP_2, SUBMIT_STEP_3, type AnalyticsEvent } from '../lib/analytics';
+
+function handleStepClick(event: AnalyticsEvent) {
+  trackEvent(event);
+}
 
 const props = defineProps<{ open: boolean }>();
 const emit = defineEmits<{ close: [] }>();
@@ -70,6 +75,10 @@ onUnmounted(() => {
         >×</button>
         <div class="submit-modal-body">
           <h2 id="submit-modal-title" class="submit-modal-title">{{ t('nav.submit_modal_title') }}</h2>
+          <div class="submit-modal-recommendation">
+            <div class="submit-modal-recommendation-titlebar">{{ t('nav.submit_modal_tip_title') }}</div>
+            <div class="submit-modal-recommendation-body">{{ t('nav.submit_modal_recommendation_pre') }}<strong>{{ t('nav.submit_modal_recommendation_highlight') }}</strong>{{ t('nav.submit_modal_recommendation_post') }}</div>
+          </div>
           <ol class="submit-steps">
             <li class="submit-step">
               <span class="step-num" aria-hidden="true">1</span>
@@ -78,6 +87,7 @@ onUnmounted(() => {
                 :href="PCD_FORUM_THREAD_URL"
                 target="_blank"
                 rel="noopener"
+                @click="handleStepClick(SUBMIT_STEP_1)"
                 :aria-label="`${t('nav.submit_modal_step1_heading')} — ${t('nav.submit_modal_step1_body')} (${t('nav.opens_in_new_tab')})`"
               >
                 <span class="step-btn-text">
@@ -94,6 +104,7 @@ onUnmounted(() => {
                 :href="PCD_FORUM_NEW_TOPIC_URL"
                 target="_blank"
                 rel="noopener"
+                @click="handleStepClick(SUBMIT_STEP_2)"
                 :aria-label="`${t('nav.submit_modal_step2_heading')} — ${t('nav.submit_modal_step2_body')} (${t('nav.opens_in_new_tab')})`"
               >
                 <span class="step-btn-text">
@@ -110,6 +121,7 @@ onUnmounted(() => {
                 :href="SUBMIT_EVENT_URL"
                 target="_blank"
                 rel="noopener"
+                @click="handleStepClick(SUBMIT_STEP_3)"
                 :aria-label="`${t('nav.submit_modal_step3_heading')} — ${t('nav.submit_modal_step3_body')} (${t('nav.opens_in_new_tab')})`"
               >
                 <span class="step-btn-text">

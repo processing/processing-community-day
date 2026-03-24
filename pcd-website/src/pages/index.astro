@@ -51,6 +51,9 @@ const pageUrl = Astro.url.href;
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <!-- Fathom - beautiful, simple website analytics -->
+    <script src="https://cdn.usefathom.com/script.js" data-site="FKXYYJDU" defer></script>
+    <!-- / Fathom -->
     <script is:inline>
       const stored = localStorage.getItem('pcd-map-style');
       const isDark = stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);

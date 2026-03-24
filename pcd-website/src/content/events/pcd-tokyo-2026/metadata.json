@@ -1,0 +1,35 @@
+{
+  "id": "pcd-tokyo-2026",
+  "uid": "be2e88a",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Karen Abe",
+    "email": "prod.karenabe@gmail.com"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Tokyo 2026",
+  "event_location": {
+    "address": "",
+    "plus_code": "8Q7XMQJ8+9R"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-tokyo-2026/48229",
+  "city": "Tokyo",
+  "country": "Japan",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 47,
+    "submitted_by_github": "prodka",
+    "submitted_date": "2026-03-24",
+    "maintainer_notes": ""
+  }
+}
