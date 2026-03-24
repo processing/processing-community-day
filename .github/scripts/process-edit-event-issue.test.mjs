@@ -45,7 +45,7 @@ const EXISTING_META = {
   intake: { issue_number: 99, submitted_by_github: 'olduser', submitted_date: '2026-01-01', maintainer_notes: '' },
 };
 
-const EXISTING_CONTENT = `---\nid: ${TEST_EVENT_ID}\n---\n\nOld content here.\n`;
+const EXISTING_CONTENT = `---\nid: ${TEST_EVENT_ID}\nuid: "abc1234"\n---\n\nOld content here.\n`;
 
 function makeEventPayload(body, { number = 10, login = 'edituser' } = {}) {
   return JSON.stringify({
@@ -226,6 +226,14 @@ describe('process-edit-event-issue', () => {
 
     const content = await fs.readFile(path.join(TEST_EVENT_DIR, 'content.md'), 'utf8');
     assert.equal(content, EXISTING_CONTENT, 'content.md should be unchanged when full_description is blank');
+  });
+
+  test('full_description provided rewrites content.md with quoted uid', async () => {
+    const { outputs } = await runScript(makeValidEditBody(), { tmpDir, number: 16 });
+    assert.equal(outputs.valid, 'true');
+
+    const content = await fs.readFile(path.join(TEST_EVENT_DIR, 'content.md'), 'utf8');
+    assert.match(content, /^uid: "[0-9a-f]{7}"$/m, 'content.md uid must be quoted');
   });
 
   test('all activities unchecked preserves existing event_activities', async () => {

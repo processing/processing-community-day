@@ -60,6 +60,7 @@ No install needed — `open-location-code` is already available at `pcd-website/
 Event data lives in `src/content/events/<event-id>/`:
 - `metadata.json` — event fields (id, uid, name, location, dates, organizers, etc.)
 - `content.md` — markdown body (frontmatter must include `id:` and `uid:`)
+  - `uid:` values in frontmatter **must always be quoted** (`uid: "abc1234"`) because unquoted hex strings like `1e46977` are parsed as scientific notation by YAML, destroying the value.
 
 `src/lib/nodes.ts` loads all events at Astro build time using `import.meta.glob()` + `getCollection('events')`, validates plus codes with `OpenLocationCode`, decodes lat/lng, and returns a sorted `Node[]` array passed as props to `<MapView>`.
 

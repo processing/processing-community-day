@@ -255,7 +255,7 @@ async function main() {
     const markdownLines = [
       '---',
       `id: ${eventId}`,
-      ...(uid ? [`uid: ${uid}`] : []),
+      ...(uid ? [`uid: "${uid}"`] : []),
       '---',
       '',
       fullDescription,
