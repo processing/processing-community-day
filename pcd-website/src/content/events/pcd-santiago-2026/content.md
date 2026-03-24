@@ -1,6 +1,6 @@
 ---
 id: pcd-santiago-2026
-uid: 2deecd2
+uid: "2deecd2"
 ---
 
 Our team at the Interaction Design Laboratory, along side the Center for the Technological Revolution in Creative Industries(CRTIC), will be hosting a Processing Community Day Chile 2026.

@@ -61,7 +61,7 @@ for (const { mpath, meta } of metadatas) {
     // Insert uid line after the id line in the frontmatter
     const updated_content = content.replace(
       /^(---\nid: [^\n]+\n)/m,
-      `$1uid: ${uid}\n`
+      `$1uid: "${uid}"\n`
     );
     await fs.writeFile(contentPath, updated_content);
   } catch {
