@@ -10,6 +10,13 @@ import {
   parseActivities,
   parseOrganizers,
   generateUniqueUid,
+  escapeTableCell,
+  eventDataToDisplayMap,
+  buildNewEventTable,
+  buildEditEventTable,
+  formatLongDescription,
+  buildPlusCodeNoteBlocks,
+  buildPrBody,
 } from './event-issue-helpers.mjs';
 
 // ── parseIssueSections ────────────────────────────────────────────────────────
@@ -176,5 +183,237 @@ describe('generateUniqueUid', () => {
       uids.add(generateUniqueUid(existing));
     }
     assert.equal(uids.size, 20);
+  });
+});
+
+// ── escapeTableCell ───────────────────────────────────────────────────────────
+
+describe('escapeTableCell', () => {
+  test('escapes pipe characters', () => {
+    assert.equal(escapeTableCell('a | b'), 'a \\| b');
+  });
+
+  test('replaces newlines with spaces', () => {
+    assert.equal(escapeTableCell('line1\nline2'), 'line1 line2');
+  });
+
+  test('handles null/undefined as empty string', () => {
+    assert.equal(escapeTableCell(null), '');
+    assert.equal(escapeTableCell(undefined), '');
+  });
+});
+
+// ── eventDataToDisplayMap ─────────────────────────────────────────────────────
+
+describe('eventDataToDisplayMap', () => {
+  const baseRecord = {
+    event_name: 'PCD @ Tokyo',
+    primary_contact: { name: 'Jane Doe', email: 'jane@example.com' },
+    online_event: false,
+    event_date: '',
+    event_end_date: undefined,
+    event_start_time: '',
+    event_end_time: '',
+    event_location: { address: '123 Main St', plus_code: '8FW4V75V+8Q' },
+    city: 'Tokyo',
+    country: 'Japan',
+    organization_name: '',
+    organization_url: '',
+    organization_type: '',
+    event_url: '',
+    event_page_url: '',
+    forum_thread_url: '',
+    event_short_description: 'A gathering.',
+    event_activities: ['Live coding', 'Exhibition'],
+    organizers: [{ name: 'Jane Doe' }, { name: 'John Smith' }],
+  };
+
+  test('returns Map with correct labels and values', () => {
+    const map = eventDataToDisplayMap(baseRecord);
+    assert.equal(map.get('Event name'), 'PCD @ Tokyo');
+    assert.equal(map.get('Contact'), 'Jane Doe (jane@example.com)');
+    assert.equal(map.get('Format'), 'In person');
+    assert.equal(map.get('City'), 'Tokyo');
+    assert.equal(map.get('Country'), 'Japan');
+    assert.equal(map.get('Address'), '123 Main St');
+    assert.equal(map.get('Plus Code'), '`8FW4V75V+8Q`');
+    assert.equal(map.get('Short description'), 'A gathering.');
+    assert.equal(map.get('Organizers'), 'Jane Doe, John Smith');
+  });
+
+  test('empty string maps to _No response_', () => {
+    const map = eventDataToDisplayMap(baseRecord);
+    assert.equal(map.get('Date'), '_No response_');
+    assert.equal(map.get('Organization'), '_No response_');
+  });
+
+  test('undefined maps to _No response_', () => {
+    const map = eventDataToDisplayMap(baseRecord);
+    assert.equal(map.get('End date'), '_No response_');
+  });
+
+  test('false is NOT treated as blank (Format: Online)', () => {
+    const map = eventDataToDisplayMap({ ...baseRecord, online_event: false });
+    assert.equal(map.get('Format'), 'In person');
+  });
+
+  test('activities are sorted for deterministic output', () => {
+    const map = eventDataToDisplayMap({ ...baseRecord, event_activities: ['Exhibition', 'Live coding'] });
+    assert.equal(map.get('Activities'), 'Exhibition, Live coding');
+  });
+});
+
+// ── buildNewEventTable ────────────────────────────────────────────────────────
+
+describe('buildNewEventTable', () => {
+  test('produces correct markdown table with Field/Value headers', () => {
+    const record = {
+      event_name: 'PCD @ Tokyo',
+      primary_contact: { name: 'Jane', email: 'jane@example.com' },
+      online_event: false,
+      event_date: '', event_end_date: undefined, event_start_time: '', event_end_time: '',
+      event_location: { address: '', plus_code: '' },
+      city: '', country: '', organization_name: '', organization_url: '',
+      organization_type: '', event_url: '', event_page_url: '', forum_thread_url: '',
+      event_short_description: '', event_activities: [], organizers: [],
+    };
+    const table = buildNewEventTable(eventDataToDisplayMap(record));
+    assert.ok(table.startsWith('| Field | Value |'), 'should start with header row');
+    assert.ok(table.includes('|---|---|'), 'should include separator');
+    assert.ok(table.includes('| Event name | PCD @ Tokyo |'), 'should include event name row');
+  });
+});
+
+// ── buildEditEventTable ───────────────────────────────────────────────────────
+
+describe('buildEditEventTable', () => {
+  const baseRecord = {
+    event_name: 'PCD @ Tokyo',
+    primary_contact: { name: 'Jane', email: 'jane@example.com' },
+    online_event: false,
+    event_date: '2026-03-21', event_end_date: undefined, event_start_time: '', event_end_time: '',
+    event_location: { address: '123 Main St', plus_code: '8FW4V75V+8Q' },
+    city: 'Tokyo', country: 'Japan', organization_name: '', organization_url: '',
+    organization_type: '', event_url: '', event_page_url: '', forum_thread_url: '',
+    event_short_description: 'A gathering.', event_activities: ['Live coding'], organizers: [],
+  };
+
+  test('only includes rows where values differ', () => {
+    const prev = eventDataToDisplayMap({ ...baseRecord, event_date: '2026-01-01' });
+    const next = eventDataToDisplayMap({ ...baseRecord, event_date: '2026-03-21' });
+    const table = buildEditEventTable(prev, next);
+    assert.ok(table.includes('| Field | Previous | New |'), 'should have 3-column header');
+    assert.ok(table.includes('| Date |'), 'should include changed Date row');
+    assert.ok(!table.includes('| Event name |'), 'should not include unchanged Event name');
+  });
+
+  test('returns fallback message when nothing changed', () => {
+    const map = eventDataToDisplayMap(baseRecord);
+    assert.equal(buildEditEventTable(map, map), '_No metadata changes._');
+  });
+
+  test('activities compared deterministically (order-insensitive)', () => {
+    const prev = eventDataToDisplayMap({ ...baseRecord, event_activities: ['Exhibition', 'Live coding'] });
+    const next = eventDataToDisplayMap({ ...baseRecord, event_activities: ['Live coding', 'Exhibition'] });
+    assert.equal(buildEditEventTable(prev, next), '_No metadata changes._');
+  });
+});
+
+// ── formatLongDescription ─────────────────────────────────────────────────────
+
+describe('formatLongDescription', () => {
+  test('prefixes each line with > ', () => {
+    assert.equal(formatLongDescription('line1\nline2'), '> line1\n> line2');
+  });
+
+  test('single line', () => {
+    assert.equal(formatLongDescription('Hello world'), '> Hello world');
+  });
+
+  test('blank/falsy returns _No response_', () => {
+    assert.equal(formatLongDescription(''), '_No response_');
+    assert.equal(formatLongDescription(null), '_No response_');
+    assert.equal(formatLongDescription(undefined), '_No response_');
+    assert.equal(formatLongDescription('   '), '_No response_');
+  });
+
+  test('normalizes \\r\\n to \\n', () => {
+    assert.equal(formatLongDescription('line1\r\nline2'), '> line1\n> line2');
+  });
+});
+
+// ── buildPlusCodeNoteBlocks ──────────────────────────────────────────────────
+
+describe('buildPlusCodeNoteBlocks', () => {
+  test('returns note block when plusCodeNote is truthy', () => {
+    const blocks = buildPlusCodeNoteBlocks(true, 'V75V+8Q', '8FW4V75V+8Q');
+    assert.equal(blocks.length, 1);
+    assert.ok(blocks[0].includes('> [!NOTE]'));
+    assert.ok(blocks[0].includes('`V75V+8Q`'));
+    assert.ok(blocks[0].includes('https://plus.codes/8FW4V75V+8Q'));
+  });
+
+  test('returns empty array when plusCodeNote is falsy', () => {
+    assert.deepEqual(buildPlusCodeNoteBlocks(false, 'V75V+8Q', '8FW4V75V+8Q'), []);
+    assert.deepEqual(buildPlusCodeNoteBlocks(null, 'V75V+8Q', '8FW4V75V+8Q'), []);
+  });
+});
+
+// ── buildPrBody ───────────────────────────────────────────────────────────────
+
+describe('buildPrBody', () => {
+  const base = {
+    number: 42,
+    eventName: 'PCD @ Tokyo',
+    submitterLogin: 'someuser',
+    plusCodeForLink: '8FW4V75V+8Q',
+    dataTable: '| Field | Value |\n|---|---|\n| Event name | PCD @ Tokyo |',
+    longDescriptionSection: null,
+    noteBlocks: [],
+  };
+
+  test('new event body has correct structure', () => {
+    const body = buildPrBody({ mode: 'new', ...base });
+    assert.ok(body.includes('Closes #42'));
+    assert.ok(body.includes('"New Event" issue form'));
+    assert.ok(body.includes('### Review checklist'));
+    assert.ok(body.includes('The event data below is accurate'));
+    assert.ok(body.includes('https://plus.codes/8FW4V75V+8Q'));
+    assert.ok(body.includes('### Event data'));
+    assert.ok(body.includes('| Field | Value |'));
+    assert.ok(!body.includes('### Long description'), 'should not include long description section when null');
+  });
+
+  test('edit event body has correct structure', () => {
+    const body = buildPrBody({ mode: 'edit', ...base, dataTable: '| Field | Previous | New |\n|---|---|---|\n| Date | old | new |' });
+    assert.ok(body.includes('"Edit Event" issue form'));
+    assert.ok(body.includes('The changes below are correct'));
+    assert.ok(body.includes('### Changes'));
+  });
+
+  test('long description section included when provided', () => {
+    const body = buildPrBody({ mode: 'new', ...base, longDescriptionSection: '> Some description.' });
+    assert.ok(body.includes('### Long description'));
+    assert.ok(body.includes('> Some description.'));
+  });
+
+  test('noteBlocks appear before Closes line', () => {
+    const body = buildPrBody({
+      mode: 'new', ...base,
+      noteBlocks: ['> [!NOTE]\n> The Plus Code was auto-recovered.'],
+    });
+    const noteIdx = body.indexOf('> [!NOTE]');
+    const closesIdx = body.indexOf('Closes #42');
+    assert.ok(noteIdx < closesIdx, 'note should appear before Closes line');
+  });
+
+  test('submitter shown as @login when provided', () => {
+    const body = buildPrBody({ mode: 'new', ...base });
+    assert.ok(body.includes('Submitted by @someuser'));
+  });
+
+  test('submitter shown as "the submitter" when login is empty', () => {
+    const body = buildPrBody({ mode: 'new', ...base, submitterLogin: '' });
+    assert.ok(body.includes('Submitted by the submitter'));
   });
 });

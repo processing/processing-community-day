@@ -206,8 +206,18 @@ describe('process-new-event-issue', () => {
       assert.equal(meta.event_name, 'PCD @ Test City');
       const contentMd = await fs.readFile(contentPath, 'utf8');
       assert.match(contentMd, /^uid: "[0-9a-f]{7}"$/m);
+
+      // PR body assertions
+      const prBody = await fs.readFile(outputs.pr_body_path, 'utf8');
+      assert.ok(prBody.includes('### Review checklist'), 'should have Review checklist section');
+      assert.ok(prBody.includes('### Event data'), 'should have Event data section');
+      assert.ok(prBody.includes('| Field | Value |'), 'should have 2-column table header');
+      assert.ok(prBody.includes('| Event name | PCD @ Test City |'), 'should include event name row');
+      assert.ok(prBody.includes('| Contact | Jane Doe (jane@example.com) |'), 'should include contact row');
+      assert.ok(prBody.includes('| Activities | Live coding |'), 'should include activities row');
+      assert.ok(prBody.includes('### Long description'), 'should include long description section');
+      assert.ok(prBody.includes('> A longer description.'), 'long description should be blockquoted');
     } finally {
-      // Clean up the generated event dir
       await fs.rm(path.join(
         path.resolve(SCRIPTS_DIR, '../..'),
         'pcd-website/src/content/events',

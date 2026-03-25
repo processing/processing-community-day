@@ -217,6 +217,21 @@ describe('process-edit-event-issue', () => {
     assert.equal(meta.intake.issue_number, 99, 'intake must be preserved');
     assert.equal(meta.primary_contact.name, 'New Contact');
     assert.equal(meta.event_name, 'PCD @ Edit Test City');
+
+    // PR body assertions
+    const prBody = await fs.readFile(outputs.pr_body_path, 'utf8');
+    assert.ok(prBody.includes('### Review checklist'), 'should have Review checklist section');
+    assert.ok(prBody.includes('### Changes'), 'should have Changes section');
+    assert.ok(prBody.includes('| Field | Previous | New |'), 'should have 3-column table header');
+    // Contact changed from Old Contact to New Contact
+    assert.ok(prBody.includes('| Contact |'), 'should include changed Contact row');
+    assert.ok(prBody.includes('Old Contact'), 'should show previous contact');
+    assert.ok(prBody.includes('New Contact'), 'should show new contact');
+    // Event name did not change — should not appear in table
+    assert.ok(!prBody.includes('| Event name |'), 'should not include unchanged Event name row');
+    // Long description changed
+    assert.ok(prBody.includes('### Long description'), 'should include long description section');
+    assert.ok(prBody.includes('> Updated full description.'), 'long description should be blockquoted');
   });
 
   test('blank full_description leaves existing content.md unchanged', async () => {
@@ -226,6 +241,10 @@ describe('process-edit-event-issue', () => {
 
     const content = await fs.readFile(path.join(TEST_EVENT_DIR, 'content.md'), 'utf8');
     assert.equal(content, EXISTING_CONTENT, 'content.md should be unchanged when full_description is blank');
+
+    // No description change → no long description section in PR body
+    const prBody = await fs.readFile(outputs.pr_body_path, 'utf8');
+    assert.ok(!prBody.includes('### Long description'), 'should not include long description section when unchanged');
   });
 
   test('full_description provided rewrites content.md with quoted uid', async () => {

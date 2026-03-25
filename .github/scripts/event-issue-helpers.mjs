@@ -154,3 +154,112 @@ export function generateUniqueUid(existingUids) {
   existingUids.add(uid);
   return uid;
 }
+
+// ── PR body helpers ────────────────────────────────────────────────────────────
+
+export const PR_FIELDS = [
+  { label: 'Event name',        accessor: (d) => d.event_name },
+  { label: 'Contact',           accessor: (d) => {
+    const name = d.primary_contact?.name?.trim();
+    const email = d.primary_contact?.email?.trim();
+    if (name && email) return `${name} (${email})`;
+    if (name) return name;
+    if (email) return email;
+    return '';
+  }},
+  { label: 'Format',            accessor: (d) => d.online_event ? 'Online' : 'In person' },
+  { label: 'Date',              accessor: (d) => d.event_date },
+  { label: 'End date',          accessor: (d) => d.event_end_date },
+  { label: 'Start time',        accessor: (d) => d.event_start_time },
+  { label: 'End time',          accessor: (d) => d.event_end_time },
+  { label: 'Address',           accessor: (d) => d.event_location?.address },
+  { label: 'Plus Code',         accessor: (d) => d.event_location?.plus_code ? `\`${d.event_location.plus_code}\`` : '' },
+  { label: 'City',              accessor: (d) => d.city },
+  { label: 'Country',           accessor: (d) => d.country },
+  { label: 'Organization',      accessor: (d) => d.organization_name },
+  { label: 'Organization URL',  accessor: (d) => d.organization_url },
+  { label: 'Organization type', accessor: (d) => d.organization_type },
+  { label: 'Event URL',         accessor: (d) => d.event_url },
+  { label: 'Event page',        accessor: (d) => d.event_page_url },
+  { label: 'Forum thread',      accessor: (d) => d.forum_thread_url },
+  { label: 'Short description', accessor: (d) => d.event_short_description },
+  { label: 'Activities',        accessor: (d) => [...(d.event_activities ?? [])].sort().join(', ') },
+  { label: 'Organizers',        accessor: (d) => (d.organizers ?? []).map(o => o.name).join(', ') },
+];
+
+export function escapeTableCell(value) {
+  return String(value ?? '').replace(/\|/g, '\\|').replace(/\n/g, ' ');
+}
+
+export function eventDataToDisplayMap(record) {
+  const map = new Map();
+  for (const { label, accessor } of PR_FIELDS) {
+    const raw = accessor(record);
+    const isEmpty = raw === undefined || raw === null || (typeof raw === 'string' && raw.trim() === '');
+    map.set(label, isEmpty ? '_No response_' : escapeTableCell(raw));
+  }
+  return map;
+}
+
+export function buildNewEventTable(displayMap) {
+  const rows = ['| Field | Value |', '|---|---|'];
+  for (const { label } of PR_FIELDS) {
+    rows.push(`| ${label} | ${displayMap.get(label)} |`);
+  }
+  return rows.join('\n');
+}
+
+export function buildEditEventTable(previousMap, newMap) {
+  const rows = [];
+  for (const { label } of PR_FIELDS) {
+    const prev = previousMap.get(label);
+    const next = newMap.get(label);
+    if (prev !== next) {
+      rows.push(`| ${label} | ${prev} | ${next} |`);
+    }
+  }
+  if (rows.length === 0) return '_No metadata changes._';
+  return ['| Field | Previous | New |', '|---|---|---|', ...rows].join('\n');
+}
+
+export function formatLongDescription(text) {
+  if (!text || !text.trim()) return '_No response_';
+  return text.replace(/\r\n/g, '\n').split('\n').map(line => `> ${line}`).join('\n');
+}
+
+export function buildPlusCodeNoteBlocks(plusCodeNote, rawPlusCode, resolvedPlusCode) {
+  if (!plusCodeNote) return [];
+  return [`> [!NOTE]\n> The Plus Code was auto-recovered from the user's input (\`${rawPlusCode}\`) using the city as a reference. Please verify the map pin placement is correct (https://plus.codes/${resolvedPlusCode}).`];
+}
+
+export function buildPrBody({ mode, number, eventName, submitterLogin, plusCodeForLink, dataTable, longDescriptionSection, noteBlocks = [] }) {
+  const submitterMention = submitterLogin ? `@${submitterLogin}` : 'the submitter';
+  const isNew = mode === 'new';
+  const formType = isNew ? 'New Event' : 'Edit Event';
+  const checklistItem = isNew ? 'The event data below is accurate' : 'The changes below are correct';
+  const tableSection = isNew ? '### Event data' : '### Changes';
+
+  const lines = [
+    ...noteBlocks.flatMap(b => [b, '']),
+    `Closes #${number}`,
+    '',
+    `This PR was generated from the "${formType}" issue form for **${eventName}**.`,
+    `Submitted by ${submitterMention}.`,
+    '',
+    '### Review checklist',
+    '',
+    `- [ ] ${checklistItem}`,
+    ...(plusCodeForLink ? [`- [ ] The map pin is placed correctly ([check Plus Code](https://plus.codes/${plusCodeForLink}))`] : []),
+    '- [ ] The event displays correctly in the **Netlify preview** (link posted by the Netlify bot)',
+    '',
+    tableSection,
+    '',
+    dataTable,
+  ];
+
+  if (longDescriptionSection) {
+    lines.push('', '### Long description', '', longDescriptionSection);
+  }
+
+  return lines.join('\n');
+}

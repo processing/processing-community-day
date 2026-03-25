@@ -21,6 +21,11 @@ import {
   parseOrganizers,
   buildValidationComment,
   generateUniqueUid,
+  eventDataToDisplayMap,
+  buildNewEventTable,
+  formatLongDescription,
+  buildPlusCodeNoteBlocks,
+  buildPrBody,
 } from './event-issue-helpers.mjs';
 
 const WORKSPACE = process.cwd();
@@ -41,44 +46,6 @@ async function setOutput(key, value) {
   await fs.appendFile(OUTPUT_PATH, `${key}=${String(value)}\n`);
 }
 
-function buildPrBody(number, name, submitterLogin, isOnlineEvent, eventDate, startTime, address, plusCodeNote, rawPlusCode, resolvedPlusCode, shortDescription, fullDescription, contactName, contactEmail) {
-  const submitterMention = submitterLogin ? `@${submitterLogin}` : 'the submitter';
-  const locationLine = isOnlineEvent
-    ? '- [ ] Online event URL is correct and accessible'
-    : address
-      ? '- [ ] Venue address and map pin placement are correct'
-      : '- [ ] Location is marked TBD — confirm this is intentional';
-  const dateLine = eventDate
-    ? startTime
-      ? '- [ ] Date and time are correct'
-      : '- [ ] Date is correct; time is marked TBD — confirm this is intentional'
-    : '- [ ] Date is marked TBD — confirm this is intentional';
-
-  const noteBlock = plusCodeNote
-    ? [
-        '> [!NOTE]',
-        `> The Plus Code was auto-recovered from the user's input (\`${rawPlusCode}\`) using the city as a reference. Please verify the map pin placement is correct (https://plus.codes/${resolvedPlusCode}).`,
-        '',
-      ]
-    : [];
-
-  return [
-    ...noteBlock,
-    `Closes #${number}`,
-    '',
-    `This PR was generated from the "New Event" issue form for **${name}**.`,
-    `Submitted by ${submitterMention}.`,
-    '',
-    'Review checklist:',
-    `- [ ] Event name "${name}" is correct`,
-    `- [ ] Public name "${contactName}" and email "${contactEmail}" are correct`,
-    ...(shortDescription ? [] : ['- [ ] Short description is left blank — confirm this is intentional']),
-    ...(fullDescription ? [] : ['- [ ] Long description is left blank — confirm this is intentional']),
-    dateLine,
-    locationLine,
-    '- [ ] Check the map and event details page in the **Netlify preview** (link posted below by the Netlify bot)',
-  ].join('\n');
-}
 
 console.log(`[process-new-event-issue] issue #${issueNumber}, body length: ${issueBody.length}`);
 
@@ -253,8 +220,12 @@ async function main() {
   await fs.writeFile(markdownPath, markdownLines.join('\n'));
   await fs.writeFile(metadataPath, `${JSON.stringify(nodeRecord, null, 2)}\n`);
 
+  const displayMap = eventDataToDisplayMap(nodeRecord);
+  const dataTable = buildNewEventTable(displayMap);
+  const longDescriptionSection = formatLongDescription(fullDescription);
+  const noteBlocks = buildPlusCodeNoteBlocks(plusCodeNote, rawPlusCode, resolvedPlusCode);
   const prBodyPath = path.join(RUNNER_TEMP, `pr-body-${issueNumber}.md`);
-  await fs.writeFile(prBodyPath, buildPrBody(issueNumber, eventName, submitterLogin, isOnlineEvent, eventDate, startTime, address, plusCodeNote, rawPlusCode, resolvedPlusCode, shortDescription, fullDescription, primaryContactName, contactEmail));
+  await fs.writeFile(prBodyPath, buildPrBody({ mode: 'new', number: issueNumber, eventName, submitterLogin, plusCodeForLink: plusCode, dataTable, longDescriptionSection, noteBlocks }));
 
   console.log(`[process-new-event-issue] validation passed — event id: ${eventId}, uid: ${uid}`);
   await setOutput('valid', 'true');
