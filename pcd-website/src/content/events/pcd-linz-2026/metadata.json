@@ -11,12 +11,12 @@
   "organization_type": "Nonprofit, foundation, association",
   "online_event": false,
   "event_url": "",
-  "event_name": "PCD @ Linz",
+  "event_name": "PCD @ Ars Electronica",
   "event_location": {
     "address": "",
     "plus_code": "8FWP875M+VP"
   },
-  "event_date": "2026-09-09",
+  "event_date": "2026-09-10",
   "event_end_date": "2026-09-13",
   "event_start_time": "",
   "event_end_time": "",
@@ -25,8 +25,7 @@
     "Show-and-tell",
     "Hands-on workshops",
     "Panel discussions",
-    "Beginner introductions to Processing or p5.js",
-    "Other"
+    "Student project presentations"
   ],
   "event_page_url": "",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-linz-2026/48218",
