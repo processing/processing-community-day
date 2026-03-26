@@ -74,6 +74,12 @@ These tests cover the shared pure functions extracted into `event-issue-helpers.
 
 ---
 
+## Single-command test run
+
+Run `./scripts/run-tests.sh` from the repo root after installing dependencies (`pcd-website` already has `node_modules/` from `npm install`). The script executes the helper, intake, and plus-code suites, then builds the Astro site (`npm run build` inside `pcd-website/`) before running `data-json.test.mjs`. Use this single command whenever you want to verify the full test battery end to end.
+
+---
+
 ## Plus Code functions
 
 **File:** `.github/scripts/plus-code.test.mjs`

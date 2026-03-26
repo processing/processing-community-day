@@ -39,6 +39,8 @@ node --test .github/scripts/plus-code.test.mjs
 node --test .github/scripts/data-json.test.mjs
 ```
 
+Need to run the tests end-to-end? `./scripts/run-tests.sh` executes the helper, intake, and plus-code suites, builds the Astro site via `npm --prefix pcd-website run build`, and then runs `data-json.test.mjs` in sequence. Run this script from the repo root after installing dependencies so you get the full battery of checks in one shot.
+
 No install needed — `open-location-code` is already available at `pcd-website/node_modules/`.
 
 ### Testing protocol

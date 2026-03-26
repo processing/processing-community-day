@@ -6,7 +6,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "../scripts/run-tests.sh"
   },
   "dependencies": {
     "@astrojs/vue": "^5.1.4",
