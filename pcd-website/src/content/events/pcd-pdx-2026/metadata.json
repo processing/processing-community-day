@@ -1,0 +1,42 @@
+{
+  "id": "pcd-pdx-2026",
+  "uid": "b69cfa5",
+  "organizers": [
+    {
+      "name": "Amy B. Woodman"
+    },
+    {
+      "name": "Noland Chaliha"
+    }
+  ],
+  "primary_contact": {
+    "name": "Amy B. Woodman",
+    "email": "amy@processingfoundation.org"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ PDX",
+  "event_location": {
+    "address": "",
+    "plus_code": "84QVG8GF+H7"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-portland-or-2026/48319",
+  "city": "Portland",
+  "country": "USA",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 56,
+    "submitted_by_github": "amy-b",
+    "submitted_date": "2026-03-26",
+    "maintainer_notes": ""
+  }
+}
