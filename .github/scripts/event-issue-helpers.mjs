@@ -72,6 +72,14 @@ export function isValidEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
+const HTTP_PROTOCOL_RE = /^https?:\/\//i;
+
+export function normalizeUrl(value) {
+  if (!value) return value;
+  if (HTTP_PROTOCOL_RE.test(value)) return value;
+  return `http://${value}`;
+}
+
 export function isValidHttpUrl(value) {
   try {
     const url = new URL(value);

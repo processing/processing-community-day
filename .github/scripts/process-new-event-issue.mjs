@@ -16,6 +16,7 @@ import {
   isValidTime,
   isValidEmail,
   isValidHttpUrl,
+  normalizeUrl,
   slugify,
   parseActivities,
   parseOrganizers,
@@ -79,26 +80,26 @@ async function main() {
     message: 'This field is required. Choose one of: `In person` or `Online`.',
   });
   const isOnlineEvent = eventFormat === 'Online';
-  const eventUrl = fields.get('Event URL (only for online events)')?.trim() ?? '';
+  const eventUrl = normalizeUrl(fields.get('Event URL (only for online events)')?.trim() ?? '');
   const primaryContactName = required(fields, 'Primary contact name', errors);
   const contactEmail = required(fields, 'Primary contact email', errors);
   // Parse city/country before plus_code resolution — needed for short-code recovery
   const city = fields.get('City or locality')?.trim() ?? '';
   const country = fields.get('Country')?.trim() ?? '';
   const organizationName = fields.get('Organization name')?.trim() ?? '';
-  const organizationUrl = fields.get('Organization website')?.trim() ?? '';
+  const organizationUrl = normalizeUrl(fields.get('Organization website')?.trim() ?? '');
   const organizationType = (fields.get('Organization type')?.trim() ?? '').replace(/^None$/i, '');
   const address = fields.get('Street address of the event venue')?.trim() ?? '';
   const eventDate = fields.get('Date of the event')?.trim() ?? '';
   const eventEndDate = fields.get('End date (for multi-day events)')?.trim() ?? '';
   const startTime = fields.get('Start time')?.trim() ?? '';
   const endTime = fields.get('End time')?.trim() ?? '';
-  const eventPageUrl = fields.get('Event page URL')?.trim() ?? '';
+  const eventPageUrl = normalizeUrl(fields.get('Event page URL')?.trim() ?? '');
   const organizers = parseOrganizers(fields.get('Organizers')?.trim() ?? '');
   const shortDescription = fields.get('Short description')?.trim() ?? '';
   const fullDescription = fields.get('Full event description')?.trim() ?? '';
   const activities = parseActivities(fields.get('Event activities')?.trim() ?? '');
-  const forumThreadUrl = fields.get('Forum discussion URL')?.trim() ?? '';
+  const forumThreadUrl = normalizeUrl(fields.get('Forum discussion URL')?.trim() ?? '');
   const maintainerNotes = fields.get('Additional notes')?.trim() ?? '';
 
   // Resolve plus_code with smart recovery before validation
@@ -123,12 +124,12 @@ async function main() {
   ) {
     errors.push({ field: 'End time', found: endTime, message: 'End time must be later than start time for single-day events.' });
   }
-  if (eventPageUrl && !isValidHttpUrl(eventPageUrl)) errors.push({ field: 'Event page URL', found: eventPageUrl, message: 'Must be a valid URL starting with `http://` or `https://`, e.g. `https://example.com/pcd`.' });
-  if (forumThreadUrl && !isValidHttpUrl(forumThreadUrl)) errors.push({ field: 'Forum discussion URL', found: forumThreadUrl, message: 'Must be a valid URL starting with `http://` or `https://`.' });
+  if (eventPageUrl && !isValidHttpUrl(eventPageUrl)) errors.push({ field: 'Event page URL', found: eventPageUrl, message: 'Not a valid URL. Please enter a web address like `https://example.com/pcd`.' });
+  if (forumThreadUrl && !isValidHttpUrl(forumThreadUrl)) errors.push({ field: 'Forum discussion URL', found: forumThreadUrl, message: 'Not a valid URL. Please enter a web address like `https://forum.example.com/thread`.' });
   if (contactEmail && !isValidEmail(contactEmail)) errors.push({ field: 'Primary contact email', found: contactEmail, message: 'Not a valid email address. Please provide a valid email like `you@example.com`.' });
   if (rawPlusCode && !resolvedPlusCode) errors.push({ field: 'Map placement (Plus Code)', found: rawPlusCode.replace(/\s+/g, '').toUpperCase(), message: 'Not a valid full global Plus Code. It should look like `8FW4V75V+8Q`. [Find your Plus Code →](https://plus.codes/)' });
-  if (eventUrl && !isValidHttpUrl(eventUrl)) errors.push({ field: 'Event URL', found: eventUrl, message: 'Must be a valid URL starting with `http://` or `https://`.' });
-  if (organizationUrl && !isValidHttpUrl(organizationUrl)) errors.push({ field: 'Organization website', found: organizationUrl, message: 'Must be a valid URL starting with `http://` or `https://`.' });
+  if (eventUrl && !isValidHttpUrl(eventUrl)) errors.push({ field: 'Event URL', found: eventUrl, message: 'Not a valid URL. Please enter a web address like `https://example.com`.' });
+  if (organizationUrl && !isValidHttpUrl(organizationUrl)) errors.push({ field: 'Organization website', found: organizationUrl, message: 'Not a valid URL. Please enter a web address like `https://example.com`.' });
   if (eventFormat && !VALID_EVENT_FORMATS.has(eventFormat)) errors.push({ field: 'Event format', found: eventFormat, message: 'Not a recognized option. Please choose one of: `In person` or `Online`.' });
   if (organizationType && !VALID_ORG_TYPES.has(organizationType)) errors.push({ field: 'Organization type', found: organizationType, message: 'Not a recognized option. Please choose one of the valid options from the form.' });
   if (isOnlineEvent && !eventUrl) errors.push({ field: 'Event URL', message: 'An event URL is required for online events. Please provide the URL where people can join.' });

@@ -6,6 +6,7 @@ import {
   isValidTime,
   isValidEmail,
   isValidHttpUrl,
+  normalizeUrl,
   slugify,
   parseActivities,
   parseOrganizers,
@@ -85,6 +86,16 @@ describe('isValidHttpUrl', () => {
   test('ftp rejected', () => assert.equal(isValidHttpUrl('ftp://example.com'), false));
   test('non-URL string', () => assert.equal(isValidHttpUrl('not a url'), false));
   test('empty string', () => assert.equal(isValidHttpUrl(''), false));
+});
+
+// ── normalizeUrl ──────────────────────────────────────────────────────────────
+
+describe('normalizeUrl', () => {
+  test('http URL unchanged', () => assert.equal(normalizeUrl('http://example.com'), 'http://example.com'));
+  test('https URL unchanged', () => assert.equal(normalizeUrl('https://example.com/path'), 'https://example.com/path'));
+  test('www without protocol', () => assert.equal(normalizeUrl('www.example.com'), 'http://www.example.com'));
+  test('bare domain', () => assert.equal(normalizeUrl('example.com'), 'http://example.com'));
+  test('empty string unchanged', () => assert.equal(normalizeUrl(''), ''));
 });
 
 // ── slugify ───────────────────────────────────────────────────────────────────
