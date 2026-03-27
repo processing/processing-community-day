@@ -15,3 +15,8 @@
   from = "/_astro/PCD2026_og-image_tinyfied*"
   to = "/og-image.png"
   status = 301
+
+[[headers]]
+  for = "/data.json"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
