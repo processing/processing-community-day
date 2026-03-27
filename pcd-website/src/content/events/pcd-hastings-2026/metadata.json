@@ -1,0 +1,42 @@
+{
+  "id": "pcd-hastings-2026",
+  "uid": "3fedb37",
+  "organizers": [
+    {
+      "name": "Your name here! get involved :)))"
+    },
+    {
+      "name": "Becca Rose"
+    }
+  ],
+  "primary_contact": {
+    "name": "Becca Rose",
+    "email": "beckaroona@gmail.com"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Hastings",
+  "event_location": {
+    "address": "",
+    "plus_code": "9F22VH2C+WX"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "Get in touch if you want to get involved. More details soon",
+  "event_activities": [],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-hastings-2026/48309",
+  "city": "Hastings",
+  "country": "UK",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 55,
+    "submitted_by_github": "awaywiththespoons",
+    "submitted_date": "2026-03-26",
+    "maintainer_notes": ""
+  }
+}
