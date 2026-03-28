@@ -1,0 +1,44 @@
+{
+  "id": "pcd-istanbul-2026",
+  "uid": "d9d5119",
+  "organizers": [
+    {
+      "name": "Alp Tuğan"
+    }
+  ],
+  "primary_contact": {
+    "name": "Alp Tuğan",
+    "email": "alp.tugan@ozyegin.edu.tr"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Istanbul 2026",
+  "event_location": {
+    "address": "",
+    "plus_code": "8GHF27J5+78"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "Algorithmic Art & Anatolian Motifs",
+  "event_activities": [
+    "Show-and-tell",
+    "Hands-on workshops",
+    "Beginner introductions to Processing or p5.js",
+    "Screening"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-istanbul-2026/48322",
+  "city": "Istanbul",
+  "country": "Türkiye",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 59,
+    "submitted_by_github": "alptugan",
+    "submitted_date": "2026-03-28",
+    "maintainer_notes": ""
+  }
+}
