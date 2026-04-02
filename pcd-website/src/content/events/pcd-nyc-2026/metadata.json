@@ -1,0 +1,35 @@
+{
+  "id": "pcd-nyc-2026",
+  "uid": "a83549a",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Iris Fernandez Valdes",
+    "email": "hola@iris-fernandez.com"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ NYC",
+  "event_location": {
+    "address": "",
+    "plus_code": "87G8M2V8+2V"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-new-york-city-2026/48393",
+  "city": "New York City",
+  "country": "United States",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 61,
+    "submitted_by_github": "abettercoach",
+    "submitted_date": "2026-04-01",
+    "maintainer_notes": ""
+  }
+}
