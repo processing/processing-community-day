@@ -1,0 +1,43 @@
+{
+  "id": "pcd-boston-cambridge-2026",
+  "uid": "782949a",
+  "organizers": [
+    {
+      "name": "Yufeng Zhao"
+    }
+  ],
+  "primary_contact": {
+    "name": "Yufeng Zhao",
+    "email": "yufengz@media.mit.edu"
+  },
+  "organization_name": "Future Sketches, MIT Media Lab",
+  "organization_url": "https://www.media.mit.edu/groups/future-sketches/overview/",
+  "organization_type": "School, university, library",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Boston/Cambridge 2026",
+  "event_location": {
+    "address": "75 Amherst St, Cambridge, MA 02139",
+    "plus_code": "87JC9W67+43"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "Talks from MIT Media Lab members on creative coding, invited speakers, and an open projector session. Hosted by the Future Sketches group.",
+  "event_activities": [
+    "Show-and-tell",
+    "Beginner introductions to Processing or p5.js",
+    "Student project presentations"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-boston-cambridge-2026/48418",
+  "city": "Cambridge, MA",
+  "country": "United States",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 64,
+    "submitted_by_github": "yz3440",
+    "submitted_date": "2026-04-08",
+    "maintainer_notes": ""
+  }
+}
