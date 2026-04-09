@@ -1,0 +1,40 @@
+{
+  "id": "pcd-coimbra-2026",
+  "uid": "6fbfe64",
+  "organizers": [],
+  "primary_contact": {
+    "name": "João Miguel Cunha",
+    "email": "pcdcoimbra@dei.uc.pt"
+  },
+  "organization_name": "",
+  "organization_url": "https://pcdcoimbra.dei.uc.pt/",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Coimbra",
+  "event_location": {
+    "address": "",
+    "plus_code": "8CGH5HPM+HGP"
+  },
+  "event_date": "2026-03-04",
+  "event_end_date": "2026-03-11",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [
+    "Show-and-tell",
+    "Hands-on workshops",
+    "Exhibition"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-coimbra-2026/48396",
+  "city": "Coimbra",
+  "country": "Portugal",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 63,
+    "submitted_by_github": "jmacunha",
+    "submitted_date": "2026-04-09",
+    "maintainer_notes": ""
+  }
+}
