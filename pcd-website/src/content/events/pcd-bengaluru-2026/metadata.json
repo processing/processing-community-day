@@ -1,0 +1,54 @@
+{
+  "id": "pcd-bengaluru-2026",
+  "uid": "ca21219",
+  "organizers": [
+    {
+      "name": "Tanvi Kumar"
+    },
+    {
+      "name": "Joe Sujin"
+    },
+    {
+      "name": "Anushka Trivedi"
+    },
+    {
+      "name": "Manaswini"
+    }
+  ],
+  "primary_contact": {
+    "name": "Tanvi Kumar",
+    "email": "tanvikumar777@gmail.com"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "Meetup, code club, community group",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Bengaluru 2026",
+  "event_location": {
+    "address": "NID Bengaluru",
+    "plus_code": "7J5V2GMP+V2"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [
+    "Show-and-tell",
+    "Hands-on workshops",
+    "Live coding",
+    "Beginner introductions to Processing or p5.js",
+    "Creative coding jams or hack sessions"
+  ],
+  "event_page_url": "https://discourse.processing.org/t/pcd-bangalore-2026/48449",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-bangalore-2026/48449",
+  "city": "Bengaluru",
+  "country": "India",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 67,
+    "submitted_by_github": "TanviKumar",
+    "submitted_date": "2026-04-20",
+    "maintainer_notes": ""
+  }
+}
