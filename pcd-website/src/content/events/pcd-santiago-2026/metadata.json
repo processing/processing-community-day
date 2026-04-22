@@ -3,7 +3,7 @@
   "uid": "2deecd2",
   "organizers": [
     {
-      "name": "Yamna Carrión"
+      "name": "Jacinta Barrenechea"
     },
     {
       "name": "Santiago Gaete"
@@ -12,13 +12,7 @@
       "name": "Joaquín González"
     },
     {
-      "name": "Bernardita Jesús"
-    },
-    {
       "name": "Aarón Montoya"
-    },
-    {
-      "name": "Sofía Pérez"
     },
     {
       "name": "Félix Rodríguez"
@@ -30,23 +24,21 @@
   },
   "organization_name": "Laboratorio de Interacción Digital",
   "organization_url": "https://github.com/disenoUDP/lid",
-  "organization_type": "School, university, library",
+  "organization_type": "",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Santiago 2026",
   "event_location": {
-    "address": "",
+    "address": "Salvador Sanfuentes 2221",
     "plus_code": "47RFH82M+579"
   },
-  "event_date": "",
+  "event_date": "2026-06-26",
+  "event_end_date": "2026-06-27",
   "event_start_time": "",
   "event_end_time": "",
   "event_short_description": "LID + CRTIC Processing Community Day",
   "event_activities": [
     "Show-and-tell",
-    "Hands-on workshops",
-    "Exhibition",
-    "Panel discussions",
     "Beginner introductions to Processing or p5.js",
     "Student project presentations",
     "Screening",
