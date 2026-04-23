@@ -3,6 +3,6 @@ id: pcd-santiago-2026
 uid: "2deecd2"
 ---
 
-Our team at the Interaction Design Laboratory, along side the Center for the Technological Revolution in Creative Industries(CRTIC), will be hosting a Processing Community Day Chile 2026.
+Join us for an expanded edition of Processing Community Day Chile, hosted by the Interaction Design Lab and CRTIC. We are opening our doors to the Chilean media arts community for a day of inspiration and celebration. This year’s event highlights the evolution of our local scene, featuring guest speakers, project exhibitions, and the final presentations of our inaugural Coding and Interaction class.
 
-The event will consist of a expanded event, with guest speakers, projects and a call to apply for a projects showcase. This will happen along to the final exam of the first version of the first mandatory coding and interaction class of the school. Open to the chilean community of media arts and creative coding.
+Whether you are a student, an established researcher, or part of an interdisciplinary collective, we invite you to participate in our open call and share your work with the largest creative coding network in the country.
