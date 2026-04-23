@@ -1,7 +1,17 @@
 {
   "id": "pcd-nyc-2026",
   "uid": "a83549a",
-  "organizers": [],
+  "organizers": [
+    {
+      "name": "Iris Fernandez Valdes"
+    },
+    {
+      "name": "Dora Do"
+    },
+    {
+      "name": "Claire Kwong"
+    }
+  ],
   "primary_contact": {
     "name": "Iris Fernandez Valdes",
     "email": "hola@iris-fernandez.com"
