@@ -1,0 +1,45 @@
+{
+  "id": "pcd-sao-paulo-2026",
+  "uid": "b6416a4",
+  "organizers": [
+    {
+      "name": "Daniel Corbani"
+    },
+    {
+      "name": "Luis Miguel Santos"
+    },
+    {
+      "name": "Felipe Gomes"
+    }
+  ],
+  "primary_contact": {
+    "name": "Daniel Corbani",
+    "email": "danielcorbani@gmail.com"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "Other",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Sao Paulo",
+  "event_location": {
+    "address": "",
+    "plus_code": "588MC8PW+H5"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-sao-paulo-2026/48479",
+  "city": "Sao Paulo",
+  "country": "Brazil",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 76,
+    "submitted_by_github": "danielcorbani",
+    "submitted_date": "2026-04-28",
+    "maintainer_notes": ""
+  }
+}
