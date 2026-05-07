@@ -1,0 +1,39 @@
+{
+  "id": "pcd-montreal-2026",
+  "uid": "64a56e8",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Benoit Baudry",
+    "email": "benoit.baudry@umontreal.ca"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Montreal",
+  "event_location": {
+    "address": "",
+    "plus_code": "87Q8G92M+76"
+  },
+  "event_date": "2026-10-23",
+  "event_start_time": "10:00",
+  "event_end_time": "21:42",
+  "event_short_description": "La programmation pour toutes et tous: une oeuvre d'art en un jour",
+  "event_activities": [
+    "Hands-on workshops",
+    "Live coding",
+    "Creative coding jams or hack sessions"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-montreal-2026/48506",
+  "city": "Montreal",
+  "country": "Canada",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 78,
+    "submitted_by_github": "bbaudry",
+    "submitted_date": "2026-05-07",
+    "maintainer_notes": ""
+  }
+}
