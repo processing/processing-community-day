@@ -12,5 +12,9 @@ Regarding "Weaving," projects are not required to directly use silk, patterns, o
 We focus more on: how you build new connections using code, algorithms, tools, education, or community practices.
 
 Event Format / FORMAT 
+
 Half-day In-person Open Day 
+
 The in-person open day will focus on workshops, thematic sharing, youth creative sharing, and roundtable discussions.
+
+code2art (2016- ) is a pioneering community and knowledge platform centered around AI, interactive media, and generative art, connecting cross-disciplinary experimenters worldwide.
