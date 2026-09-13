@@ -1,0 +1,41 @@
+{
+  "id": "pcd-detroit-2026",
+  "uid": "bf590c7",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Wesley Taylor",
+    "email": "Westiv@gmail.com"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD@Detroit",
+  "event_location": {
+    "address": "4731 Grand River Ave, Detroit, MI 48208",
+    "plus_code": "86JR8WW7+W9"
+  },
+  "event_date": "2026-10-17",
+  "event_start_time": "11:00",
+  "event_end_time": "18:30",
+  "event_short_description": "",
+  "event_activities": [
+    "Show-and-tell",
+    "Hands-on workshops",
+    "Live coding",
+    "Exhibition",
+    "Panel discussions"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-detroit-2026/49200",
+  "city": "Detroit",
+  "country": "USA",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 241,
+    "submitted_by_github": "we5tiv",
+    "submitted_date": "2026-09-13",
+    "maintainer_notes": ""
+  }
+}
