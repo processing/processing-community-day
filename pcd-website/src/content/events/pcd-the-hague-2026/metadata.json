@@ -21,15 +21,15 @@
     "plus_code": "9F4638F6+RQ"
   },
   "event_date": "2026-10-16",
-  "event_start_time": "",
-  "event_end_time": "",
+  "event_start_time": "14:30",
+  "event_end_time": "19:00",
   "event_short_description": "Processing Community Day",
   "event_activities": [
     "Show-and-tell",
     "Exhibition",
     "Panel discussions"
   ],
-  "event_page_url": "",
+  "event_page_url": "https://pcd.rndr.studio/",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-the-hague-2026/48233",
   "city": "The Hague",
   "country": "The Netherlands",
