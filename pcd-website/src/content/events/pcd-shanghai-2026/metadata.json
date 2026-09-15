@@ -1,33 +1,45 @@
 {
   "id": "pcd-shanghai-2026",
   "uid": "754d2bc",
-  "organizers": [],
+  "organizers": [
+    {
+      "name": "NYU Shanghai IMA"
+    },
+    {
+      "name": "Raven Kwok (Guo, Ruiwen)"
+    },
+    {
+      "name": "Contra (Luo Xiao)"
+    },
+    {
+      "name": "code2art Community"
+    }
+  ],
   "primary_contact": {
     "name": "Luo Xiao",
     "email": "dadadaluo@gmail.com"
   },
-  "organization_name": "",
+  "organization_name": "NYU Shanghai IMA, Raven Kwok, Luo Xiao, code2art Community",
   "organization_url": "",
   "organization_type": "",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Shanghai",
   "event_location": {
-    "address": "Shanghai New York University, Century Avenue, Pudong New Area, Shanghai",
-    "plus_code": "8Q336GGM+7H"
+    "address": "567 West Yangsi Road, Shanghai",
+    "plus_code": "8Q336GGM+8M"
   },
   "event_date": "2026-10-31",
   "event_start_time": "",
   "event_end_time": "",
-  "event_short_description": "",
+  "event_short_description": "Reconnection: PCD Shanghai 2026",
   "event_activities": [
     "Show-and-tell",
     "Hands-on workshops",
     "Beginner introductions to Processing or p5.js",
-    "Student project presentations",
-    "Other"
+    "Student project presentations"
   ],
-  "event_page_url": "",
+  "event_page_url": "https://pcd2026.mysxl.cn/",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-shanghai-2026/48212",
   "city": "Shanghai",
   "country": "China",
