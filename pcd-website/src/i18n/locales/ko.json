@@ -39,6 +39,8 @@
         "date_tbd": "날짜 미정"
     },
     "panel": {
+        "more_about_pcd": "이 PCD에 대해 더 알아보기",
+        "past_event": "종료된 이벤트",
         "find_out_more": "자세히 알아보기",
         "event_page": "이벤트 페이지",
         "forum_thread": "포럼 스레드",

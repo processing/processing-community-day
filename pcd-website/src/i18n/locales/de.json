@@ -39,6 +39,8 @@
         "date_tbd": "Datum noch offen"
     },
     "panel": {
+        "more_about_pcd": "Mehr über diesen PCD",
+        "past_event": "Vergangene Veranstaltung",
         "find_out_more": "Mehr erfahren",
         "event_page": "Veranstaltungsseite",
         "forum_thread": "Forum-Thread",

@@ -39,6 +39,8 @@
         "date_tbd": "Date TBD"
     },
     "panel": {
+        "more_about_pcd": "More about this PCD",
+        "past_event": "Past event",
         "find_out_more": "Join this PCD",
         "event_page": "Event Page",
         "forum_thread": "Forum Thread",

@@ -39,6 +39,8 @@
         "date_tbd": "日時未定"
     },
     "panel": {
+        "more_about_pcd": "このPCDについて詳しく",
+        "past_event": "終了したイベント",
         "find_out_more": "詳しく見る",
         "event_page": "イベントページ",
         "forum_thread": "フォーラムのスレッド",

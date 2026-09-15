@@ -361,6 +361,7 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
                 </button>
               </div>
             </div>
+            <span v-else-if="isPastEvent(node)" class="info-card-past-label">{{ t('panel.past_event') }}</span>
           </div>
           <!-- Venue + address (OSM link) or Online platform -->
           <template v-if="node.online_event || !node.location_tbd || !isPastEvent(node)">
@@ -403,7 +404,7 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
           aria-labelledby="panel-hero-heading"
           :class="{ 'panel-hero-actions--both': node.event_page_url && node.forum_thread_url, 'panel-hero-actions--forum-only': !node.event_page_url }"
         >
-          <h2 id="panel-hero-heading" class="panel-hero-heading">{{ t('panel.find_out_more') }}</h2>
+          <h2 id="panel-hero-heading" class="panel-hero-heading">{{ t(isPastEvent(node) ? 'panel.more_about_pcd' : 'panel.find_out_more') }}</h2>
           <a
             v-if="node.event_page_url"
             :href="node.event_page_url"
@@ -1052,6 +1053,19 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   flex: 0 1 auto;
   max-width: 8rem;
   margin-left: auto;
+}
+
+.info-card-past-label {
+  flex: 0 1 auto;
+  max-width: 8rem;
+  margin-left: auto;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #eeeeee;
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  text-align: center;
 }
 
 .info-card-cal-trigger-wrap .quick-action-menu {
