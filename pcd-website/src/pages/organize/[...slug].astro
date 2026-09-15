@@ -3,9 +3,10 @@ import Icon from '../../components/Icon.astro';
 import { getCollection, render } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 import DocsLayout from '../../layouts/DocsLayout.astro';
-import { flattenKitNav, getKitNav } from '../../config/organizer-kit-nav';
+import { flattenKitNav, getKitNav, kitHref } from '../../config/organizer-kit-nav';
 import { ZINE_SUBMIT_URL } from '../../config';
 import ZineGrid from '../../components/ZineGrid.astro';
+import PartnerCards from '../../components/PartnerCards.astro';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const entries = await getCollection('organizerKit', (entry) => !entry.data.draft);
@@ -16,6 +17,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 const { entry } = Astro.props;
+const headingLogo = entry.data.partnerCard?.logo;
+const partners = entry.id === 'partners'
+  ? (await getCollection('organizerKit', (partner) => !partner.data.draft && !!partner.data.partnerCard))
+      .sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title))
+  : [];
 const { Content, headings } = await render(entry);
 
 // Prev/next follow the sidebar's reading order rather than the raw collection
@@ -31,11 +37,17 @@ const SUBMIT_PAGES = new Set(['zines/zine-library']);
 const markdownSuffix = SUBMIT_PAGES.has(entry.id)
   ? `\n\n[Submit a zine](${ZINE_SUBMIT_URL})\n`
   : '';
-const markdown = `# ${entry.data.title}\n\n${entry.body?.trim() ?? ''}\n${markdownSuffix}`;
+const partnerMarkdown = partners.map((partner) => {
+  const card = partner.data.partnerCard!;
+  return `\n\n## ${partner.data.title}\n\n${card.summary}\n\n[Learn more about ${partner.data.title} →](${kitHref(partner.id)})`;
+}).join('');
+const markdown = `# ${entry.data.title}\n\n${entry.body?.trim() ?? ''}\n${markdownSuffix}${partnerMarkdown}`;
 ---
 
 <DocsLayout
   title={entry.data.title}
+  headingLogo={headingLogo}
+  backLink={headingLogo ? { href: '/organize/partners/', label: 'Back to Partners' } : undefined}
   description={entry.data.description ?? `${entry.data.title} — the Processing Community Day Organizer's Kit.`}
   eyebrow={entry.data.section ?? "Organizer's Kit"}
   headings={headings}
@@ -45,6 +57,7 @@ const markdown = `# ${entry.data.title}\n\n${entry.body?.trim() ?? ''}\n${markdo
 >
   <Content />
   {entry.id === 'zines/zine-library' && <ZineGrid />}
+  {entry.id === 'partners' && <PartnerCards partners={partners} />}
 
   <a class="docs-back-to-top" href="#main">
     <Icon name="arrow-up" class="docs-back-to-top__icon" />

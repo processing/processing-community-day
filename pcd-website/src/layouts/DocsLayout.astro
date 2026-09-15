@@ -1,11 +1,13 @@
 ---
-import type { MarkdownHeading } from 'astro';
+import type { ImageMetadata, MarkdownHeading } from 'astro';
+import { Image } from 'astro:assets';
 import BaseLayout from './BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import DocsSidebar from '../components/DocsSidebar.astro';
 import DocsTableOfContents from '../components/DocsTableOfContents.astro';
 import DocsPageActions from '../components/DocsPageActions.astro';
+import BackButton from '../components/BackButton.astro';
 import { getKitNav } from '../config/organizer-kit-nav';
 import '../styles/base.css';
 import '../styles/docs.css';
@@ -15,8 +17,12 @@ interface Props {
   description: string;
   /** Rendered above the h1 as the section label. */
   eyebrow?: string;
+  /** Parent navigation shown in place of the eyebrow. */
+  backLink?: { href: string; label: string };
   /** Page heading. Falls back to `title` when omitted. */
   heading?: string;
+  /** Optional logo displayed within the h1, using the heading as alt text. */
+  headingLogo?: ImageMetadata;
   headings?: MarkdownHeading[];
   /** Suppresses the "On this page" table of contents. */
   hideToc?: boolean;
@@ -26,7 +32,7 @@ interface Props {
   editHref?: string;
 }
 
-const { title, description, eyebrow, heading, headings = [], hideToc = false, markdown, editHref } = Astro.props;
+const { title, description, eyebrow, backLink, heading, headingLogo, headings = [], hideToc = false, markdown, editHref } = Astro.props;
 
 const nav = await getKitNav();
 const permalink = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
@@ -49,9 +55,13 @@ const permalink = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).hr
 
     <main id="main" tabindex="-1" class="docs-shell__main">
       <article class="docs-prose">
-        {eyebrow && <p class="prose__eyebrow">{eyebrow}</p>}
-        <div class="docs-title-row">
-          <h1>{heading ?? title}</h1>
+        {backLink
+          ? <BackButton href={backLink.href} label={backLink.label} />
+          : eyebrow && <p class="prose__eyebrow">{eyebrow}</p>}
+        <div class:list={['docs-title-row', { 'docs-title-row--logo': headingLogo }]}>
+          <h1>{headingLogo
+            ? <Image class="docs-heading-logo" src={headingLogo} alt={heading ?? title} />
+            : heading ?? title}</h1>
           {markdown && editHref && (
             <DocsPageActions markdown={markdown} permalink={permalink} editHref={editHref} />
           )}
@@ -63,6 +73,23 @@ const permalink = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).hr
   </div>
   <Footer />
 </BaseLayout>
+
+<style>
+  .docs-title-row--logo {
+    row-gap: var(--sp-6);
+    margin-bottom: var(--sp-6);
+  }
+
+  .docs-heading-logo {
+    display: block;
+    width: auto;
+    height: 48px;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: left;
+    margin: 0;
+  }
+</style>
 
 <script is:inline>
   (() => {
