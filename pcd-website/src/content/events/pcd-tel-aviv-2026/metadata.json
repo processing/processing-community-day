@@ -17,18 +17,20 @@
   "event_url": "",
   "event_name": "PCD @ Tel Aviv",
   "event_location": {
-    "address": "",
-    "plus_code": "8G4P3QGJ+8Q"
+    "address": "14 Leonardo Da Vinci Street, @tatarbut_davinci",
+    "plus_code": "8G4P3QFP+M6"
   },
-  "event_date": "",
-  "event_start_time": "",
-  "event_end_time": "",
+  "event_date": "2026-10-29",
+  "event_start_time": "18:00",
+  "event_end_time": "21:00",
   "event_short_description": "",
   "event_activities": [
     "Show-and-tell",
-    "Panel discussions"
+    "Exhibition",
+    "Panel discussions",
+    "Student project presentations"
   ],
-  "event_page_url": "",
+  "event_page_url": "https://www.instagram.com/pcd.tlv/",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-tel-aviv-2026/48879",
   "city": "Tel Aviv",
   "country": "Israel",
