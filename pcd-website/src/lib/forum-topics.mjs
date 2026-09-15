@@ -38,3 +38,27 @@ export function relativeForumTime(updated, now = Date.now()) {
     if (seconds >= duration) return `${Math.floor(seconds / duration)}${unit} ago`;
   }
 }
+
+/** Accept only public Processing topic URLs; ignore optional post numbers. */
+export function forumTopicId(value) {
+  try {
+    const url = new URL(value);
+    if (url.origin !== 'https://discourse.processing.org') return null;
+    const match = url.pathname.match(/^\/t\/(?:[^/]*[^/0-9][^/]*\/)?([1-9]\d*)(?:\/\d+)?\/?$/);
+    const id = Number(match?.[1]);
+    return Number.isSafeInteger(id) && id > 0 ? id : null;
+  } catch { return null; }
+}
+
+export function forumTopicDetails(payload, expectedId) {
+  if (payload?.id !== expectedId || !Number.isSafeInteger(payload.posts_count) ||
+      !Number.isFinite(Date.parse(payload.last_posted_at))) throw new Error('Invalid forum topic');
+  return {
+    replies: Math.max(0, payload.posts_count - 1),
+    updated: payload.last_posted_at,
+    posters: (Array.isArray(payload.details?.participants) ? payload.details.participants : [])
+      .filter(user => typeof user?.username === 'string' && user.username.trim())
+      .slice(0, 5)
+      .map(user => ({ username: user.username, avatar: forumAvatarUrl(user.avatar_template) })),
+  };
+}

@@ -16,6 +16,11 @@ const https =
 
 // Match the fixed production Netlify proxy for runtime forum requests.
 const forumProxy = {
+  '^/api/pcd-forum-topic/[1-9][0-9]*$': {
+    target: 'https://discourse.processing.org',
+    changeOrigin: true,
+    rewrite: path => `/t/${path.split('/').pop()}.json`,
+  },
   '^/api/pcd-forum$': {
     target: 'https://discourse.processing.org',
     changeOrigin: true,

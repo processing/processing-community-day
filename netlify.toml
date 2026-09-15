@@ -52,3 +52,10 @@
   to = "https://discourse.processing.org/tag/pcd/l/latest.json?order=activity"
   status = 200
   force = true
+
+# Public individual topic metadata for event detail panels.
+[[redirects]]
+  from = "/api/pcd-forum-topic/:id"
+  to = "https://discourse.processing.org/t/:id.json"
+  status = 200
+  force = true
