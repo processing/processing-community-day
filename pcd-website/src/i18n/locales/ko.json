@@ -39,6 +39,18 @@
         "date_tbd": "날짜 미정"
     },
     "panel": {
+        "find_out_more": "자세히 알아보기",
+        "event_page": "이벤트 페이지",
+        "forum_thread": "포럼 스레드",
+        "contact_organizers_email": "이 이벤트에 관한 질문은 {email}로 주최자에게 직접 문의하세요.",
+        "disclaimer_with_org_email": "이 이벤트는 {org}이(가) 주최하며 Processing Foundation과 관련이 없습니다. 이 이벤트에 관한 질문은 {email}로 주최자에게 직접 문의하세요.",
+        "disclaimer_without_org_email": "이 이벤트는 독립적으로 주최되며 Processing Foundation과 관련이 없습니다. 이 이벤트에 관한 질문은 {email}로 주최자에게 직접 문의하세요.",
+        "about_event": "이벤트 소개",
+        "forum_participants": "참여자",
+        "forum_replies": "답글 {count}개",
+        "forum_loading": "토론 불러오는 중…",
+        "forum_unavailable": "토론 정보를 불러올 수 없습니다.",
+        "forum_retry": "다시 시도",
         "close_details": "이벤트 세부 정보 닫기",
         "back_to_map": "지도로 돌아가기",
         "placeholder_warning": "⚠ 이것은 플레이스홀더 데이터입니다. 이 위치에서 실제 이벤트는 아직 확인되지 않았습니다.",

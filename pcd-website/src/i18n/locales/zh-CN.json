@@ -39,6 +39,18 @@
         "date_tbd": "日期待定"
     },
     "panel": {
+        "find_out_more": "了解更多",
+        "event_page": "活动页面",
+        "forum_thread": "论坛主题",
+        "contact_organizers_email": "如对本活动有任何疑问，请通过 {email} 直接联系主办方。",
+        "disclaimer_with_org_email": "本活动由 {org} 主办，与 Processing Foundation 无关。 如对本活动有任何疑问，请通过 {email} 直接联系主办方。",
+        "disclaimer_without_org_email": "本活动为独立主办，与 Processing Foundation 无关。 如对本活动有任何疑问，请通过 {email} 直接联系主办方。",
+        "about_event": "关于活动",
+        "forum_participants": "主题参与者",
+        "forum_replies": "{count} 条回复",
+        "forum_loading": "正在加载讨论…",
+        "forum_unavailable": "暂时无法获取讨论详情。",
+        "forum_retry": "重试",
         "close_details": "关闭活动详情",
         "back_to_map": "返回地图",
         "placeholder_warning": "⚠ 这是占位数据，尚未有实际活动在此地点确认。",

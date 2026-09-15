@@ -9,6 +9,8 @@ import { cartoTileUrl } from '../lib/carto';
 import { getOsmUrl } from '../lib/popup';
 import { GITHUB_EDIT_EVENT_URL, GITHUB_CONTENT_ISSUE_URL } from '../config';
 import ShareMenu from './ShareMenu.vue';
+import EventForumThread from './EventForumThread.vue';
+import externalLinkIcon from '../icons/external-link.svg?raw';
 
 const props = defineProps<{
   node: Node | null;
@@ -19,6 +21,14 @@ const emit = defineEmits<{
 }>();
 
 const { t, locale } = useI18n();
+const dateBadge = computed(() => {
+  if (!props.node?.event_date || props.node.date_tbd) return null;
+  const date = new Date(`${props.node.event_date}T00:00:00Z`);
+  return {
+    month: new Intl.DateTimeFormat(locale.value, { month: 'short', timeZone: 'UTC' }).format(date),
+    day: new Intl.DateTimeFormat(locale.value, { day: 'numeric', timeZone: 'UTC' }).format(date),
+  };
+});
 const panelRef = ref<HTMLElement | null>(null);
 const tabButtonRef = ref<HTMLButtonElement | null>(null);
 const minimapRef = ref<HTMLDivElement | null>(null);
@@ -299,45 +309,64 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
           </p>
         </div>
 
-        <!-- Event website CTA -->
-        <a
-          v-if="node.event_page_url"
-          :href="node.event_page_url"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="panel-event-website-btn"
-          :aria-label="t('panel.visit_event_page_new_tab')"
-        >{{ t('panel.visit_event_page') }} <Icon icon="bi:box-arrow-up-right" width="1em" height="1em" aria-hidden="true" style="margin-left: 0.5rem; vertical-align: -0.1em;" /></a>
-        <a
-          v-else-if="node.forum_thread_url"
-          :href="node.forum_thread_url"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="panel-event-website-btn"
-          :aria-label="t('panel.visit_forum_thread_new_tab')"
-        >{{ t('panel.visit_forum_thread') }} <Icon icon="bi:box-arrow-up-right" width="1em" height="1em" aria-hidden="true" style="margin-left: 0.5rem; vertical-align: -0.1em;" /></a>
-
         <!-- Info Card -->
         <div class="panel-info-card">
-          <!-- Row 1: Date/time -->
-          <div class="info-card-row">
-            <Icon icon="bi:calendar-event" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
-            <div>
+          <!-- Date/time and calendar action -->
+          <div class="info-card-row info-card-date-row">
+            <div v-if="dateBadge" class="info-card-date-badge" aria-hidden="true">
+              <span class="info-card-date-badge-month">{{ dateBadge.month }}</span>
+              <span class="info-card-date-badge-day">{{ dateBadge.day }}</span>
+            </div>
+            <Icon v-else icon="bi:calendar-event" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
+            <div class="info-card-date-details">
               <span v-if="node.date_tbd" class="info-card-date info-card-tbd">{{ t('panel.date_tbd') }}</span>
               <span v-else class="info-card-date">{{ formatDateRange(node.event_date ?? '', node.event_end_date, false, locale) }}</span>
-              <span v-if="!node.date_tbd && node.time_tbd && !isPastEvent(node)" class="info-card-time info-card-tbd">· {{ t('panel.time_tbd') }}</span>
-              <span v-else-if="!node.date_tbd && node.event_start_time" class="info-card-time">
-                · {{ formatTimeRange(node.event_start_time, node.event_end_time) }}
-              </span>
-              <span v-if="!node.date_tbd && node.event_start_time" class="info-card-time-note">{{ t('panel.local_time') }}</span>
+              <div v-if="!node.date_tbd && (node.event_start_time || (node.time_tbd && !isPastEvent(node)))" class="info-card-time-details">
+                <span v-if="!node.date_tbd && node.time_tbd && !isPastEvent(node)" class="info-card-time info-card-tbd">{{ t('panel.time_tbd') }}</span>
+                <span v-else-if="!node.date_tbd && node.event_start_time" class="info-card-time">
+                  {{ formatTimeRange(node.event_start_time, node.event_end_time) }}
+                </span>
+                <span v-if="!node.date_tbd && node.event_start_time" class="info-card-time-note">{{ t('panel.local_time') }}</span>
+              </div>
+            </div>
+            <div v-if="!node.date_tbd && !isPastEvent(node)" class="info-card-cal-trigger-wrap info-card-calendar-row">
+              <button
+                class="info-card-cal-trigger"
+                :aria-label="t('panel.add_to_calendar')"
+                aria-haspopup="menu"
+                :aria-expanded="calDropdownOpen"
+                @click.stop="calDropdownOpen = !calDropdownOpen"
+              >
+                {{ t('panel.add_to_calendar') }}
+              </button>
+              <div v-show="calDropdownOpen" class="quick-action-menu" role="menu">
+                <a
+                  :href="calLinks!.googleCalUrl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  role="menuitem"
+                  :aria-label="t('panel.google_calendar_new_tab')"
+                  @click="calDropdownOpen = false"
+                >{{ t('panel.google_calendar') }}</a>
+                <a
+                  :href="calLinks!.outlookCalUrl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  role="menuitem"
+                  :aria-label="t('panel.outlook_new_tab')"
+                  @click="calDropdownOpen = false"
+                >{{ t('panel.outlook') }}</a>
+                <button role="menuitem" @click="downloadIcs(node); calDropdownOpen = false">
+                  {{ t('panel.download_ics') }}
+                </button>
+              </div>
             </div>
           </div>
-          <!-- Row 2: Venue + address (OSM link) or Online platform -->
+          <!-- Venue + address (OSM link) or Online platform -->
           <template v-if="node.online_event || !node.location_tbd || !isPastEvent(node)">
-            <hr class="info-card-divider" aria-hidden="true" />
             <div class="info-card-row info-card-venue-row">
               <div class="info-card-row-leading">
-                <Icon :icon="!node.online_event && node.location_tbd ? 'bi:geo-alt' : 'bi:link-45deg'" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
+                <Icon :icon="!node.online_event ? 'bi:geo-alt' : 'bi:link-45deg'" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
                 <div class="info-card-venue">
                   <span class="info-card-venue-name">{{ node.online_event ? onlinePlatformName(node.event_url) : node.location_tbd ? t('panel.location_tbd') : (node.location_name || node.address) }}</span>
                   <a
@@ -364,146 +393,113 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
               </p>
             </div>
           </template>
-          <!-- Row 3: Add to calendar (hidden when date is TBD or the event has ended) -->
-          <template v-if="!node.date_tbd && !isPastEvent(node)">
-            <hr class="info-card-divider" aria-hidden="true" />
-            <div class="info-card-row info-card-calendar-row">
-              <Icon icon="bi:calendar-plus" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
-              <div class="info-card-cal-trigger-wrap">
-                <button
-                  class="info-card-cal-trigger"
-                  :aria-label="t('panel.add_to_calendar')"
-                  aria-haspopup="menu"
-                  :aria-expanded="calDropdownOpen"
-                  @click.stop="calDropdownOpen = !calDropdownOpen"
-                >
-                  {{ t('panel.add_to_calendar') }}
-                </button>
-                <div v-show="calDropdownOpen" class="quick-action-menu" role="menu">
-                  <a
-                    :href="calLinks!.googleCalUrl"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    role="menuitem"
-                    :aria-label="t('panel.google_calendar_new_tab')"
-                    @click="calDropdownOpen = false"
-                  >{{ t('panel.google_calendar') }}</a>
-                  <a
-                    :href="calLinks!.outlookCalUrl"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    role="menuitem"
-                    :aria-label="t('panel.outlook_new_tab')"
-                    @click="calDropdownOpen = false"
-                  >{{ t('panel.outlook') }}</a>
-                  <button role="menuitem" @click="downloadIcs(node); calDropdownOpen = false">
-                    {{ t('panel.download_ics') }}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </template>
-          <template v-if="node.event_activities?.length">
-            <hr class="info-card-divider" aria-hidden="true" />
-            <div class="info-card-row panel-activities">
-              <Icon icon="bi:tag" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
-              <div class="panel-activity-tags">
-                <span
-                  v-for="activity in node.event_activities"
-                  :key="activity"
-                  class="panel-activity-tag"
-                >{{ activity }}</span>
-              </div>
-            </div>
-          </template>
         </div>
 
-        <!-- Minimap (hidden for online events and TBD locations) -->
-        <div v-if="!node.online_event && !node.location_tbd" class="panel-minimap-wrap" aria-hidden="true">
-          <div ref="minimapRef" class="panel-minimap"></div>
-          <div class="panel-minimap-shield"></div>
-        </div>
-
-        <!-- Description -->
-        <div v-if="node.details_html" class="panel-description">
-          <!-- details_html is rendered from PR-reviewed markdown; micromark escapes
-               raw HTML and sanitizes link protocols at build time. -->
-          <div
-            ref="descContentRef"
-            class="panel-description-content markdown-body"
-            :class="{ 'panel-description-content--clamped': !descExpanded && descHasMore }"
-            v-html="node.details_html"
-          ></div>
-          <button
-            v-if="descHasMore"
-            class="panel-read-more"
-            :aria-expanded="descExpanded"
-            @click="descExpanded = !descExpanded"
-          >
-            {{ descExpanded ? t('panel.show_less') : t('panel.read_more') }}
-          </button>
-        </div>
-
-        <!-- Links section -->
-        <div v-if="node.event_page_url || node.primary_contact.email || (!node.online_event && node.event_url)" class="panel-links">
-          <hr class="panel-separator" aria-hidden="true" />
-          <a
-            v-if="!node.online_event && !node.location_tbd"
-            :href="getOsmUrl(node)"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="panel-link-row"
-            :title="t('panel.get_directions_osm')"
-          >
-            <Icon icon="bi:map" width="1em" height="1em" aria-hidden="true" class="panel-link-icon" />
-            <span>{{ t('panel.get_directions') }}</span>
-          </a>
-          <a
-            v-if="node.primary_contact.email"
-            :href="`mailto:${node.primary_contact.email}`"
-            class="panel-link-row"
-            :title="`Email ${node.primary_contact.email}`"
-          >
-            <Icon icon="bi:envelope" width="1em" height="1em" aria-hidden="true" class="panel-link-icon" />
-            <span>{{ node.primary_contact.email }}</span>
-          </a>
-          <a
-            v-if="!node.online_event && node.event_url"
-            :href="node.event_url"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="panel-link-row"
-            :title="`Visit ${node.event_url}`"
-          >
-            <Icon icon="bi:globe" width="1em" height="1em" aria-hidden="true" class="panel-link-icon" />
-            <span>{{ node.event_url }}</span>
-          </a>
+        <!-- Event and forum actions -->
+        <div
+          v-if="node.event_page_url || node.forum_thread_url"
+          class="panel-hero-actions"
+          role="region"
+          aria-labelledby="panel-hero-heading"
+          :class="{ 'panel-hero-actions--both': node.event_page_url && node.forum_thread_url, 'panel-hero-actions--forum-only': !node.event_page_url }"
+        >
+          <h2 id="panel-hero-heading" class="panel-hero-heading">{{ t('panel.find_out_more') }}</h2>
           <a
             v-if="node.event_page_url"
             :href="node.event_page_url"
             target="_blank"
             rel="noopener noreferrer"
-            class="panel-link-row"
-            :title="`Visit ${node.event_page_url}`"
+            class="panel-event-website-btn"
+            :aria-label="t('panel.visit_event_page_new_tab')"
+          >{{ t('panel.event_page') }} <span class="panel-event-website-icon" aria-hidden="true" v-html="externalLinkIcon"></span></a>
+          <EventForumThread v-if="node.forum_thread_url" :key="node.forum_thread_url" :url="node.forum_thread_url" :stacked="!!node.event_page_url">
+            <a
+              :href="node.forum_thread_url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="panel-event-website-btn"
+              :class="{ 'panel-event-website-btn--secondary': node.event_page_url }"
+              :aria-label="t('panel.visit_forum_thread_new_tab')"
+            >{{ t('panel.forum_thread') }} <span class="panel-event-website-icon" aria-hidden="true" v-html="externalLinkIcon"></span></a>
+          </EventForumThread>
+        </div>
+
+        <section v-if="node.details_html || node.event_activities?.length" class="panel-about" aria-labelledby="panel-about-heading">
+          <h2 id="panel-about-heading" class="panel-section-heading">{{ t('panel.about_event') }}</h2>
+          <!-- Description -->
+          <div v-if="node.details_html" class="panel-description">
+            <!-- details_html is rendered from PR-reviewed markdown; micromark escapes
+                 raw HTML and sanitizes link protocols at build time. -->
+            <div
+              ref="descContentRef"
+              class="panel-description-content markdown-body"
+              :class="{ 'panel-description-content--clamped': !descExpanded && descHasMore }"
+              v-html="node.details_html"
+            ></div>
+            <button
+              v-if="descHasMore"
+              class="panel-read-more"
+              :aria-expanded="descExpanded"
+              @click="descExpanded = !descExpanded"
+            >
+              {{ descExpanded ? t('panel.show_less') : t('panel.read_more') }}
+            </button>
+          </div>
+
+          <div v-if="node.event_activities?.length" class="panel-activity-tags">
+            <span
+              v-for="activity in node.event_activities"
+              :key="activity"
+              class="panel-activity-tag"
+            >{{ activity }}</span>
+          </div>
+        </section>
+
+        <!-- Minimap (hidden for online events and TBD locations) -->
+        <div v-if="!node.online_event && !node.location_tbd" class="panel-minimap-wrap">
+          <div ref="minimapRef" class="panel-minimap" aria-hidden="true"></div>
+          <div class="panel-minimap-shield" aria-hidden="true"></div>
+          <a
+            :href="getOsmUrl(node)"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="panel-minimap-directions"
+            :title="t('panel.get_directions_osm')"
           >
-            <Icon icon="bi:globe" width="1em" height="1em" aria-hidden="true" class="panel-link-icon" />
-            <span>{{ node.event_page_url }}</span>
+            <Icon icon="bi:map" width="1em" height="1em" aria-hidden="true" />
+            {{ t('panel.get_directions') }}
           </a>
         </div>
 
         <!-- Disclaimer -->
         <template v-if="!node.organization_name?.toLowerCase().includes('processing foundation')">
           <hr class="panel-separator" aria-hidden="true" />
+          <i18n-t
+            v-if="node.primary_contact.email"
+            :keypath="node.organization_name ? 'panel.disclaimer_with_org_email' : 'panel.disclaimer_without_org_email'"
+            tag="p"
+            class="panel-disclaimer panel-inline-md"
+          >
+            <template #org><em v-html="node.organization_name_html"></em></template>
+            <template #email><a :href="`mailto:${node.primary_contact.email}`">{{ node.primary_contact.email }}</a></template>
+          </i18n-t>
           <!-- disclaimer_with_org wraps {org} in <em>; org name may itself
                contain PR-reviewed inline markdown, so inject as HTML. -->
           <p
-            v-if="node.organization_name"
+            v-else-if="node.organization_name"
             class="panel-disclaimer panel-inline-md"
             v-html="t('panel.disclaimer_with_org', { org: node.organization_name_html })"
           ></p>
           <p v-else class="panel-disclaimer">
             {{ t('panel.disclaimer_without_org') }}
           </p>
+        </template>
+
+        <template v-else-if="node.primary_contact.email">
+          <hr class="panel-separator" aria-hidden="true" />
+          <i18n-t keypath="panel.contact_organizers_email" tag="p" class="panel-disclaimer">
+            <template #email><a :href="`mailto:${node.primary_contact.email}`">{{ node.primary_contact.email }}</a></template>
+          </i18n-t>
         </template>
 
         <!-- Report issue / Edit event -->
@@ -742,6 +738,7 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
 }
 
 .panel-activity-tags {
+  margin-bottom: 1rem;
   display: flex;
   flex-wrap: wrap;
   gap: 0.4em;
@@ -843,12 +840,57 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   color: var(--color-text);
 }
 
-/* ─── Event website CTA ─── */
-.panel-event-website-btn {
-  display: block;
-  width: 100%;
+/* ─── Event and forum actions ─── */
+.panel-hero-actions {
   margin-bottom: 1.5rem;
-  padding: 0.625rem 1rem;
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: #f5f5f5;
+}
+
+.panel-hero-heading {
+  grid-column: 1 / -1;
+  margin: -16px -16px 16px;
+  padding: 6px 16px;
+  border-bottom: 1px solid var(--color-border);
+  border-radius: 11px 11px 0 0;
+  background: #eeeeee;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.panel-hero-actions--both .panel-hero-heading {
+  margin-bottom: 0;
+}
+
+.panel-hero-actions--both {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 12px;
+}
+
+@media (max-width: 640px) {
+  .panel-hero-actions--both {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.panel-hero-actions--forum-only .panel-event-website-btn {
+  width: auto;
+  flex: 1 0 auto;
+}
+
+.panel-event-website-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.625rem 0.75rem;
   background: var(--color-primary);
   color: #fff;
   text-align: center;
@@ -859,39 +901,103 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   box-sizing: border-box;
 }
 
+.panel-event-website-btn--secondary {
+  background: #d4d4d4;
+  color: var(--color-text);
+}
+
+.panel-event-website-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  opacity: 0.75;
+}
+
+.panel-event-website-icon :deep(svg) {
+  width: 20px;
+  height: 20px;
+}
+
 .panel-event-website-btn:hover {
   opacity: 0.85;
 }
 
 /* ─── Info Card ─── */
 .panel-info-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   margin-bottom: 1.25rem;
 }
 
 .info-card-row {
   display: flex;
-  align-items: flex-start;
-  gap: 0.625rem;
+  align-items: center;
+  gap: 16px;
 }
 
 .info-card-row-leading {
   display: flex;
-  align-items: flex-start;
-  gap: 0.625rem;
+  align-items: center;
+  gap: 16px;
   flex: 1;
+  min-width: 0;
 }
 
 .info-card-row.info-card-venue-row {
   justify-content: space-between;
 }
 
-.info-card-icon {
-  flex-shrink: 0;
+.info-card-icon,
+.info-card-date-badge {
+  box-sizing: border-box;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
   color: var(--color-text-muted);
+}
+
+.info-card-icon {
+  padding: 10px;
+}
+
+.info-card-date-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  overflow: hidden;
+  text-align: center;
+}
+
+.info-card-date-badge-month {
+  background: var(--color-border);
+  font-size: .5625rem;
+  font-weight: 600;
+  line-height: 15px;
+  text-transform: uppercase;
+}
+
+.info-card-date-badge-day {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 23px;
+}
+
+.info-card-date-details,
+.info-card-venue {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.info-card-time-details {
   margin-top: 2px;
 }
 
 .info-card-date {
+  display: block;
+  font-weight: 600;
   font-size: 0.9375rem;
   color: var(--color-text);
   line-height: 1.45;
@@ -909,12 +1015,6 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   margin-left: 0.25em;
 }
 
-.info-card-divider {
-  border: none;
-  border-top: 1px solid var(--color-border);
-  margin: 14px 0;
-}
-
 .info-card-venue {
   display: flex;
   flex-direction: column;
@@ -923,13 +1023,13 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
 
 .info-card-venue-name {
   font-size: 0.9375rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--color-text);
   line-height: 1.35;
 }
 
 .info-card-venue-address {
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   color: var(--color-text-muted);
   line-height: 1.4;
   text-decoration: none;
@@ -942,13 +1042,21 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   color: var(--color-text);
 }
 
-/* ─── Calendar row inside info card ─── */
-.info-card-calendar-row {
-  position: relative;
+/* ─── Calendar action beside date details ─── */
+.info-card-date-row .info-card-date-details {
+  flex: 1;
 }
 
 .info-card-cal-trigger-wrap {
   position: relative;
+  flex: 0 1 auto;
+  max-width: 8rem;
+  margin-left: auto;
+}
+
+.info-card-cal-trigger-wrap .quick-action-menu {
+  left: auto;
+  right: 0;
 }
 
 .info-card-cal-trigger {
@@ -1006,8 +1114,9 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
 /* ─── Minimap ─── */
 .panel-minimap-wrap {
   position: relative;
-  width: calc(100% + 3rem);
-  margin-left: -1.5rem;
+  outline: 1px solid var(--color-border);
+  width: 100%;
+  border-radius: 12px;
   aspect-ratio: 18 / 9;
   margin-bottom: 1.25rem;
   overflow: hidden;
@@ -1016,6 +1125,33 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
 .panel-minimap {
   width: 100%;
   height: 100%;
+}
+
+.panel-minimap-directions {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1001;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-bg-panel);
+  color: var(--color-text);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 12%);
+  font-size: 0.8125rem;
+  text-decoration: none;
+}
+
+.panel-minimap-directions:hover {
+  color: var(--color-primary);
+}
+
+.panel-minimap-directions:focus-visible {
+  outline-offset: -4px;
 }
 
 .panel-minimap-shield {
@@ -1030,6 +1166,17 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
 }
 
 /* ─── Description ─── */
+.panel-about {
+  margin-bottom: 1.25rem;
+}
+
+.panel-section-heading {
+  margin: 0 0 0.75rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
 .panel-description {
   margin-bottom: 1rem;
 }
@@ -1165,7 +1312,7 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   color: var(--color-text);
 }
 
-/* ─── Links section ─── */
+/* ─── Disclaimer and report actions ─── */
 .panel-disclaimer {
   font-size: 0.8125rem;
   color: var(--color-text-muted);
@@ -1173,8 +1320,10 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   margin-bottom: 1rem;
 }
 
-.panel-links {
-  margin-bottom: 0.75rem;
+.panel-disclaimer a {
+  color: var(--color-primary);
+  overflow-wrap: anywhere;
+  text-underline-offset: 2px;
 }
 
 .panel-report-row {

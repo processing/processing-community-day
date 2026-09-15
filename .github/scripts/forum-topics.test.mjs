@@ -42,3 +42,25 @@ test('relative timestamps cover minutes, hours, days, and future clock skew', ()
   assert.equal(relativeForumTime('2026-09-03T12:00:00Z', now), '2d ago');
   assert.equal(relativeForumTime('2026-09-06T12:00:00Z', now), 'just now');
 });
+
+// Event details fetch the whole topic even when the stored URL links to a reply.
+const { forumTopicId, forumTopicDetails } = await import('../../pcd-website/src/lib/forum-topics.mjs');
+test('event forum URLs resolve topic IDs and reject foreign origins', () => {
+  assert.equal(forumTopicId('https://discourse.processing.org/t/pcd-seattle-2026/48913'), 48913);
+  assert.equal(forumTopicId('https://discourse.processing.org/t/48913/2'), 48913);
+  assert.equal(forumTopicId('https://discourse.processing.org/t/pcd-west/48863/2'), 48863);
+  assert.equal(forumTopicId('https://example.com/t/48913'), null);
+  assert.equal(forumTopicId('javascript:alert(1)'), null);
+});
+test('event forum metadata validates topic identity and safely resolves avatars', () => {
+  const payload = { id: 48913, posts_count: 3, last_posted_at: '2026-09-15T12:00:00Z', details: { participants: [
+    { username: 'alice', avatar_template: '/user_avatar/forum/alice/{size}/1.png' },
+    { username: 'bob', avatar_template: 'https://example.com/avatar.png' },
+  ] } };
+  const topic = forumTopicDetails(payload, 48913);
+  assert.equal(topic.replies, 2);
+  assert.equal(topic.posters.length, 2);
+  assert.equal(topic.posters[1].avatar, null);
+  assert.throws(() => forumTopicDetails(payload, 1));
+  assert.throws(() => forumTopicDetails({ ...payload, last_posted_at: 'invalid' }, 48913));
+});

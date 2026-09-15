@@ -39,6 +39,18 @@
         "date_tbd": "Fecha por confirmar"
     },
     "panel": {
+        "find_out_more": "Más información",
+        "event_page": "Página del evento",
+        "forum_thread": "Hilo del foro",
+        "contact_organizers_email": "Para cualquier pregunta o inquietud sobre este evento, contacta directamente con los organizadores en {email}.",
+        "disclaimer_with_org_email": "Este evento está organizado por {org} y no está afiliado con la Processing Foundation. Para cualquier pregunta o inquietud sobre este evento, contacta directamente con los organizadores en {email}.",
+        "disclaimer_without_org_email": "Este evento está organizado de forma independiente y no está afiliado con la Processing Foundation. Para cualquier pregunta o inquietud sobre este evento, contacta directamente con los organizadores en {email}.",
+        "about_event": "Sobre el evento",
+        "forum_participants": "Participantes del hilo",
+        "forum_replies": "0 respuestas | 1 respuesta | {count} respuestas",
+        "forum_loading": "Cargando conversación…",
+        "forum_unavailable": "Los detalles no están disponibles.",
+        "forum_retry": "Reintentar",
         "close_details": "Cerrar detalles del evento",
         "back_to_map": "Volver al mapa",
         "placeholder_warning": "⚠ Estos son datos de ejemplo. No se ha confirmado ningún evento real en esta ubicación.",

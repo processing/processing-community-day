@@ -39,6 +39,18 @@
         "date_tbd": "日時未定"
     },
     "panel": {
+        "find_out_more": "詳しく見る",
+        "event_page": "イベントページ",
+        "forum_thread": "フォーラムのスレッド",
+        "contact_organizers_email": "このイベントに関するご質問は、{email} で主催者に直接お問い合わせください。",
+        "disclaimer_with_org_email": "このイベントは {org} が主催しており、Processing Foundation とは直接の関係はありません。 このイベントに関するご質問は、{email} で主催者に直接お問い合わせください。",
+        "disclaimer_without_org_email": "このイベントは独自に主催されており、Processing Foundation とは直接の関係はありません。 このイベントに関するご質問は、{email} で主催者に直接お問い合わせください。",
+        "about_event": "イベントについて",
+        "forum_participants": "参加者",
+        "forum_replies": "{count}件の返信",
+        "forum_loading": "読み込み中…",
+        "forum_unavailable": "ディスカッションの詳細を取得できません。",
+        "forum_retry": "再試行",
         "close_details": "イベント詳細を閉じる",
         "back_to_map": "地図に戻る",
         "placeholder_warning": "⚠これはプレースホルダーです。この場所での実際のイベントはまだ確認されていません。",
