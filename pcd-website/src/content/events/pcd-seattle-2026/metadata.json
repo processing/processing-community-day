@@ -1,27 +1,40 @@
 {
   "id": "pcd-seattle-2026",
   "uid": "5ea5839",
-  "organizers": [],
+  "organizers": [
+    {
+      "name": "[Sabin Timalsena](https://sabin.art/)"
+    },
+    {
+      "name": "[Joseph Gray](grauwald.com)"
+    },
+    {
+      "name": "[Grant Hinkson](https://www.granthinkson.com/)"
+    }
+  ],
   "primary_contact": {
     "name": "Sabin Timalsena",
     "email": "hello@sabin.art"
   },
   "organization_name": "Seattle Creative Code",
   "organization_url": "https://seattlecreativecode.com",
-  "organization_type": "",
+  "organization_type": "Meetup, code club, community group",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Seattle",
   "event_location": {
-    "address": "",
-    "plus_code": "84VVJM28+MF"
+    "address": "1005 E Union St, Seattle, WA 98122",
+    "plus_code": "84VVJM7J+39"
   },
-  "event_date": "",
-  "event_start_time": "",
-  "event_end_time": "",
-  "event_short_description": "",
-  "event_activities": [],
-  "event_page_url": "",
+  "event_date": "2026-10-10",
+  "event_start_time": "14:00",
+  "event_end_time": "17:00",
+  "event_short_description": "The Seattle Processing Community Day meetup is open to anyone interested in the Processing programming language and creative code in general.",
+  "event_activities": [
+    "Show-and-tell",
+    "Other"
+  ],
+  "event_page_url": "https://luma.com/85m5jso4",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-seattle-2026/48913",
   "city": "Seattle",
   "country": "USA",
