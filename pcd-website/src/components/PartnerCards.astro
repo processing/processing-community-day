@@ -1,0 +1,24 @@
+---
+import { Image } from 'astro:assets';
+import { kitHref, type KitEntry } from '../config/organizer-kit-nav';
+
+interface Props {
+  partners: KitEntry[];
+}
+
+const { partners } = Astro.props;
+---
+
+<div class="partner-grid">
+  {partners.map((partner) => {
+    const card = partner.data.partnerCard;
+    if (!card) return null;
+    return (
+      <section class="partner-card">
+        <p><Image src={card.logo} alt={partner.data.title} /></p>
+        <p>{card.summary}</p>
+        <p><a href={kitHref(partner.id)}>Learn more about {partner.data.title} →</a></p>
+      </section>
+    );
+  })}
+</div>

@@ -179,22 +179,19 @@ const UTILITY_LINKS = [
   .sponsor-logo {
     display: inline-flex;
     align-items: center;
-    padding: 0.5rem 0.625rem;
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-    background: #fff;
+    padding: 0.5rem 0;
   }
 
   .sponsor-logo img {
     display: block;
-    width: 200px;
+    width: auto;
     max-width: 100%;
-    height: auto;
+    height: 30px;
+    object-fit: contain;
   }
 
-  .sponsor-logo:hover {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
+  .sponsor-logo:hover img {
+    opacity: 0.8;
   }
 
   .social-row {

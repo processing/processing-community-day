@@ -31,7 +31,7 @@ const pages = defineCollection({
 
 const organizerKit = defineCollection({
   loader: glob({ base: './src/content/organizer-kit', pattern: '**/*.md' }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     // Sidebar grouping. `section` is the parent group's title; standalone
     // top-level pages omit it. `order` sorts a page within its section — the
@@ -39,9 +39,15 @@ const organizerKit = defineCollection({
     section: z.string().optional(),
     order: z.number().default(0),
     description: z.string().optional(),
+    partnerCard: z.object({
+      logo: image(),
+      summary: z.string().min(1),
+    }).optional(),
     // Excludes the page from the sidebar and from build output entirely, for
     // TBD pages that shouldn't be publicly reachable yet.
     draft: z.boolean().default(false),
+    // Keeps a page published while omitting it from navigation and prev/next links.
+    hideFromNav: z.boolean().default(false),
     // Suppresses the "On this page" table of contents, for short pages whose
     // headings aren't worth navigating.
     hideToc: z.boolean().default(false),
