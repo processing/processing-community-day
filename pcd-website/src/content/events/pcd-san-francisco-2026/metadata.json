@@ -20,17 +20,15 @@
     "address": "2665 Mission St, San Francisco CA, 94110",
     "plus_code": "849VQH3J+RQ6"
   },
-  "event_date": "",
-  "event_start_time": "",
-  "event_end_time": "",
+  "event_date": "2026-10-03",
+  "event_start_time": "13:00",
+  "event_end_time": "18:00",
   "event_short_description": "Workshops & lightning talks!",
   "event_activities": [
-    "Hands-on workshops",
-    "Beginner introductions to Processing or p5.js",
-    "Student project presentations",
-    "Other"
+    "Show-and-tell",
+    "Hands-on workshops"
   ],
-  "event_page_url": "",
+  "event_page_url": "https://grayarea.org/event/processing-community-day-sf/",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-san-francisco-2026/48820",
   "city": "San Francisco",
   "country": "USA",
