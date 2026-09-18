@@ -12,7 +12,7 @@
   },
   "organization_name": "code2art Community",
   "organization_url": "https://code2art.com",
-  "organization_type": "Meetup, code club, community group",
+  "organization_type": "",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Suzhou",
@@ -27,10 +27,11 @@
   "event_activities": [
     "Show-and-tell",
     "Hands-on workshops",
+    "Live coding",
     "Beginner introductions to Processing or p5.js",
     "Student project presentations"
   ],
-  "event_page_url": "",
+  "event_page_url": "https://code2art.com/pcd-suzhou-2026/",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-suzhou-2026/48877",
   "city": "Suzhou",
   "country": "China",
