@@ -18,6 +18,10 @@
   --color-bg-popup: #ffffff;
   --color-bg-popup-hover: #f0f0f0;
   --color-border: #e0e0e0;
+  --color-event-past: #b0b0b0;
+  --color-event-confirmed: #7920cc;
+  --color-event-undated: #a05eda;
+  --color-event-date-location-tbd: #c293e8;
   --color-overlay: rgba(0, 0, 0, 0.4);
   --color-callout-placeholder-bg: #fffbea;
   --color-callout-placeholder-border: #e8b84b;
@@ -145,3 +149,25 @@ body {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
+
+/* Shared event status pills for the map and event list. */
+.date-tbd-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.625rem;
+  border-radius: 999px;
+  background: var(--color-event-undated);
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 1.5;
+}
+
+.date-tbd-pill.date-tbd-pill--location-tbd {
+  background: var(--color-event-date-location-tbd);
+  color: #fff;
+}
+
+
+.date-tbd-pill.time-tbd-pill { background: #81b4d9; color: #fff; }

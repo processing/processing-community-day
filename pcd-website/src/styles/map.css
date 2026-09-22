@@ -110,6 +110,13 @@ body {
 }
 
 /* ─── Leaflet Popup Overrides ───────────────────────────────── */
+.popup-content .date-tbd-pill {
+  flex: 0 0 auto;
+  max-width: 100%;
+  padding: 0.0625rem 0.5rem;
+  font-size: 0.75rem;
+}
+
 .past-event-notice {
   display: flex;
   flex-wrap: wrap;
@@ -223,6 +230,10 @@ body {
   font-size: var(--popup-info-date-size);
   font-weight: 500;
   color: var(--color-text);
+}
+
+.popup-content .popup-date--tbd {
+  margin: 0.625rem 0 0.75rem;
 }
 
 .popup-content .popup-date-separator {

@@ -325,10 +325,10 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
             </div>
             <Icon v-else icon="bi:calendar-event" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
             <div class="info-card-date-details">
-              <span v-if="node.date_tbd" class="info-card-date info-card-tbd">{{ t('panel.date_tbd') }}</span>
+              <span v-if="node.date_tbd" class="date-tbd-pill">{{ t('panel.date_tbd') }}</span>
               <span v-else class="info-card-date">{{ formatDateRange(node.event_date ?? '', node.event_end_date, false, locale) }}</span>
               <div v-if="!node.date_tbd && (node.event_start_time || (node.time_tbd && !isPastEvent(node)))" class="info-card-time-details">
-                <span v-if="!node.date_tbd && node.time_tbd && !isPastEvent(node)" class="info-card-time info-card-tbd">{{ t('panel.time_tbd') }}</span>
+                <span v-if="!node.date_tbd && node.time_tbd && !isPastEvent(node)" class="date-tbd-pill time-tbd-pill">{{ t('panel.time_tbd') }}</span>
                 <span v-else-if="!node.date_tbd && node.event_start_time" class="info-card-time">
                   {{ formatTimeRange(node.event_start_time, node.event_end_time) }}
                 </span>
@@ -374,7 +374,8 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
               <div class="info-card-row-leading">
                 <Icon :icon="!node.online_event ? 'bi:geo-alt' : 'bi:link-45deg'" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
                 <div class="info-card-venue">
-                  <span class="info-card-venue-name">{{ node.online_event ? onlinePlatformName(node.event_url) : node.location_tbd ? t('panel.location_tbd') : (node.location_name || node.address) }}</span>
+                  <span v-if="!node.online_event && node.location_tbd" class="date-tbd-pill date-tbd-pill--location-tbd">{{ t('panel.location_tbd') }}</span>
+                  <span v-else class="info-card-venue-name">{{ node.online_event ? onlinePlatformName(node.event_url) : (node.location_name || node.address) }}</span>
                   <a
                     v-if="node.online_event && node.event_url"
                     :href="node.event_url"

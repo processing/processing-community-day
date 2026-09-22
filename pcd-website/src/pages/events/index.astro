@@ -78,8 +78,8 @@ const days = [...new Set(events.map(({ record }) => eventGroupDay(record, today)
             <article class="event-card" data-event={JSON.stringify(record)}>
               <div class="event-card-content">
                 <p class="event-card-datetime">
-                  {node.event_date && <span>{formatDateRange(node.event_date, node.event_end_date)}</span>}
-                  {node.event_start_time ? <span>{formatTimeRange(node.event_start_time, node.event_end_time)} <small>local time</small></span> : node.event_date && <span data-missing-time hidden={(node.event_end_date || node.event_date) < today}>Time to be announced</span>}
+                  {node.event_date ? <span>{formatDateRange(node.event_date, node.event_end_date)}</span> : <span class:list={['date-tbd-pill', { 'date-tbd-pill--location-tbd': node.location_tbd }]}>{node.location_tbd ? 'Date and location to be announced' : 'Date to be announced'}</span>}
+                  {node.event_date && (node.event_start_time ? <span>{formatTimeRange(node.event_start_time, node.event_end_time)} <small>local time</small></span> : node.event_date && <span class="date-tbd-pill time-tbd-pill" data-missing-time hidden={(node.event_end_date || node.event_date) < today}>Time to be announced</span>)}
                 </p>
                 <h3><a href={`/event/${canonicalEventId(node)}/`}>{node.event_name}</a></h3>
                 <p
@@ -88,11 +88,13 @@ const days = [...new Set(events.map(({ record }) => eventGroupDay(record, today)
                   hidden={!node.city && !node.country && !node.online_event && isPastEvent(node)}
                 >{[node.city, node.country].filter(Boolean).join(', ') || (node.online_event ? 'Online' : 'Location to be announced')}{node.online_event && node.city ? ' · Online' : ''}</p>
                 {(node.event_short_description || node.details_text) && <p class="event-card-description">{node.event_short_description || node.details_text}</p>}
-                <p
+                {(!node.location_tbd || node.event_date) && <p
                   class="event-card-venue"
-                  data-missing-location={!node.online_event && node.location_tbd || undefined}
-                  hidden={!node.online_event && node.location_tbd && isPastEvent(node)}
-                >{node.online_event ? 'Online event' : [node.location_name, node.address].filter(Boolean).join(' · ') || 'Venue to be announced'}</p>
+                  data-missing-location={node.location_tbd || undefined}
+                  hidden={node.location_tbd && isPastEvent(node)}
+                >
+                  {node.location_tbd ? <span class="date-tbd-pill date-tbd-pill--location-tbd">Location to be announced</span> : node.online_event ? 'Online event' : [node.location_name, node.address].filter(Boolean).join(' · ')}
+                </p>}
                 {node.placeholder && <p class="event-placeholder">Placeholder — no real event confirmed</p>}
               </div>
               <span class="event-card-arrow" aria-hidden="true">→</span>

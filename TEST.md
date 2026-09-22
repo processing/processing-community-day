@@ -1,5 +1,9 @@
 # Tests
 
+## Map date visibility and eyelid blink
+
+Browser checks against a fresh production build cover desktop and mobile layouts, independent Future/Past/Other visibility, Show all, Hide all, and clearing filters. Hiding the last category starts the full-viewport CSS eyelids: all categories remain hidden through the closed pause, then only the last hidden category returns as the eyes reopen. Hide all restores the last currently visible category in display order. Check each category as the last hidden one, repeat the animation, verify keyboard focus stays on the trigger, and confirm Escape restores visibility immediately. Format/activity choices must survive the blink. Reduced motion uses an opacity fade without moving eyelids. Leaving the tab finishes the blink, and unmounting clears timers and keyboard/visibility listeners.
+
 ## Forum sidebar
 
 **File:** `.github/scripts/forum-topics.test.mjs`

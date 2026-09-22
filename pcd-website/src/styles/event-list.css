@@ -123,3 +123,4 @@
 .event-forum-avatar + .event-forum-avatar { margin-left: -9px; }
 .event-forum-avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .event-forum-replies { font-size: .75rem; color: var(--color-text-muted); white-space: nowrap; }
+

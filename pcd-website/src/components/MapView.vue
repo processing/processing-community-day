@@ -9,11 +9,14 @@ import NodePanel from './NodePanel.vue';
 import LanguageSwitcher from './LanguageSwitcher.vue';
 import InfoModal from './InfoModal.vue';
 import SubmitModal from './SubmitModal.vue';
+import EyelidBlink from './EyelidBlink.vue';
 import { currentLocale } from '../i18n/localeState';
 import { trackEvent, SUBMIT_EVENT_BUTTON_CLICK } from '../lib/analytics';
 import { cartoTileUrl } from '../lib/carto';
 import { safeStorage } from '../lib/safeStorage.mjs';
 import { i18n } from '../i18n/index';
+import calendarIcon from '../icons/calendar.svg?raw';
+import questionMarkIcon from '../icons/question-mark.svg?raw';
 
 const props = defineProps<{
   nodes: Node[];
@@ -27,8 +30,11 @@ const selectedNode = ref<Node | null>(null);
 const filterPanelOpen = ref(false);
 const filterButtonRef = ref<HTMLButtonElement | null>(null);
 const filterCloseRef = ref<HTMLButtonElement | null>(null);
-type DateFilter = 'future' | 'past' | 'all' | 'not-past';
-const dateFilter = ref<DateFilter>('all');
+const dateCategories = ['future', 'past', 'other'] as const;
+type DateCategory = typeof dateCategories[number];
+const visibleDates = ref<DateCategory[]>([...dateCategories]);
+const blinking = ref(false);
+let lastHiddenDate: DateCategory = 'other';
 const selectedFormats = ref<string[]>([]);
 const selectedActivities = ref<string[]>([]);
 
@@ -36,24 +42,40 @@ const activityOptions = computed(() =>
   [...new Set(props.nodes.flatMap((node) => node.event_activities))].sort((a, b) => a.localeCompare(b))
 );
 
-function localDateKey(): string {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
+function showAllDates() {
+  if (blinking.value) return;
+  visibleDates.value = [...dateCategories];
+}
+
+function blinkIfAllHidden() {
+  if (visibleDates.value.length === 0) blinking.value = true;
+}
+
+function restoreLastHiddenDate() {
+  if (visibleDates.value.length === 0) visibleDates.value = [lastHiddenDate];
+}
+
+function hideAllDates() {
+  if (blinking.value || visibleDates.value.length === 0) return;
+  lastHiddenDate = dateCategories.filter((category) => visibleDates.value.includes(category)).at(-1)!;
+  visibleDates.value = [];
+  blinkIfAllHidden();
+}
+
+function toggleDateVisibility(category: DateCategory) {
+  if (blinking.value) return;
+  if (!visibleDates.value.includes(category)) {
+    visibleDates.value = [...visibleDates.value, category];
+  } else {
+    lastHiddenDate = category;
+    visibleDates.value = visibleDates.value.filter((value) => value !== category);
+    blinkIfAllHidden();
+  }
 }
 
 function matchesFilters(node: Node): boolean {
-  const today = localDateKey();
-  const endDate = node.event_end_date ?? node.event_date;
-  const matchesDate = dateFilter.value === 'all' || (
-    dateFilter.value === 'not-past'
-      ? !isPastEvent(node)
-      : dateFilter.value === 'past'
-        ? !!endDate && endDate < today
-        : !!node.event_date && (!endDate || endDate >= today)
-  );
+  const dateCategory = !node.event_date ? 'other' : isPastEvent(node) ? 'past' : 'future';
+  const matchesDate = visibleDates.value.includes(dateCategory);
   const format = node.online_event ? 'online' : 'in-person';
   const matchesFormat = selectedFormats.value.length === 0 || selectedFormats.value.includes(format);
   const matchesActivity = selectedActivities.value.length === 0 ||
@@ -63,7 +85,7 @@ function matchesFilters(node: Node): boolean {
 
 const filteredNodes = computed(() => props.nodes.filter(matchesFilters));
 const activeFilterCount = computed(() =>
-  (dateFilter.value === 'all' ? 0 : 1) +
+  (visibleDates.value.length === dateCategories.length ? 0 : 1) +
   selectedFormats.value.length + selectedActivities.value.length
 );
 
@@ -78,7 +100,7 @@ function closeFilterPanel({ refocus = true } = {}) {
 }
 
 function clearFilters() {
-  dateFilter.value = 'all';
+  showAllDates();
   selectedFormats.value = [];
   selectedActivities.value = [];
 }
@@ -86,7 +108,9 @@ function clearFilters() {
 async function hidePastEvents() {
   mapInstance?.closePopup();
   closePanel();
-  dateFilter.value = 'not-past';
+  lastHiddenDate = 'past';
+  visibleDates.value = visibleDates.value.filter((category) => category !== 'past');
+  blinkIfAllHidden();
   await nextTick();
   filterButtonRef.value?.focus();
 }
@@ -355,18 +379,22 @@ onMounted(async () => {
 
   setMapStyle(map, L);
 
+  const pastMarkers = new WeakSet<import('leaflet').Marker>();
+
   // Cluster group with Google Maps-style concentric circles
   clusterGroup = (L as unknown as { markerClusterGroup: (opts?: object) => import('leaflet').LayerGroup }).markerClusterGroup({
     showCoverageOnHover: false,
     maxClusterRadius: 40,
     disableClusteringAtZoom: 4,
-    iconCreateFunction: (cluster: { getChildCount: () => number }) => {
+    iconCreateFunction: (cluster: { getChildCount: () => number; getAllChildMarkers: () => import('leaflet').Marker[] }) => {
       const count = cluster.getChildCount();
+      const allPast = cluster.getAllChildMarkers().every((marker) => pastMarkers.has(marker));
+      const color = allPast ? 'var(--color-event-past)' : 'var(--color-event-confirmed)';
       const r1 = 24, r2 = 18, r3 = 12;
       const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${r1 * 2}" height="${r1 * 2}" viewBox="0 0 ${r1 * 2} ${r1 * 2}">
-        <circle cx="${r1}" cy="${r1}" r="${r1}" fill="#5601A4" opacity="0.2"/>
-        <circle cx="${r1}" cy="${r1}" r="${r2}" fill="#5601A4" opacity="0.3"/>
-        <circle cx="${r1}" cy="${r1}" r="${r3}" fill="#5601A4" opacity="0.9"/>
+        <circle cx="${r1}" cy="${r1}" r="${r1}" fill="${color}" opacity="0.2"/>
+        <circle cx="${r1}" cy="${r1}" r="${r2}" fill="${color}" opacity="0.3"/>
+        <circle cx="${r1}" cy="${r1}" r="${r3}" fill="${color}" opacity="0.9"/>
         <text x="${r1}" y="${r1}" text-anchor="middle" dominant-baseline="central"
           font-family="IBM Plex Sans, system-ui, sans-serif" font-size="11" font-weight="600" fill="#fff">${count}</text>
       </svg>`;
@@ -379,45 +407,36 @@ onMounted(async () => {
     },
   });
 
-  const markerIcon = L.divIcon({
-    className: 'marker-node',
-    html: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
-      <circle cx="10" cy="10" r="8" fill="#5601A4" stroke="#fff" stroke-width="2"/>
-    </svg>`,
-    iconSize: [20, 20],
-    iconAnchor: [10, 10],
-    popupAnchor: [0, -12],
-  });
+  const calendarSymbol = `<g class="marker-symbol marker-symbol--calendar" color="#fff" transform="translate(6 6) scale(0.875)">${calendarIcon}</g>`;
+  // The circle-free Octicon occupies the middle of its original 16px viewBox.
+  const questionSymbol = `<g class="marker-symbol marker-symbol--question" color="#fff" transform="scale(1.625)">${questionMarkIcon}</g>`;
 
-  const onlineMarkerIcon = L.divIcon({
-    className: 'marker-node marker-node--online',
-    html: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
-      <circle cx="11" cy="11" r="10" fill="#5601A4" stroke="#fff" stroke-width="2"/>
-      <path d="M11 15.5a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z" fill="#fff"/>
-      <path d="M7.5 12.2a4.95 4.95 0 0 1 7 0" stroke="#fff" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-      <path d="M5 9.7a8.0 8.0 0 0 1 12 0" stroke="#fff" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.7"/>
-    </svg>`,
-    iconSize: [22, 22],
-    iconAnchor: [11, 11],
-    popupAnchor: [0, -13],
-  });
-
-  const pastMarkerIcon = L.divIcon({
-    ...markerIcon.options,
-    className: 'marker-node marker-node--past',
-  });
-  const pastOnlineMarkerIcon = L.divIcon({
-    ...onlineMarkerIcon.options,
-    className: 'marker-node marker-node--online marker-node--past',
-  });
-
-  // Add markers
+  // Add markers. Color describes the date state; the symbol signals whether
+  // the event's date and location are confirmed, including online events.
   props.nodes.forEach((node) => {
     nodeMap.set(node.id, node);
-    const icon = isPastEvent(node)
-      ? (node.online_event ? pastOnlineMarkerIcon : pastMarkerIcon)
-      : (node.online_event ? onlineMarkerIcon : markerIcon);
-    const marker = L.marker([node.lat, node.lng], { icon });
+    const past = isPastEvent(node);
+    const confirmed = !!node.event_date && !node.location_tbd && !node.placeholder;
+    const stateClass = !node.event_date
+      ? (node.location_tbd ? ' marker-node--date-location-tbd' : ' marker-node--undated')
+      : past ? ' marker-node--past' : '';
+    const icon = L.divIcon({
+      className: `marker-node${stateClass}${node.online_event ? ' marker-node--online' : ''}`,
+      html: `<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <circle class="marker-shape" cx="13" cy="13" r="12" fill="var(--color-event-confirmed)" stroke="#fff" stroke-width="2" />
+        ${confirmed ? calendarSymbol : past ? '' : questionSymbol}
+      </svg>`,
+      iconSize: [26, 26],
+      iconAnchor: [13, 13],
+      popupAnchor: [0, -15],
+    });
+    const marker = L.marker([node.lat, node.lng], {
+      icon,
+      // Keep confirmed upcoming events above overlapping TBD markers, regardless
+      // of insertion order or Leaflet's default latitude-based stacking.
+      zIndexOffset: confirmed && !past ? 1000 : 0,
+    });
+    if (past) pastMarkers.add(marker);
     marker.bindPopup(() => makePopupContent(node), {
       maxWidth: 340,
       autoPanPaddingTopLeft: L.point(16, 80),
@@ -748,12 +767,30 @@ onUnmounted(() => {
     </div>
 
     <fieldset>
-      <legend>{{ t('filters.when') }}</legend>
-      <div class="filter-options">
-        <label><input v-model="dateFilter" type="radio" value="future" /> {{ t('filters.future') }}</label>
-        <label><input v-model="dateFilter" type="radio" value="past" /> {{ t('filters.past') }}</label>
-        <label><input v-model="dateFilter" type="radio" value="not-past" /> {{ t('filters.hide_past') }}</label>
-        <label><input v-model="dateFilter" type="radio" value="all" /> {{ t('filters.all') }}</label>
+      <legend class="date-filter-heading">
+        <span>{{ t('filters.when') }}</span>
+        <span class="date-visibility-actions">
+          <button type="button" class="show-all-dates" :disabled="visibleDates.length === dateCategories.length" @click="showAllDates">{{ t('filters.show_all') }}</button>
+          <button type="button" class="show-all-dates hide-all-dates" @click="hideAllDates">{{ t('filters.hide_all') }}</button>
+        </span>
+      </legend>
+      <div class="filter-options date-visibility-options">
+        <button
+          v-for="category in dateCategories"
+          :key="category"
+          type="button"
+          class="date-visibility-toggle"
+          :data-date-category="category"
+          :aria-pressed="visibleDates.includes(category)"
+          @click="toggleDateVisibility(category)"
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+            <circle cx="12" cy="12" r="3" />
+            <path v-if="!visibleDates.includes(category)" d="m3 3 18 18" />
+          </svg>
+          {{ t(`filters.${category}`) }}
+        </button>
       </div>
     </fieldset>
 
@@ -780,6 +817,7 @@ onUnmounted(() => {
   </aside>
   <NodePanel :node="selectedNode" @close="closePanel" @hide-past-events="hidePastEvents" />
   <div id="map" tabindex="-1" :aria-label="t('map.aria_label')"></div>
+  <EyelidBlink v-if="blinking" @reopen="restoreLastHiddenDate" @complete="blinking = false" />
 </template>
 
 <style scoped>
@@ -930,6 +968,70 @@ onUnmounted(() => {
   padding-top: 0.75rem;
 }
 
+.date-filter-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.show-all-dates {
+  padding: 0.25rem 0;
+  border: 0;
+  background: none;
+  color: var(--color-primary);
+  font: 500 0.8125rem/1.4 var(--font-family);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.date-visibility-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.25rem 0.75rem;
+}
+
+.show-all-dates:disabled {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  cursor: default;
+}
+
+.date-visibility-options {
+  gap: 0.375rem;
+}
+
+.date-visibility-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: 44px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font: 500 0.875rem/1.35 var(--font-family);
+  text-align: left;
+  cursor: pointer;
+}
+
+.date-visibility-toggle svg {
+  flex: 0 0 auto;
+}
+
+.date-visibility-toggle[aria-pressed="true"] {
+  border-color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 7%, white);
+  color: var(--color-primary);
+}
+
+.date-visibility-toggle:hover {
+  background: color-mix(in srgb, var(--color-primary) 12%, white);
+}
+
 .map-filter-panel label {
   display: flex;
   align-items: flex-start;
@@ -988,18 +1090,31 @@ onUnmounted(() => {
 </style>
 
 <style>
-.marker-node--past svg circle {
-  fill: #757575;
+.marker-node > svg {
+  overflow: visible;
+  filter: drop-shadow(0 2px 3px rgb(0 0 0 / 30%));
 }
 
-.marker-node.marker-active svg {
+.marker-node--past .marker-shape {
+  fill: var(--color-event-past);
+}
+
+.marker-node--undated .marker-shape {
+  fill: var(--color-event-undated);
+}
+
+.marker-node--date-location-tbd .marker-shape {
+  fill: var(--color-event-date-location-tbd);
+}
+
+.marker-node.marker-active > svg {
   overflow: visible;
-  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 10px rgba(86, 1, 164, 0.9));
+  filter: drop-shadow(0 2px 3px rgb(0 0 0 / 30%)) drop-shadow(0 0 5px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 10px rgba(72, 43, 146, 0.9));
   transform: scale(1.4);
   transform-origin: center;
 }
 
-.marker-node.marker-active svg circle {
+.marker-node.marker-active .marker-shape {
   stroke-width: 3.5;
 }
 </style>

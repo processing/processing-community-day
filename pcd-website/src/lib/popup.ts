@@ -62,9 +62,10 @@ export function getOsmUrl(node: Node): string {
 export function makePopupContent(node: Node): string {
   const locale = currentLocale.value;
   const past = isPastEvent(node);
+  const dateAndLocationTbd = node.date_tbd && node.location_tbd;
 
   const date = node.date_tbd
-    ? t('popup.date_tbd')
+    ? `<span class="date-tbd-pill${dateAndLocationTbd ? ' date-tbd-pill--location-tbd' : ''}">${escapeHtml(t(dateAndLocationTbd ? 'popup.date_location_tbd' : 'popup.date_tbd'))}</span>`
     : escapeHtml(formatPopupDate(node.event_date ?? '', node.event_end_date, locale));
 
   const rawText = node.event_short_description.trim();
@@ -82,7 +83,7 @@ export function makePopupContent(node: Node): string {
     : '';
 
   const onlineBadgeHtml = node.online_event ? `<span class="popup-online-badge">${t('popup.online_event')}</span>` : '';
-  const timeHint = !node.date_tbd && node.time_tbd && !past ? ` · ${t('popup.time_tbd')}` : '';
+  const timeHint = !node.date_tbd && node.time_tbd && !past ? ` <span class="date-tbd-pill time-tbd-pill">${escapeHtml(t('popup.time_tbd'))}</span>` : '';
   const dateLineContent = `${date}${timeHint}`;
 
   const venueNameHtml = node.online_event
@@ -135,8 +136,8 @@ export function makePopupContent(node: Node): string {
       </div>
       ${organizingEntityHtml}
       <div class="popup-info-card">
-        <p class="popup-date">${dateLineContent}</p>
-        ${node.location_tbd && past ? '' : `<div class="popup-venue">
+        <p class="popup-date${node.date_tbd ? ' popup-date--tbd' : ''}">${dateLineContent}</p>
+        ${dateAndLocationTbd || (node.location_tbd && past) ? '' : `<div class="popup-venue">
           ${venueNameHtml}
           ${past ? '' : venueAddressHtml}
         </div>`}
