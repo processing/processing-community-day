@@ -1,14 +1,7 @@
 {
   "id": "pcd-hastings-2026",
   "uid": "3fedb37",
-  "organizers": [
-    {
-      "name": "Your name here! get involved :)))"
-    },
-    {
-      "name": "Becca Rose"
-    }
-  ],
+  "organizers": [],
   "primary_contact": {
     "name": "Becca Rose",
     "email": "beckaroona@gmail.com"
@@ -18,16 +11,20 @@
   "organization_type": "",
   "online_event": false,
   "event_url": "",
-  "event_name": "PCD @ Hastings",
+  "event_name": "Does Not Compute",
   "event_location": {
-    "address": "",
-    "plus_code": "9F22VH2C+WX"
+    "address": "Source Park, White Rock, Hastings TN34 1JA",
+    "plus_code": "9F22VH3G+H2"
   },
-  "event_date": "",
+  "event_date": "2025-10-29",
   "event_start_time": "",
   "event_end_time": "",
-  "event_short_description": "Get in touch if you want to get involved. More details soon",
-  "event_activities": [],
+  "event_short_description": "Drop-in, workshops, get messy and techy. Open projector!",
+  "event_activities": [
+    "Hands-on workshops",
+    "Live coding",
+    "Creative coding jams or hack sessions"
+  ],
   "event_page_url": "",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-hastings-2026/48309",
   "city": "Hastings",
