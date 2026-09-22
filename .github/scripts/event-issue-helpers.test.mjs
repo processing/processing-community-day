@@ -18,9 +18,19 @@ import {
   formatLongDescription,
   buildPlusCodeNoteBlocks,
   buildPrBody,
+  addressPlusCodeWarning,
 } from './event-issue-helpers.mjs';
 
 // ── parseIssueSections ────────────────────────────────────────────────────────
+
+test('address changes warn only when the resolved Plus Code is unchanged', () => {
+  const previous = { address: '123 Old St', plus_code: '8FW4V75V+8Q' };
+  const warning = addressPlusCodeWarning(previous, { address: '456 New St', plus_code: '8fw4v75v+8q' }, 'Check {plus_code_url} in {issue_reference}.', 'issue #10');
+  assert.equal(warning, 'Check https://plus.codes/8FW4V75V+8Q in issue #10.');
+  assert.equal(addressPlusCodeWarning(previous, { ...previous, address: '123 Old St ' }), '');
+  assert.equal(addressPlusCodeWarning(previous, { address: '456 New St', plus_code: '8FW4V75V+9Q' }), '');
+  assert.equal(addressPlusCodeWarning(previous, { address: '456 New St', plus_code: '' }), '');
+});
 
 describe('parseIssueSections', () => {
   test('parses normal sections', () => {
@@ -381,6 +391,8 @@ describe('buildPrBody', () => {
     dataTable: '| Field | Value |\n|---|---|\n| Event name | PCD @ Tokyo |',
     longDescriptionSection: null,
     noteBlocks: [],
+    forumThreadUrl: 'https://discourse.processing.org/t/pcd-tokyo-2026/12345',
+    eventUrl: 'https://day.processing.org/event/pcd-tokyo-2026-abc1234',
   };
 
   test('new event body has correct structure', () => {
@@ -400,6 +412,8 @@ describe('buildPrBody', () => {
     assert.ok(body.includes('"Edit Event" issue form'));
     assert.ok(body.includes('The changes below are correct'));
     assert.ok(body.includes('### Changes'));
+    assert.ok(body.includes('[forum thread](https://discourse.processing.org/t/pcd-tokyo-2026/12345)'), 'should link the forum thread');
+    assert.ok(body.includes('[event page](https://day.processing.org/event/pcd-tokyo-2026-abc1234) will be updated as soon as this PR is merged.'), 'should explain when the event page updates');
   });
 
   test('long description section included when provided', () => {

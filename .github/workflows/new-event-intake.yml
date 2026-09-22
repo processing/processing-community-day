@@ -15,6 +15,10 @@ permissions:
 
 env:
   STATUS_COMMENT_MARKER: <!-- new-event-intake-status -->
+  # Shared by the edit issue reply and PR body. Tokens are filled by the edit script.
+  # {issue_reference} is "this issue" in the reply and "issue #123" in the PR.
+  LOCATION_WARNING_TEMPLATE: >-
+    The event address changed, but the Plus Code stayed the same. Please check whether [the Plus Code]({plus_code_url}) still points to the correct location and update it in {issue_reference} if needed.
 
 jobs:
   process-new-event:
@@ -25,6 +29,7 @@ jobs:
       PCD_TEAM_ASSIGNEES: ${{ vars.PCD_TEAM_ASSIGNEES }}
       PCD_TEAM_REVIEWERS: ${{ vars.PCD_TEAM_REVIEWERS }}
     outputs:
+      forum_thread_url: ${{ steps.generate.outputs.forum_thread_url }}
       valid: ${{ steps.generate.outputs.valid }}
       branch: ${{ steps.generate.outputs.branch }}
       commit_message: ${{ steps.generate.outputs.commit_message }}
@@ -139,6 +144,8 @@ jobs:
       PCD_TEAM_REVIEWERS: ${{ vars.PCD_TEAM_REVIEWERS }}
     outputs:
       event_url: ${{ steps.generate.outputs.event_url }}
+      location_warning: ${{ steps.generate.outputs.location_warning }}
+      forum_thread_url: ${{ steps.generate.outputs.forum_thread_url }}
       valid: ${{ steps.generate.outputs.valid }}
       branch: ${{ steps.generate.outputs.branch }}
       commit_message: ${{ steps.generate.outputs.commit_message }}
@@ -445,17 +452,37 @@ jobs:
         env:
           PR_NUMBER: ${{ needs.create-pr.outputs.pull-request-number }}
           PR_URL: ${{ needs.create-pr.outputs.pull-request-url }}
+          EVENT_URL: ${{ needs.process-edit-event.outputs.event_url }}
+          FORUM_THREAD_URL: ${{ needs.process-new-event.outputs.forum_thread_url || needs.process-edit-event.outputs.forum_thread_url }}
+          SUBMITTER_LOGIN: ${{ github.event.issue.user.login }}
           EVENT_NAME: ${{ needs.process-new-event.outputs.event_name || needs.process-edit-event.outputs.event_name }}
-          ACTION_VERB: ${{ needs.process-new-event.outputs.action_verb || needs.process-edit-event.outputs.action_verb }}
+          IS_EVENT_UPDATE: ${{ needs.process-edit-event.outputs.valid == 'true' }}
+          LOCATION_WARNING: ${{ needs.process-edit-event.outputs.location_warning }}
         with:
           script: |
             const marker = process.env.STATUS_COMMENT_MARKER;
-            const body = [
+            const isEdit = process.env.IS_EVENT_UPDATE === 'true';
+            const forumUrl = process.env.FORUM_THREAD_URL;
+            const submitter = `@${process.env.SUBMITTER_LOGIN}`;
+            const forumThread = forumUrl ? `[forum thread](${forumUrl})` : 'forum thread';
+            const prLink = `[#${process.env.PR_NUMBER}](${process.env.PR_URL})`;
+            const body = (isEdit ? [
               marker,
-              `**${process.env.EVENT_NAME}** has been successfully parsed and a pull request has been opened for review: [#${process.env.PR_NUMBER}](${process.env.PR_URL}).`,
+              `${submitter}, your updates to **${process.env.EVENT_NAME}** are ready for review in ${prLink}.`,
               '',
-              `Once the PR is merged, your event will be **${process.env.ACTION_VERB}** the map at https://day.processing.org.`,
-            ].join('\n');
+              `Your [event page](${process.env.EVENT_URL}) will be updated as soon as ${prLink} is merged.`,
+              ...(process.env.LOCATION_WARNING ? ['', '> [!WARNING]', `> ${process.env.LOCATION_WARNING}`] : []),
+            ] : [
+              marker,
+              `${submitter}, thanks for submitting **${process.env.EVENT_NAME}**! Your new event is ready for review in ${prLink}.`,
+              '',
+              `Once the PR is merged, your event will be **added to** the map at https://day.processing.org.`,
+            ]).concat([
+              '',
+              `Please remember to keep your community posted on your ${forumThread}.`,
+              '',
+              'For information about organizing your PCD, visit the [Organizer Kit](https://day.processing.org/organize/).',
+            ]).join('\n');
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,

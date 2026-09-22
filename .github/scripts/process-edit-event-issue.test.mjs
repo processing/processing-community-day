@@ -151,6 +151,7 @@ async function runScript(issueBody, { tmpDir, number = 10, login = 'edituser' } 
 
   const env = {
     ...process.env,
+    LOCATION_WARNING_TEMPLATE: 'Check {plus_code_url} in {issue_reference}.',
     GITHUB_EVENT_PATH: eventPath,
     GITHUB_OUTPUT: outputPath,
     RUNNER_TEMP: tmpDir,
@@ -220,6 +221,9 @@ describe('process-edit-event-issue', () => {
 
     // PR body assertions
     const prBody = await fs.readFile(outputs.pr_body_path, 'utf8');
+    assert.equal(outputs.location_warning, 'Check https://plus.codes/8FW4V75V+8Q in this issue.');
+    assert.ok(prBody.includes('> [!WARNING]'));
+    assert.ok(prBody.includes('Check https://plus.codes/8FW4V75V+8Q in issue #10.'));
     assert.ok(prBody.includes('### Review checklist'), 'should have Review checklist section');
     assert.ok(prBody.includes('### Changes'), 'should have Changes section');
     assert.ok(prBody.includes('| Field | Previous | New |'), 'should have 3-column table header');
@@ -232,6 +236,8 @@ describe('process-edit-event-issue', () => {
     // Long description changed
     assert.ok(prBody.includes('### Long description'), 'should include long description section');
     assert.ok(prBody.includes('> Updated full description.'), 'long description should be blockquoted');
+    assert.ok(prBody.includes('[forum thread](https://discourse.processing.org/t/pcd-worldwide-2026-call-for-organizers/48081)'), 'should link the forum thread reminder');
+    assert.ok(prBody.includes('[event page](https://day.processing.org/event/pcd-edit-test-city-2026-abc1234) will be updated as soon as this PR is merged.'), 'should explain when the event page updates');
   });
 
   test('blank full_description leaves existing content.md unchanged', async () => {

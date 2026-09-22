@@ -235,12 +235,22 @@ export function formatLongDescription(text) {
   return text.replace(/\r\n/g, '\n').split('\n').map(line => `> ${line}`).join('\n');
 }
 
+export function addressPlusCodeWarning(previousLocation, nextLocation, template, issueReference) {
+  const address = (location) => (location?.address ?? '').trim();
+  const code = (location) => (location?.plus_code ?? '').replace(/\s+/g, '').toUpperCase();
+  const plusCode = code(nextLocation);
+  if (address(previousLocation) === address(nextLocation) || !plusCode || code(previousLocation) !== plusCode) return '';
+  if (!template) throw new Error('LOCATION_WARNING_TEMPLATE is required for address-change warnings');
+  const values = { plus_code_url: `https://plus.codes/${plusCode}`, issue_reference: issueReference };
+  return template.replace(/\{(plus_code_url|issue_reference)\}/g, (_, key) => values[key]);
+}
+
 export function buildPlusCodeNoteBlocks(plusCodeNote, rawPlusCode, resolvedPlusCode) {
   if (!plusCodeNote) return [];
   return [`> [!NOTE]\n> The Plus Code was auto-recovered from the user's input (\`${rawPlusCode}\`) using the city as a reference. Please verify the map pin placement is correct (https://plus.codes/${resolvedPlusCode}).`];
 }
 
-export function buildPrBody({ mode, number, eventName, submitterLogin, plusCodeForLink, dataTable, longDescriptionSection, noteBlocks = [] }) {
+export function buildPrBody({ mode, number, eventName, submitterLogin, plusCodeForLink, dataTable, longDescriptionSection, noteBlocks = [], forumThreadUrl = '', eventUrl = '' }) {
   const submitterMention = submitterLogin ? `@${submitterLogin}` : 'the submitter';
   const isNew = mode === 'new';
   const formType = isNew ? 'New Event' : 'Edit Event';
@@ -268,6 +278,15 @@ export function buildPrBody({ mode, number, eventName, submitterLogin, plusCodeF
   if (longDescriptionSection) {
     lines.push('', '### Long description', '', longDescriptionSection);
   }
+
+  const forumThread = forumThreadUrl ? `[forum thread](${forumThreadUrl})` : 'forum thread';
+  lines.push('', `Please remember to keep your community posted on your ${forumThread}.`);
+
+  if (mode === 'edit' && eventUrl) {
+    lines.push('', `Your [event page](${eventUrl}) will be updated as soon as this PR is merged.`);
+  }
+
+  lines.push('', 'For information about organizing your PCD, visit the [Organizer Kit](https://day.processing.org/organize/).');
 
   return lines.join('\n');
 }
