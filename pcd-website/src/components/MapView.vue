@@ -35,6 +35,7 @@ type DateCategory = typeof dateCategories[number];
 const visibleDates = ref<DateCategory[]>([...dateCategories]);
 const suppressedDateHover = ref<DateCategory | null>(null);
 const blinking = ref(false);
+const readjustingEye = ref<DateCategory | null>(null);
 let lastHiddenDate: DateCategory = 'other';
 const selectedFormats = ref<string[]>([]);
 const selectedActivities = ref<string[]>([]);
@@ -49,15 +50,27 @@ function showAllDates() {
 }
 
 function blinkIfAllHidden() {
-  if (visibleDates.value.length === 0) blinking.value = true;
+  if (visibleDates.value.length === 0) {
+    readjustingEye.value = null;
+    blinking.value = true;
+  }
 }
 
 function restoreLastHiddenDate() {
   if (visibleDates.value.length === 0) visibleDates.value = [lastHiddenDate];
 }
 
+function finishBlink() {
+  blinking.value = false;
+  if (filterPanelOpen.value && !document.hidden &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    readjustingEye.value = lastHiddenDate;
+  }
+}
+
 function toggleDateVisibility(category: DateCategory) {
   if (blinking.value) return;
+  readjustingEye.value = null;
   if (!visibleDates.value.includes(category)) {
     visibleDates.value = [...visibleDates.value, category];
   } else {
@@ -793,8 +806,17 @@ onUnmounted(() => {
           @click="toggleDateVisibility(category)"
         >
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
-            <circle cx="12" cy="12" r="3" />
+            <g
+              class="date-eye"
+              :class="{
+                'date-eye--dilated': blinking && lastHiddenDate === category && visibleDates.includes(category),
+                'date-eye--readjusting': readjustingEye === category,
+              }"
+              @animationend.self="readjustingEye = null"
+            >
+              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+              <circle class="date-eye-pupil" cx="12" cy="12" r="3" />
+            </g>
             <path v-if="!visibleDates.includes(category)" d="m3 3 18 18" />
           </svg>
           {{ t(`filters.${category}`) }}
@@ -829,10 +851,60 @@ onUnmounted(() => {
   </Transition>
   <NodePanel :node="selectedNode" @close="closePanel" @hide-past-events="hidePastEvents" />
   <div id="map" tabindex="-1" :aria-label="t('map.aria_label')"></div>
-  <EyelidBlink v-if="blinking" @reopen="restoreLastHiddenDate" @complete="blinking = false" />
+  <EyelidBlink v-if="blinking" @reopen="restoreLastHiddenDate" @complete="finishBlink" />
 </template>
 
 <style scoped>
+.date-eye,
+.date-eye-pupil {
+  transform-origin: 12px 12px;
+}
+
+.date-eye--readjusting {
+  animation: eye-readjust 700ms ease-in-out 180ms both;
+}
+
+.date-eye--readjusting .date-eye-pupil {
+  animation: pupil-readjust 700ms ease-out 180ms both;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .date-eye--dilated .date-eye-pupil {
+    r: 1.9375px;
+    stroke-width: 3.875px;
+    transform: scale(1.35);
+  }
+}
+
+@keyframes eye-readjust {
+  0%, 12%, 42%, 100% { transform: scaleY(1); }
+  25% { transform: scaleY(0.08); }
+  58% { transform: scaleY(0.35); }
+  76% { transform: scaleY(1); }
+}
+
+@keyframes pupil-readjust {
+  /* Reduce the radius as the stroke thickens to fill inward, keeping
+     the outer edge at 3.875px before the dilation scale is applied. */
+  0%, 12% {
+    r: 1.9375px;
+    stroke-width: 3.875px;
+    transform: scale(1.35);
+  }
+  70%, 100% {
+    r: 3px;
+    stroke-width: 1.75px;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .date-eye--readjusting,
+  .date-eye--readjusting .date-eye-pupil {
+    animation: none;
+  }
+}
+
 #map {
   position: fixed;
   top: var(--header-height);
