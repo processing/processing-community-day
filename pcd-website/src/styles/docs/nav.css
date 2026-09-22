@@ -44,20 +44,22 @@
   text-decoration: none;
 }
 .nav-list .nav-list-item .nav-list-link.active {
-  font-weight: 600;
+  background-color: var(--docs-nav-active-background);
 }
 .nav-list .nav-list-item .nav-list-link:hover,
 .nav-list .nav-list-item .nav-list-link.active {
   color: var(--color-primary-dark);
-  background-color: var(--feedback-color);
+}
+.nav-list .nav-list-item .nav-list-link:hover {
+  background-color: var(--docs-nav-hover-background);
+}
+.nav-list .nav-list-item .nav-list-link.active:hover {
+  background-color: var(--docs-nav-active-hover-background);
 }
 .nav-list .nav-list-item .nav-list-link--static {
   color: var(--docs-nav-heading-color);
   font-weight: 600;
   cursor: pointer;
-}
-.nav-list .nav-list-item .nav-list-link--static:hover {
-  background-color: transparent;
 }
 .nav-list .nav-list-item .nav-list-group-toggle {
   width: 100%;

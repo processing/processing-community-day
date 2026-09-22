@@ -196,6 +196,8 @@ For local map development, `pcd-website/.env` may define `PUBLIC_CARTO_API_KEY`.
 
 ## UI / Styling Rules
 
+- Organizer Kit `.nav-list` highlights use dedicated tokens in `docs/tokens.css`: light purple for the active page, a paler hover background, and a stronger active-page hover background. Expandable group headings also receive the hover highlight. Active items retain their normal font weight; selection must not make regular-weight links bold.
+
 - The shared purple palette in `base.css` is `#5503a4`, `#7a3eb6`, `#9b6ac7`, `#ba95d8`, and `#d8c2e9` (`--color-purple-900` through `--color-purple-100`). Use semantic tokens for primary actions, links, focus, and event states; lighter palette tokens supply accents and tinted surfaces. Time pills retain their requested blue, past events remain grey, and warning colors retain their semantic meaning.
 
 - Event detail hero actions render directly in the panel without the former surrounding box or title bar; the localized hero heading remains plain text. The detail title uses dark grey while the eyebrow remains muted grey.

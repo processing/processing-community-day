@@ -35,6 +35,9 @@
   --content-width: 50rem;
   --border-radius: 0.25rem;
   --feedback-color: var(--color-purple-100);
+  --docs-nav-active-background: color-mix(in srgb, var(--color-purple-100) 60%, white);
+  --docs-nav-hover-background: color-mix(in srgb, var(--color-purple-100) 40%, white);
+  --docs-nav-active-hover-background: color-mix(in srgb, var(--color-purple-100) 80%, white);
   --docs-nav-heading-color: #333;
   --docs-nav-child-link-color: #555;
 }
