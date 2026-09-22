@@ -226,7 +226,7 @@ async function main() {
   const longDescriptionSection = formatLongDescription(fullDescription);
   const noteBlocks = buildPlusCodeNoteBlocks(plusCodeNote, rawPlusCode, resolvedPlusCode);
   const prBodyPath = path.join(RUNNER_TEMP, `pr-body-${issueNumber}.md`);
-  await fs.writeFile(prBodyPath, buildPrBody({ mode: 'new', number: issueNumber, eventName, submitterLogin, plusCodeForLink: plusCode, dataTable, longDescriptionSection, noteBlocks }));
+  await fs.writeFile(prBodyPath, buildPrBody({ mode: 'new', number: issueNumber, eventName, submitterLogin, plusCodeForLink: plusCode, dataTable, longDescriptionSection, noteBlocks, forumThreadUrl }));
 
   console.log(`[process-new-event-issue] validation passed — event id: ${eventId}, uid: ${uid}`);
   await setOutput('valid', 'true');
@@ -235,6 +235,7 @@ async function main() {
   await setOutput('pr_title', `Add ${eventName} to the PCD map`);
   await setOutput('pr_body_path', prBodyPath);
   await setOutput('event_name', eventName);
+  await setOutput('forum_thread_url', forumThreadUrl);
   await setOutput('pr_label', 'new event');
   await setOutput('action_verb', 'added to');
 }

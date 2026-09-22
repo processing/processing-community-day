@@ -232,6 +232,8 @@ describe('process-edit-event-issue', () => {
     // Long description changed
     assert.ok(prBody.includes('### Long description'), 'should include long description section');
     assert.ok(prBody.includes('> Updated full description.'), 'long description should be blockquoted');
+    assert.ok(prBody.includes('[forum thread](https://discourse.processing.org/t/pcd-worldwide-2026-call-for-organizers/48081)'), 'should link the forum thread reminder');
+    assert.ok(prBody.includes('[event page](https://day.processing.org/event/pcd-edit-test-city-2026-abc1234) will be updated as soon as this PR is merged.'), 'should explain when the event page updates');
   });
 
   test('blank full_description leaves existing content.md unchanged', async () => {

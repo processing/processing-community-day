@@ -204,6 +204,8 @@ New events are submitted via GitHub Issues using `.github/ISSUE_TEMPLATE/01-new-
 
 ### Edit events
 
+PR confirmation comments use separate initial-submission and event-update messages, selected by the validated edit job output. Both confirmations and PR bodies mention the issue author, remind them to keep their community posted on their forum thread (linked when a URL is available), and link to the Organizer Kit. Only event updates include the canonical event-page update notice; initial submission confirmations explain that the event will be added to the map after merge.
+
 When a valid edit produces no PR because the generated files already match the site, the `create-pr` job upserts the shared status comment with the canonical event link and a short note about the form workaround. This feedback runs only after successful PR creation returns operation `none` without a PR number; failures and existing PRs must not be described as unchanged submissions.
 
 Organizers can edit existing events via `.github/ISSUE_TEMPLATE/04-edit-event.yml`. The same workflow (`process-edit-event` job) runs `.github/scripts/process-edit-event-issue.mjs`. The edit script: reads the existing event by `event_id`, preserves the immutable `uid` and `intake` block, preserves `event_activities` if all checkboxes are unchecked (GitHub issue forms cannot prefill checkboxes), and preserves `content.md` if `full_description` is blank.

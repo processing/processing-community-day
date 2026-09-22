@@ -244,8 +244,9 @@ async function main() {
   const longDescriptionSection = descChanged ? formatLongDescription(newDescBody) : null;
 
   const noteBlocks = buildPlusCodeNoteBlocks(plusCodeNote, rawPlusCode, resolvedPlusCode);
+  const canonicalEventUrl = `https://day.processing.org/event/${eventId}-${uid}`;
   const prBodyPath = path.join(RUNNER_TEMP, `pr-body-${issueNumber}.md`);
-  await fs.writeFile(prBodyPath, buildPrBody({ mode: 'edit', number: issueNumber, eventName, submitterLogin, plusCodeForLink: plusCode, dataTable, longDescriptionSection, noteBlocks }));
+  await fs.writeFile(prBodyPath, buildPrBody({ mode: 'edit', number: issueNumber, eventName, submitterLogin, plusCodeForLink: plusCode, dataTable, longDescriptionSection, noteBlocks, forumThreadUrl, eventUrl: canonicalEventUrl }));
 
   console.log(`[process-edit-event-issue] validation passed — event id: ${eventId}`);
   await setOutput('valid', 'true');
@@ -254,7 +255,8 @@ async function main() {
   await setOutput('pr_title', `Update ${eventName} on the PCD map`);
   await setOutput('pr_body_path', prBodyPath);
   await setOutput('event_name', eventName);
-  await setOutput('event_url', `https://day.processing.org/event/${eventId}-${uid}`);
+  await setOutput('event_url', canonicalEventUrl);
+  await setOutput('forum_thread_url', forumThreadUrl);
   await setOutput('pr_label', 'edit event');
   await setOutput('action_verb', 'updated on');
 }
