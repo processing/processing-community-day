@@ -292,27 +292,17 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
           {{ t('panel.placeholder_warning') }}
         </div>
 
-        <p class="panel-eyebrow">{{ t('panel.event_eyebrow') }}</p>
         <div class="panel-header-row">
-          <h2 id="panel-title" class="panel-name">{{ node.event_name }}</h2>
+          <div class="panel-heading">
+            <p class="panel-eyebrow">{{ t('panel.event_eyebrow') }}</p>
+            <h2 id="panel-title" class="panel-name">{{ node.event_name }}</h2>
+          </div>
           <ShareMenu
             class="panel-share-menu"
             :markdown="getShareMarkdown(node)"
             :permalink="getShareUrl(node)"
             :qr-filename="`${node.id}-qr-code.png`"
           />
-        </div>
-        <div class="panel-byline">
-          <p v-if="node.organization_name" class="panel-organizing-entity">
-            <span class="panel-label">{{ t('panel.by') }}</span> <span class="panel-inline-md" v-html="node.organization_name_html"></span>
-          </p>
-          <p v-if="node.organizers.some(o => o.name)" class="panel-hosts">
-            <span class="panel-label">{{ t('panel.hosts_label') }}</span>
-            <span v-if="!hostsExpanded" class="panel-hosts-line">
-              <span class="panel-hosts-names panel-inline-md" v-html="formatOrganizers(node.organizers, false)"></span><template v-if="hasMoreHosts(node.organizers)"><span class="panel-hosts-more-wrap">…&nbsp;<button class="panel-hosts-more" :aria-label="t('panel.show_all_hosts')" @click="hostsExpanded = true">{{ t('panel.more') }}</button></span></template>
-            </span>
-            <span v-else class="panel-inline-md" v-html="formatOrganizers(node.organizers, true)"></span>
-          </p>
         </div>
 
         <!-- Info Card -->
@@ -326,45 +316,44 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
             <Icon v-else icon="bi:calendar-event" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
             <div class="info-card-date-details">
               <span v-if="node.date_tbd" class="date-tbd-pill">{{ t('panel.date_tbd') }}</span>
-              <span v-else class="info-card-date">{{ formatDateRange(node.event_date ?? '', node.event_end_date, false, locale) }}</span>
-              <div v-if="!node.date_tbd && (node.event_start_time || (node.time_tbd && !isPastEvent(node)))" class="info-card-time-details">
-                <span v-if="!node.date_tbd && node.time_tbd && !isPastEvent(node)" class="date-tbd-pill time-tbd-pill">{{ t('panel.time_tbd') }}</span>
-                <span v-else-if="!node.date_tbd && node.event_start_time" class="info-card-time">
-                  {{ formatTimeRange(node.event_start_time, node.event_end_time) }}
+              <div v-else class="info-card-date-line">
+                <span class="info-card-date">{{ formatDateRange(node.event_date ?? '', node.event_end_date, false, locale) }}</span>
+                <span v-if="node.event_start_time" class="info-card-time">
+                  {{ formatTimeRange(node.event_start_time, node.event_end_time) }}<span class="info-card-time-note">{{ t('panel.local_time') }}</span>
                 </span>
-                <span v-if="!node.date_tbd && node.event_start_time" class="info-card-time-note">{{ t('panel.local_time') }}</span>
+                <span v-else-if="node.time_tbd && !isPastEvent(node)" class="date-tbd-pill time-tbd-pill">{{ t('panel.time_tbd') }}</span>
               </div>
-            </div>
-            <div v-if="!node.date_tbd && !isPastEvent(node)" class="info-card-cal-trigger-wrap info-card-calendar-row">
-              <button
-                class="info-card-cal-trigger"
-                :aria-label="t('panel.add_to_calendar')"
-                aria-haspopup="menu"
-                :aria-expanded="calDropdownOpen"
-                @click.stop="calDropdownOpen = !calDropdownOpen"
-              >
-                {{ t('panel.add_to_calendar') }}
-              </button>
-              <div v-show="calDropdownOpen" class="quick-action-menu" role="menu">
-                <a
-                  :href="calLinks!.googleCalUrl"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  role="menuitem"
-                  :aria-label="t('panel.google_calendar_new_tab')"
-                  @click="calDropdownOpen = false"
-                >{{ t('panel.google_calendar') }}</a>
-                <a
-                  :href="calLinks!.outlookCalUrl"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  role="menuitem"
-                  :aria-label="t('panel.outlook_new_tab')"
-                  @click="calDropdownOpen = false"
-                >{{ t('panel.outlook') }}</a>
-                <button role="menuitem" @click="downloadIcs(node); calDropdownOpen = false">
-                  {{ t('panel.download_ics') }}
+              <div v-if="!node.date_tbd && !isPastEvent(node)" class="info-card-cal-trigger-wrap info-card-calendar-row">
+                <button
+                  class="info-card-cal-trigger"
+                  :aria-label="t('panel.add_to_calendar')"
+                  aria-haspopup="menu"
+                  :aria-expanded="calDropdownOpen"
+                  @click.stop="calDropdownOpen = !calDropdownOpen"
+                >
+                  {{ t('panel.add_to_calendar') }}
                 </button>
+                <div v-show="calDropdownOpen" class="quick-action-menu" role="menu">
+                  <a
+                    :href="calLinks!.googleCalUrl"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    role="menuitem"
+                    :aria-label="t('panel.google_calendar_new_tab')"
+                    @click="calDropdownOpen = false"
+                  >{{ t('panel.google_calendar') }}</a>
+                  <a
+                    :href="calLinks!.outlookCalUrl"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    role="menuitem"
+                    :aria-label="t('panel.outlook_new_tab')"
+                    @click="calDropdownOpen = false"
+                  >{{ t('panel.outlook') }}</a>
+                  <button role="menuitem" @click="downloadIcs(node); calDropdownOpen = false">
+                    {{ t('panel.download_ics') }}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -389,7 +378,7 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
                     :href="getOsmUrl(node)"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="info-card-venue-address"
+                    class="info-card-venue-address info-card-osm-link"
                     :title="t('panel.get_directions_osm')"
                   >{{ node.location_name ? node.address : t('panel.view_osm') }}</a>
                 </div>
@@ -424,11 +413,26 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
               :href="node.forum_thread_url"
               target="_blank"
               rel="noopener noreferrer"
-              class="panel-event-website-btn"
-              :class="{ 'panel-event-website-btn--secondary': node.event_page_url }"
+              class="panel-event-website-btn panel-event-website-btn--secondary"
               :aria-label="t('panel.visit_forum_thread_new_tab')"
             >{{ t('panel.forum_thread') }} <span class="panel-event-website-icon" aria-hidden="true" v-html="externalLinkIcon"></span></a>
           </EventForumThread>
+        </div>
+
+        <div v-if="node.organization_name || node.organizers.some(o => o.name)" class="panel-byline">
+          <section v-if="node.organizers.some(o => o.name)" aria-labelledby="panel-hosted-heading">
+            <h2 id="panel-hosted-heading" class="panel-section-heading">{{ t('panel.hosted_by') }}</h2>
+            <p class="panel-hosts">
+              <span v-if="!hostsExpanded" class="panel-hosts-line">
+                <span class="panel-hosts-names panel-inline-md" v-html="formatOrganizers(node.organizers, false)"></span><template v-if="hasMoreHosts(node.organizers)"><span class="panel-hosts-more-wrap">…&nbsp;<button class="panel-hosts-more" :aria-label="t('panel.show_all_hosts')" @click="hostsExpanded = true">{{ t('panel.more') }}</button></span></template>
+              </span>
+              <span v-else class="panel-inline-md" v-html="formatOrganizers(node.organizers, true)"></span>
+            </p>
+          </section>
+          <section v-if="node.organization_name" aria-labelledby="panel-organized-heading">
+            <h2 id="panel-organized-heading" class="panel-section-heading">{{ t('panel.organized_by') }}</h2>
+            <p class="panel-organizing-entity panel-inline-md" v-html="node.organization_name_html"></p>
+          </section>
         </div>
 
         <section v-if="node.details_html || node.event_activities?.length" class="panel-about" aria-labelledby="panel-about-heading">
@@ -710,15 +714,22 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  margin-bottom: 0.25rem;
-}
-
-.panel-byline {
   margin-bottom: 1.25rem;
 }
 
-.panel-name {
+.panel-byline {
+  display: grid;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.panel-heading {
   flex: 1;
+  min-width: 0;
+}
+
+.panel-name {
+  color: var(--color-text);
   min-width: 0;
   margin: 0 0 0.2rem;
   font-size: 1.75rem;
@@ -788,7 +799,9 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   text-underline-offset: 2px;
 }
 
-.panel-inline-md :deep(a:hover) {
+.panel-inline-md :deep(a:hover),
+.panel-disclaimer :deep(a:hover),
+.info-card-venue-address:hover {
   color: var(--color-link-hover);
 }
 
@@ -798,7 +811,7 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
 }
 
 .panel-organizing-entity {
-  margin: 0 0 0.125rem;
+  margin: 0;
   font-size: 0.875rem;
   color: var(--color-text);
 }
@@ -811,14 +824,6 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   align-items: baseline;
   gap: 0.3em;
   overflow: hidden;
-}
-
-.panel-label {
-  color: var(--color-text-muted);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  flex-shrink: 0;
 }
 
 .panel-hosts-line {
@@ -859,19 +864,16 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
 /* ─── Event and forum actions ─── */
 .panel-hero-actions {
   margin-bottom: 1.5rem;
-  padding: 16px;
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  background: #f5f5f5;
 }
 
 .panel-hero-heading {
   grid-column: 1 / -1;
-  margin: -16px -16px 16px;
-  padding: 6px 16px;
-  border-bottom: 1px solid var(--color-border);
-  border-radius: 11px 11px 0 0;
-  background: #eeeeee;
+}
+
+.panel-hero-heading,
+.panel-section-heading {
+  margin: 0 0 0.75rem;
+  padding: 0;
   font-size: 0.9375rem;
   font-weight: 600;
   line-height: 1.4;
@@ -918,8 +920,17 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
 }
 
 .panel-event-website-btn--secondary {
-  background: #d4d4d4;
-  color: var(--color-text);
+  padding: 0.625rem 1rem;
+  background: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  line-height: 1.5;
+  transition: opacity 0.15s ease;
+}
+
+.panel-event-website-btn--secondary:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
 .panel-event-website-icon {
@@ -943,7 +954,7 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
 .info-card-row {
@@ -970,9 +981,9 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   flex: 0 0 40px;
   width: 40px;
   height: 40px;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-purple-300);
   border-radius: 8px;
-  color: var(--color-text-muted);
+  color: var(--color-purple-900);
 }
 
 .info-card-icon {
@@ -988,7 +999,8 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
 }
 
 .info-card-date-badge-month {
-  background: var(--color-border);
+  background: var(--color-purple-700);
+  color: #fff;
   font-size: .5625rem;
   font-weight: 600;
   line-height: 15px;
@@ -1007,8 +1019,16 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   overflow-wrap: anywhere;
 }
 
-.info-card-time-details {
-  margin-top: 2px;
+.info-card-date-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.125rem 0.75rem;
+}
+
+.info-card-date-line .time-tbd-pill {
+  padding-block: 0;
+  align-self: center;
 }
 
 .info-card-date {
@@ -1016,11 +1036,12 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   font-weight: 600;
   font-size: 0.9375rem;
   color: var(--color-text);
-  line-height: 1.45;
+  line-height: 1.35;
 }
 
 .info-card-time {
   font-size: 0.875rem;
+  line-height: 1.4;
   color: var(--color-text-muted);
 }
 
@@ -1046,46 +1067,41 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
 
 .info-card-venue-address {
   font-size: 0.875rem;
-  color: var(--color-text-muted);
   line-height: 1.4;
-  text-decoration: none;
 }
 
-.info-card-venue-address:hover {
-  text-decoration: underline;
-  text-decoration-style: dotted;
-  text-underline-offset: 2px;
-  color: var(--color-text);
-}
-
-/* ─── Calendar action beside date details ─── */
+/* ─── Calendar action below date details ─── */
 .info-card-date-row .info-card-date-details {
   flex: 1;
 }
 
 .info-card-cal-trigger-wrap {
   position: relative;
-  flex: 0 1 auto;
-  max-width: 8rem;
-  margin-left: auto;
+  margin-top: 2px;
 }
 
 .info-card-cal-trigger-wrap .quick-action-menu {
-  left: auto;
-  right: 0;
+  left: 0;
+  right: auto;
 }
 
 .info-card-cal-trigger {
+  display: block;
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
   font-family: var(--font-family);
-  font-size: 0.9375rem;
-  color: var(--color-text);
-  line-height: 1.45;
+  font-size: 0.875rem;
+  color: var(--color-primary);
+  line-height: 1.4;
   text-decoration: underline;
+  text-decoration-style: dotted;
   text-underline-offset: 2px;
+}
+
+.info-card-cal-trigger:hover {
+  color: var(--color-link-hover);
 }
 
 /* ─── Calendar dropdown menu ─── */
@@ -1184,13 +1200,6 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
 /* ─── Description ─── */
 .panel-about {
   margin-bottom: 1.25rem;
-}
-
-.panel-section-heading {
-  margin: 0 0 0.75rem;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  line-height: 1.4;
 }
 
 .panel-description {
@@ -1336,10 +1345,16 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   margin-bottom: 1rem;
 }
 
-.panel-disclaimer a {
+.panel-disclaimer :deep(a),
+.info-card-venue-address {
   color: var(--color-primary);
   overflow-wrap: anywhere;
+  text-decoration: underline;
   text-underline-offset: 2px;
+}
+
+.info-card-venue-address.info-card-osm-link {
+  text-decoration-style: dotted;
 }
 
 .panel-report-row {

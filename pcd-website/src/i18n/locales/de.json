@@ -71,6 +71,8 @@
         },
         "by": "von",
         "hosts_label": "Organisator:innen:",
+        "organized_by": "Organisiert von",
+        "hosted_by": "Gastgeber:innen",
         "show_all_hosts": "Alle anzeigen",
         "more": "mehr",
         "visit_event_page": "Veranstaltungsseite besuchen",

@@ -71,6 +71,8 @@
         },
         "by": "por",
         "hosts_label": "Organizadores:",
+        "organized_by": "Organizado por",
+        "hosted_by": "Anfitriões",
         "show_all_hosts": "Mostrar todos os organizadores",
         "more": "mais",
         "visit_event_page": "Visitar página do evento",

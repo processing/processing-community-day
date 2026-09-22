@@ -71,6 +71,8 @@
         },
         "by": "주최:",
         "hosts_label": "주최자:",
+        "organized_by": "주최",
+        "hosted_by": "진행",
         "show_all_hosts": "모든 주최자 보기",
         "more": "더보기",
         "visit_event_page": "이벤트 페이지 방문",

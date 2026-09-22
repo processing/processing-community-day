@@ -71,6 +71,8 @@
         },
         "by": "主辦：",
         "hosts_label": "主辦單位：",
+        "organized_by": "主辦單位",
+        "hosted_by": "活動主持人",
         "show_all_hosts": "顯示所有主辦單位",
         "more": "更多",
         "visit_event_page": "前往活動頁面",

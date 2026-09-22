@@ -71,6 +71,8 @@
         },
         "by": "by",
         "hosts_label": "Hosts:",
+        "organized_by": "Organized by",
+        "hosted_by": "Hosted by",
         "show_all_hosts": "Show all hosts",
         "more": "more",
         "visit_event_page": "Visit event page",

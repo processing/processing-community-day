@@ -417,6 +417,12 @@ onMounted(async () => {
     nodeMap.set(node.id, node);
     const past = isPastEvent(node);
     const confirmed = !!node.event_date && !node.location_tbd && !node.placeholder;
+    const hasDate = Number(!!node.event_date);
+    const hasLocation = Number(!node.location_tbd);
+    const hasTime = Number(!!node.event_start_time);
+    // More known fields win; equal counts prefer date, then location, then time.
+    const informationPriority = (hasDate + hasLocation + hasTime) * 8
+      + hasDate * 4 + hasLocation * 2 + hasTime;
     const stateClass = !node.event_date
       ? (node.location_tbd ? ' marker-node--date-location-tbd' : ' marker-node--undated')
       : past ? ' marker-node--past' : '';
@@ -432,9 +438,9 @@ onMounted(async () => {
     });
     const marker = L.marker([node.lat, node.lng], {
       icon,
-      // Keep confirmed upcoming events above overlapping TBD markers, regardless
-      // of insertion order or Leaflet's default latitude-based stacking.
-      zIndexOffset: confirmed && !past ? 1000 : 0,
+      // Non-past events lead; 32 exceeds the maximum information score (31).
+      // Separate overlapping dots' priority tiers beyond Leaflet's latitude offset.
+      zIndexOffset: ((past ? 0 : 32) + informationPriority) * 1000,
     });
     if (past) pastMarkers.add(marker);
     marker.bindPopup(() => makePopupContent(node), {
@@ -1109,7 +1115,7 @@ onUnmounted(() => {
 
 .marker-node.marker-active > svg {
   overflow: visible;
-  filter: drop-shadow(0 2px 3px rgb(0 0 0 / 30%)) drop-shadow(0 0 5px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 10px rgba(72, 43, 146, 0.9));
+  filter: drop-shadow(0 2px 3px rgb(0 0 0 / 30%)) drop-shadow(0 0 5px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 10px color-mix(in srgb, var(--color-primary) 90%, transparent));
   transform: scale(1.4);
   transform-origin: center;
 }

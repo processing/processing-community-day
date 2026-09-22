@@ -71,6 +71,8 @@
         },
         "by": "par",
         "hosts_label": "Organisateur·rice·s :",
+        "organized_by": "Organisé par",
+        "hosted_by": "Accueilli par",
         "show_all_hosts": "Afficher tout",
         "more": "plus",
         "visit_event_page": "Voir la page de l'événement",

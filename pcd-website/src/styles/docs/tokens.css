@@ -34,7 +34,7 @@
   --nav-width: 16.5rem;
   --content-width: 50rem;
   --border-radius: 0.25rem;
-  --feedback-color: #f2eaf4;
+  --feedback-color: var(--color-purple-100);
   --docs-nav-heading-color: #333;
   --docs-nav-child-link-color: #555;
 }

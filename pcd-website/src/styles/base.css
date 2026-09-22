@@ -3,13 +3,18 @@
 
 /* ─── Design Tokens ─────────────────────────────────────────── */
 :root {
-  --color-primary: #800f8d;
-  --color-primary-dark: #500f67;
-  --color-link: #7253ed;
-  --color-link-hover: #5e40b7;
-  --color-link-underline: rgb(238, 235, 238);
-  --color-link-underline-hover: rgba(114, 83, 237, 0.45);
-  --color-focus: #005fcc;
+  --color-purple-900: #5503a4;
+  --color-purple-700: #7a3eb6;
+  --color-purple-500: #9b6ac7;
+  --color-purple-300: #ba95d8;
+  --color-purple-100: #d8c2e9;
+  --color-primary: var(--color-purple-900);
+  --color-primary-dark: var(--color-purple-700);
+  --color-link: var(--color-purple-900);
+  --color-link-hover: var(--color-purple-700);
+  --color-link-underline: var(--color-purple-100);
+  --color-link-underline-hover: var(--color-purple-300);
+  --color-focus: var(--color-purple-900);
   --color-text: #1a1a1a;
   --color-text-muted: #555;
   --color-text-subtle: #666;
@@ -19,9 +24,9 @@
   --color-bg-popup-hover: #f0f0f0;
   --color-border: #e0e0e0;
   --color-event-past: #b0b0b0;
-  --color-event-confirmed: #7920cc;
-  --color-event-undated: #a05eda;
-  --color-event-date-location-tbd: #c293e8;
+  --color-event-confirmed: var(--color-purple-900);
+  --color-event-undated: var(--color-purple-700);
+  --color-event-date-location-tbd: var(--color-purple-500);
   --color-overlay: rgba(0, 0, 0, 0.4);
   --color-callout-placeholder-bg: #fffbea;
   --color-callout-placeholder-border: #e8b84b;
@@ -29,7 +34,7 @@
   --color-callout-unconfirmed-bg: #e8f0fe;
   --color-callout-unconfirmed-border: #7baaf7;
   --color-callout-unconfirmed-text: #1a3a6b;
-  --docs-sidebar-color: #faf7fb;
+  --docs-sidebar-color: color-mix(in srgb, var(--color-purple-100) 25%, white);
 
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;

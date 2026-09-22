@@ -71,6 +71,8 @@
         },
         "by": "主催：",
         "hosts_label": "主催者：",
+        "organized_by": "主催",
+        "hosted_by": "ホスト",
         "show_all_hosts": "すべての主催者を表示",
         "more": "もっと見る",
         "visit_event_page": "イベントページへ",

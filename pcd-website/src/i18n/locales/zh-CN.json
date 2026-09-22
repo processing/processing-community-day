@@ -71,6 +71,8 @@
         },
         "by": "主办：",
         "hosts_label": "主办方：",
+        "organized_by": "主办单位",
+        "hosted_by": "活动主持人",
         "show_all_hosts": "显示所有主办方",
         "more": "更多",
         "visit_event_page": "访问活动页面",

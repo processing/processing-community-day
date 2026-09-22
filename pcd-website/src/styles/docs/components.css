@@ -86,6 +86,16 @@
   border-color: var(--color-text-muted);
   text-decoration: none;
 }
+.docs-action-button.share-menu__trigger,
+:is(.prose, .docs-prose) .docs-action-button.share-menu__trigger {
+  background: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  transition: opacity 0.15s ease;
+}
+.docs-action-button.share-menu__trigger:hover {
+  opacity: 0.85;
+}
 .docs-action-button:active {
   transform: translateY(1px);
 }

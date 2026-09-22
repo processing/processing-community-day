@@ -3,6 +3,8 @@ import { loadNodes, canonicalEventId } from '../../lib/nodes';
 import type { Node } from '../../lib/nodes';
 import MapView from '../../components/MapView.vue';
 import MapLayout from '../../layouts/MapLayout.astro';
+import { getImage } from 'astro:assets';
+import bannerImageSrc from '../../images/PCD2026_og-image_tinyfied.png';
 
 export async function getStaticPaths() {
   const nodes = await loadNodes();
@@ -30,6 +32,7 @@ const canonicalUrl = `${siteUrl}${base}/event/${canonicalId}/`;
 const redirectUrl = redirectTo ? `${base}/event/${redirectTo}/` : null;
 
 const ogImageUrl = redirectUrl ? '' : `${siteUrl}${base}/og-image.png`;
+const bannerImage = redirectUrl ? null : await getImage({ src: bannerImageSrc, format: 'webp', quality: 80, width: 960 });
 const title = `${node.event_name} — Processing Community Day 2026`;
 const locationLabel = node.city || 'your city';
 const description = node.event_short_description || node.details_text.slice(0, 200).trimEnd() || `Join the global celebration at Processing Community Day 2026 in ${locationLabel}. Find your local event on the map, or start a PCD in your community.`;
@@ -56,7 +59,7 @@ const description = node.event_short_description || node.details_text.slice(0, 2
   ) : (
     <>
       <a href="#main" class="skip-link" id="skip-link">Skip to map</a>
-      <MapView nodes={nodes} initialEventId={node.id} client:only="vue" />
+      <MapView nodes={nodes} initialEventId={node.id} bannerImageUrl={bannerImage!.src} client:only="vue" />
     </>
   )}
 </MapLayout>
