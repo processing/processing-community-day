@@ -150,7 +150,7 @@
         "button": "Filter",
         "title": "Filter events",
         "close": "Close filters",
-        "showing": "Showing {shown} of {total} events",
+        "showing": "{shown} of {total} shown",
         "when": "When",
         "future": "Show future events",
         "past": "Show past events",

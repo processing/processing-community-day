@@ -150,7 +150,7 @@
         "button": "絞り込み",
         "title": "イベントを絞り込む",
         "close": "絞り込みを閉じる",
-        "showing": "{total}件中{shown}件のイベントを表示",
+        "showing": "{total}件中{shown}件を表示",
         "when": "開催時期",
         "future": "今後のイベントを表示",
         "past": "過去のイベントを表示",

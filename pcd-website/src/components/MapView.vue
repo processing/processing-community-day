@@ -33,6 +33,7 @@ const filterCloseRef = ref<HTMLButtonElement | null>(null);
 const dateCategories = ['future', 'past', 'other'] as const;
 type DateCategory = typeof dateCategories[number];
 const visibleDates = ref<DateCategory[]>([...dateCategories]);
+const suppressedDateHover = ref<DateCategory | null>(null);
 const blinking = ref(false);
 let lastHiddenDate: DateCategory = 'other';
 const selectedFormats = ref<string[]>([]);
@@ -55,18 +56,12 @@ function restoreLastHiddenDate() {
   if (visibleDates.value.length === 0) visibleDates.value = [lastHiddenDate];
 }
 
-function hideAllDates() {
-  if (blinking.value || visibleDates.value.length === 0) return;
-  lastHiddenDate = dateCategories.filter((category) => visibleDates.value.includes(category)).at(-1)!;
-  visibleDates.value = [];
-  blinkIfAllHidden();
-}
-
 function toggleDateVisibility(category: DateCategory) {
   if (blinking.value) return;
   if (!visibleDates.value.includes(category)) {
     visibleDates.value = [...visibleDates.value, category];
   } else {
+    suppressedDateHover.value = category;
     lastHiddenDate = category;
     visibleDates.value = visibleDates.value.filter((value) => value !== category);
     blinkIfAllHidden();
@@ -91,7 +86,10 @@ const activeFilterCount = computed(() =>
 
 function toggleFilterPanel() {
   filterPanelOpen.value = !filterPanelOpen.value;
-  if (filterPanelOpen.value) nextTick(() => filterCloseRef.value?.focus());
+  if (filterPanelOpen.value) {
+    closePanel();
+    nextTick(() => filterCloseRef.value?.focus());
+  }
 }
 
 function closeFilterPanel({ refocus = true } = {}) {
@@ -215,6 +213,7 @@ function focusNode(node: Node, { animate = false, zoom = 5 }: { animate?: boolea
 }
 
 function openPanel(node: Node) {
+  closeFilterPanel({ refocus: false });
   selectedNode.value = node;
   const marker = markerMap.get(node.id);
   marker?.closePopup();
@@ -729,7 +728,7 @@ onUnmounted(() => {
 
 <template>
   <div class="map-chrome" :class="{ 'map-chrome--filters-open': filterPanelOpen }">
-    <div class="banner-controls-left">
+    <div v-show="!filterPanelOpen" class="banner-controls-left">
       <button
         ref="filterButtonRef"
         class="map-filter-button"
@@ -757,6 +756,7 @@ onUnmounted(() => {
     <InfoModal :open="infoModalOpen" :bannerImageUrl="props.bannerImageUrl" :autoOpened="infoModalAutoOpened" @close="infoModalOpen = false" @suppress="suppressInfoModal" />
     <SubmitModal :open="submitModalOpen" @close="submitModalOpen = false" />
   </div>
+  <Transition name="filter-panel">
   <aside
     v-show="filterPanelOpen"
     id="map-filter-panel"
@@ -764,12 +764,13 @@ onUnmounted(() => {
     :inert="!filterPanelOpen"
     :aria-label="t('filters.title')"
   >
+    <button ref="filterCloseRef" type="button" class="filter-panel-tab" :aria-label="t('filters.close')" @click="closeFilterPanel()">
+      <Icon icon="bi:chevron-left" width="1em" height="1em" aria-hidden="true" />
+    </button>
+    <div class="filter-panel-scroll">
     <div class="filter-panel-header">
-      <div>
-        <h2>{{ t('filters.title') }}</h2>
-        <p>{{ t('filters.showing', { shown: filteredNodes.length, total: props.nodes.length }) }}</p>
-      </div>
-      <button ref="filterCloseRef" type="button" class="filter-close" :aria-label="t('filters.close')" @click="closeFilterPanel()">×</button>
+      <h2>{{ t('filters.title') }}</h2>
+      <p>{{ t('filters.showing', { shown: filteredNodes.length, total: props.nodes.length }) }}</p>
     </div>
 
     <fieldset>
@@ -777,7 +778,6 @@ onUnmounted(() => {
         <span>{{ t('filters.when') }}</span>
         <span class="date-visibility-actions">
           <button type="button" class="show-all-dates" :disabled="visibleDates.length === dateCategories.length" @click="showAllDates">{{ t('filters.show_all') }}</button>
-          <button type="button" class="show-all-dates hide-all-dates" @click="hideAllDates">{{ t('filters.hide_all') }}</button>
         </span>
       </legend>
       <div class="filter-options date-visibility-options">
@@ -786,6 +786,8 @@ onUnmounted(() => {
           :key="category"
           type="button"
           class="date-visibility-toggle"
+          :class="{ 'date-visibility-toggle--hover-suppressed': suppressedDateHover === category }"
+          @mouseleave="suppressedDateHover = null"
           :data-date-category="category"
           :aria-pressed="visibleDates.includes(category)"
           @click="toggleDateVisibility(category)"
@@ -817,10 +819,14 @@ onUnmounted(() => {
       </div>
     </fieldset>
 
+    <div class="filter-panel-footer">
     <button type="button" class="clear-filters" :disabled="activeFilterCount === 0" @click="clearFilters">
       {{ t('filters.clear') }}
     </button>
+    </div>
+    </div>
   </aside>
+  </Transition>
   <NodePanel :node="selectedNode" @close="closePanel" @hide-past-events="hidePastEvents" />
   <div id="map" tabindex="-1" :aria-label="t('map.aria_label')"></div>
   <EyelidBlink v-if="blinking" @reopen="restoreLastHiddenDate" @complete="blinking = false" />
@@ -873,7 +879,6 @@ onUnmounted(() => {
 }
 
 .map-filter-button:focus-visible,
-.filter-close:focus-visible,
 .clear-filters:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
@@ -902,17 +907,43 @@ onUnmounted(() => {
   top: var(--header-height);
   bottom: 0;
   left: 0;
-  width: min(360px, 100vw);
-  padding: calc(64px + var(--spacing-md)) var(--spacing-lg) var(--spacing-lg);
+  width: min(360px, calc(100vw - 40px));
+  filter: drop-shadow(4px 0 16px rgba(0, 0, 0, 0.18));
+}
+
+.filter-panel-scroll {
+  height: 100%;
+  padding: var(--spacing-lg) var(--spacing-lg) 0;
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
   background: var(--color-bg-panel);
   border-right: 1px solid var(--color-border);
-  box-shadow: 8px 0 28px rgba(18, 19, 33, 0.16);
+  position: relative;
+  z-index: 1;
+}
+
+.filter-panel-enter-active,
+.filter-panel-leave-active {
+  transition: var(--transition-panel);
+}
+
+.filter-panel-enter-from,
+.filter-panel-leave-to {
+  transform: translateX(calc(-100% - 40px));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filter-panel-enter-active,
+  .filter-panel-leave-active {
+    transition: none;
+  }
 }
 
 .filter-panel-header {
+  flex-shrink: 0;
   display: flex;
-  align-items: flex-start;
+  align-items: baseline;
   justify-content: space-between;
   gap: var(--spacing-md);
   margin-inline: calc(-1 * var(--spacing-lg));
@@ -926,31 +957,87 @@ onUnmounted(() => {
 }
 
 .filter-panel-header p {
-  margin: 0.25rem 0 0;
+  margin: 0;
+  text-align: right;
   color: var(--color-text-muted);
   font-size: 0.8125rem;
 }
 
-.filter-close {
-  display: grid;
-  flex: 0 0 40px;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  color: var(--color-text);
+.filter-panel-tab {
+  --tab-r: 12px;
+  position: absolute;
+  right: 1px;
+  top: 50%;
+  transform: translate(100%, -50%) scaleX(-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 96px;
+  background: var(--color-bg-popup);
+  border: none;
   cursor: pointer;
-  font: 400 1.75rem/1 var(--font-family);
-  place-items: center;
+  color: var(--color-text-muted);
+  padding: 0;
+  z-index: 0;
+  /* drop-shadow renders along the clipped shape outline, acting as a border */
+  filter: drop-shadow(-1px 0 0 var(--color-border))
+          drop-shadow(0 -1px 0 var(--color-border))
+          drop-shadow(0 1px 0 var(--color-border));
+  transition: background-color 0.12s ease, color 0.12s ease, filter 0.12s ease;
+  clip-path: shape(
+    /*
+     * Vertical tab, right edge meets the panel.
+     * Adapted from the horizontal tab example by rotating 90° CW:
+     * concave corners on the right, convex on the left.
+     */
+    from top right,
+    /* 1. Concave top-right */
+    curve to calc(100% - var(--tab-r)) var(--tab-r)
+      with 100% var(--tab-r),
+    /* 2. Top edge ← */
+    hline to var(--tab-r),
+    /* 3. Convex top-left */
+    curve to 0 calc(var(--tab-r) * 2)
+      with 0 var(--tab-r),
+    /* 4. Left edge ↓ */
+    vline to calc(100% - calc(var(--tab-r) * 2)),
+    /* 5. Convex bottom-left */
+    curve to var(--tab-r) calc(100% - var(--tab-r))
+      with 0 calc(100% - var(--tab-r)),
+    /* 6. Bottom edge → */
+    hline to calc(100% - var(--tab-r)),
+    /* 7. Concave bottom-right */
+    curve to 100% 100%
+      with 100% calc(100% - var(--tab-r))
+  );
+
+  @supports not (clip-path: shape(from top left, hline to 0)) {
+    right: 4px;
+    border: 1px solid var(--color-border);
+    border-right: none;
+    border-radius: 12px 0 0 12px;
+    clip-path: none;
+  }
 }
 
-.filter-close:hover {
+.filter-panel-tab:hover {
   background: var(--color-bg-popup-hover);
+  color: var(--color-text);
+}
+
+.filter-panel-tab:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Mirror the tab shape without reversing the left-pointing arrow. */
+.filter-panel-tab :deep(svg) {
+  transform: scaleX(-1);
 }
 
 .map-filter-panel fieldset {
+  flex-shrink: 0;
   margin: 0 calc(-1 * var(--spacing-lg));
   min-width: 0;
   padding: 1rem var(--spacing-lg) 1.25rem;
@@ -1000,7 +1087,7 @@ onUnmounted(() => {
 }
 
 .show-all-dates:disabled {
-  color: var(--color-text-muted);
+  color: #999;
   text-decoration: none;
   cursor: default;
 }
@@ -1034,11 +1121,18 @@ onUnmounted(() => {
   color: var(--color-primary);
 }
 
-.date-visibility-toggle:hover {
-  background: color-mix(in srgb, var(--color-primary) 12%, white);
+.date-visibility-toggle[aria-pressed="true"]:not(.date-visibility-toggle--hover-suppressed):hover {
+  background: color-mix(in srgb, var(--color-primary) 11%, white);
+}
+
+.date-visibility-toggle[aria-pressed="false"]:not(.date-visibility-toggle--hover-suppressed):hover {
+  background: #e8f0fe;
+  border-color: #a9c5ee;
 }
 
 .map-filter-panel label {
+  position: relative;
+  isolation: isolate;
   display: flex;
   align-items: flex-start;
   gap: 0.625rem;
@@ -1046,6 +1140,19 @@ onUnmounted(() => {
   font-size: 0.875rem;
   line-height: 1.35;
   cursor: pointer;
+}
+
+.map-filter-panel label::before {
+  content: "";
+  position: absolute;
+  inset: -0.375rem -0.75rem;
+  z-index: -1;
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.map-filter-panel label:hover::before {
+  background: #e8f0fe;
 }
 
 .map-filter-panel input {
@@ -1056,20 +1163,32 @@ onUnmounted(() => {
   accent-color: var(--color-primary);
 }
 
+.filter-panel-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  flex-shrink: 0;
+  margin: auto calc(-1 * var(--spacing-lg)) 0;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--color-bg-panel);
+  border-top: 1px solid var(--color-border);
+  box-shadow: 0 -8px 20px rgb(18 19 33 / 8%);
+}
+
 .clear-filters {
   width: 100%;
-  margin-top: var(--spacing-lg);
   padding: 0.625rem 1rem;
   border: 2px solid var(--color-primary);
   border-radius: 6px;
-  background: transparent;
-  color: var(--color-primary);
+  background: var(--color-primary);
+  color: #fff;
   font: 600 0.875rem/1.3 var(--font-family);
   cursor: pointer;
 }
 
 .clear-filters:hover:not(:disabled) {
-  background: var(--color-primary);
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
   color: #fff;
 }
 
@@ -1083,10 +1202,6 @@ onUnmounted(() => {
     top: calc(var(--header-height) + var(--spacing-sm));
     left: var(--spacing-sm);
     gap: 0.375rem;
-  }
-
-  .map-filter-panel {
-    padding-top: calc(56px + var(--spacing-md));
   }
 
   .map-chrome--filters-open .host-btn-group {

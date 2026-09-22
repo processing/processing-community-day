@@ -86,7 +86,7 @@
   display: none;
   padding-left: var(--sp-3);
 }
-.nav-list .nav-list-item > .nav-list .nav-list-item .nav-list-link {
+.nav-list .nav-list-item > .nav-list .nav-list-item .nav-list-link:not(.active):not(:hover) {
   color: var(--docs-nav-child-link-color);
 }
 .nav-list .nav-list-item.active > .nav-list {

@@ -150,7 +150,7 @@
         "button": "Filtrar",
         "title": "Filtrar eventos",
         "close": "Fechar filtros",
-        "showing": "A mostrar {shown} de {total} eventos",
+        "showing": "{shown} de {total} visíveis",
         "when": "Quando",
         "future": "Mostrar eventos futuros",
         "past": "Mostrar eventos passados",

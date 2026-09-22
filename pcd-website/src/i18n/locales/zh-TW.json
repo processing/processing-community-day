@@ -150,7 +150,7 @@
         "button": "篩選",
         "title": "篩選活動",
         "close": "關閉篩選",
-        "showing": "顯示 {total} 個活動中的 {shown} 個",
+        "showing": "已顯示 {shown}/{total} 個",
         "when": "時間",
         "future": "顯示未來的活動",
         "past": "顯示過去的活動",

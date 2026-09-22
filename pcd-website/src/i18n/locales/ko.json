@@ -150,7 +150,7 @@
         "button": "필터",
         "title": "이벤트 필터",
         "close": "필터 닫기",
-        "showing": "전체 {total}개 중 {shown}개 이벤트 표시",
+        "showing": "{total}개 중 {shown}개 표시",
         "when": "시기",
         "future": "예정된 행사 표시",
         "past": "지난 행사 표시",

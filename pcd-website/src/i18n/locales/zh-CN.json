@@ -150,7 +150,7 @@
         "button": "筛选",
         "title": "筛选活动",
         "close": "关闭筛选",
-        "showing": "显示 {total} 个活动中的 {shown} 个",
+        "showing": "已显示 {shown}/{total} 个",
         "when": "时间",
         "future": "显示未来的活动",
         "past": "显示过去的活动",

@@ -150,7 +150,7 @@
         "button": "Filtrer",
         "title": "Filtrer les événements",
         "close": "Fermer les filtres",
-        "showing": "{shown} événements sur {total} affichés",
+        "showing": "{shown} sur {total} affichés",
         "when": "Quand",
         "future": "Afficher les événements à venir",
         "past": "Afficher les événements passés",

@@ -67,34 +67,24 @@
   gap: var(--sp-2);
   min-height: 2.25rem;
   padding: 0.35rem 0.625rem;
-  color: var(--color-text-muted);
+  color: var(--color-primary);
   font: inherit;
   font-size: var(--step-3);
   font-weight: 400;
   white-space: nowrap;
   cursor: pointer;
-  background: var(--color-bg);
-  border: 1px solid #b8b8b8;
+  background: transparent;
+  border: 1px solid var(--color-primary);
   border-radius: var(--border-radius);
   text-decoration: none;
+  transition: opacity 0.15s ease;
 }
 :is(.prose, .docs-prose) .docs-action-button {
-  color: var(--color-text-muted);
+  color: var(--color-primary);
   text-decoration: none;
 }
 .docs-action-button:hover {
-  background: var(--docs-sidebar-color);
-  border-color: var(--color-text-muted);
   text-decoration: none;
-}
-.docs-action-button.share-menu__trigger,
-:is(.prose, .docs-prose) .docs-action-button.share-menu__trigger {
-  background: transparent;
-  color: var(--color-primary);
-  border-color: var(--color-primary);
-  transition: opacity 0.15s ease;
-}
-.docs-action-button.share-menu__trigger:hover {
   opacity: 0.85;
 }
 .docs-action-button:active {
