@@ -333,21 +333,12 @@ onMounted(async () => {
 
   });
 
-  // Deep link: zoom to event location, skip geolocation
+  // Deep links focus the event; otherwise start at the default world view.
   const eventId = props.initialEventId ?? new URLSearchParams(window.location.search).get('event');
   const linkedNode = eventId ? props.nodes.find((n) => n.id === eventId || n.uid === eventId) : null;
 
   if (!linkedNode) {
-    // Try to center on visitor's location, fall back to world view
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => map.setView([pos.coords.latitude, pos.coords.longitude], 5),
-        () => map.setView([20, 10], 3),
-        { timeout: 5000 }
-      );
-    } else {
-      map.setView([20, 10], 3);
-    }
+    map.setView([20, 10], 3);
   }
 
   setMapStyle(map, L);
