@@ -28,6 +28,7 @@ interface Props {
 
 const { title, description, eyebrow, heading, headings = [], hideToc = false, markdown, editHref } = Astro.props;
 
+const hasToc = !hideToc && headings.filter((heading) => heading.depth === 2).length > 1;
 const nav = await getKitNav();
 const permalink = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
 ---
@@ -48,16 +49,18 @@ const permalink = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).hr
     </aside>
 
     <main id="main" tabindex="-1" class="docs-shell__main">
-      <article class="docs-prose">
-        {eyebrow && <p class="prose__eyebrow">{eyebrow}</p>}
-        <div class="docs-title-row">
-          <h1>{heading ?? title}</h1>
-          {markdown && editHref && (
-            <DocsPageActions markdown={markdown} permalink={permalink} editHref={editHref} />
-          )}
+      <article class:list={['docs-prose', { 'docs-article--with-toc': hasToc }]}>
+        <div class="docs-article__header">
+          {eyebrow && <p class="prose__eyebrow">{eyebrow}</p>}
+          <div class="docs-title-row">
+            <h1>{heading ?? title}</h1>
+            {markdown && editHref && (
+              <DocsPageActions markdown={markdown} permalink={permalink} editHref={editHref} />
+            )}
+          </div>
         </div>
-        {!hideToc && <DocsTableOfContents headings={headings} />}
-        <slot />
+        {hasToc && <DocsTableOfContents headings={headings} />}
+        <div class="docs-article__content"><slot /></div>
       </article>
     </main>
   </div>

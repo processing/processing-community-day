@@ -16,6 +16,10 @@
 .docs-shell__main {
   min-width: 0;
 }
+.docs-article__header,
+.docs-article__content {
+  min-width: 0;
+}
 .docs-shell__nav {
   margin: 0 calc(var(--sp-4) * -1);
   background: var(--docs-sidebar-color);
@@ -42,6 +46,34 @@
 @media (min-width: 66.5rem) {
   .docs-shell {
     grid-template-columns: var(--nav-width) minmax(0, var(--content-width));
+  }
+}
+
+@media screen and (min-width: 80rem) {
+  .docs-shell {
+    max-width: 94rem;
+    grid-template-columns: var(--nav-width) minmax(0, 1fr);
+  }
+  .docs-article--with-toc {
+    display: grid;
+    grid-template-columns: minmax(0, var(--content-width)) 16rem;
+    column-gap: var(--sp-7);
+    align-items: start;
+  }
+  .docs-article__header,
+  .docs-article__content {
+    grid-column: 1;
+    max-width: var(--content-width);
+  }
+  .docs-article--with-toc > .docs-page-toc {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    position: sticky;
+    top: calc(var(--header-height) + var(--sp-7));
+    max-height: calc(100dvh - var(--header-height) - var(--sp-7) * 2);
+    overflow-y: auto;
+    overflow-wrap: anywhere;
+    margin: 0;
   }
 }
 

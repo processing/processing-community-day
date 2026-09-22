@@ -21,6 +21,7 @@
   color: #6b6b6b;
 }
 .docs-page-toc {
+  font-size: var(--fs-4);
   margin: var(--sp-5) 0 var(--sp-7);
   padding: var(--sp-4) var(--sp-5);
   border-left: 0.25rem solid var(--color-primary);

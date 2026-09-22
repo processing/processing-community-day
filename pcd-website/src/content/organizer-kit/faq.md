@@ -1,5 +1,6 @@
 ---
 title: Frequently Asked Questions
+hideToc: false
 order: 9
 description: Common questions about registering, scheduling, funding, and running a PCD.
 ---
