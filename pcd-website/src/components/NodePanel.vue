@@ -287,6 +287,7 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
           {{ t('panel.placeholder_warning') }}
         </div>
 
+        <p class="panel-eyebrow">{{ t('panel.event_eyebrow') }}</p>
         <div class="panel-header-row">
           <h2 id="panel-title" class="panel-name">{{ node.event_name }}</h2>
           <ShareMenu
@@ -690,6 +691,15 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   color: var(--color-callout-placeholder-text);
 }
 
+
+.panel-eyebrow {
+  margin: 0 0 0.375rem;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
 
 .panel-header-row {
   display: flex;

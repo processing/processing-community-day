@@ -88,6 +88,7 @@ export function makePopupContent(node: Node): string {
   return `
     <div class="popup-content">
       ${placeholderBanner}
+      <p class="popup-eyebrow">${escapeHtml(t('panel.event_eyebrow'))}</p>
       <div class="popup-header-row">
         <h3 class="popup-name">${escapeHtml(node.event_name)}</h3>
         ${onlineBadgeHtml}
