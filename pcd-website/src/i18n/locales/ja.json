@@ -39,7 +39,7 @@
     "panel": {
         "event_eyebrow": "Processing Community Day",
         "more_about_pcd": "このPCDについて詳しく",
-        "past_event": "終了したイベント",
+        "event_over": "このイベントは終了しました",
         "find_out_more": "詳しく見る",
         "event_page": "イベントページ",
         "forum_thread": "フォーラムのスレッド",
@@ -142,6 +142,7 @@
         "description": "世界中の Processing Community Day 2026 イベントを探索しましょう。インタラクティブマップでお近くのイベントを見つけてください。"
     },
     "filters": {
+        "hide_past": "終了したイベントを非表示",
         "button": "絞り込み",
         "title": "イベントを絞り込む",
         "close": "絞り込みを閉じる",

@@ -39,7 +39,7 @@
     "panel": {
         "event_eyebrow": "Processing Community Day",
         "more_about_pcd": "이 PCD에 대해 더 알아보기",
-        "past_event": "종료된 이벤트",
+        "event_over": "이 행사는 종료되었습니다",
         "find_out_more": "자세히 알아보기",
         "event_page": "이벤트 페이지",
         "forum_thread": "포럼 스레드",
@@ -142,6 +142,7 @@
         "description": "전 세계 Processing Community Day 2026 노드를 탐색하세요. 인터랙티브 지도에서 가까운 이벤트를 찾아보세요."
     },
     "filters": {
+        "hide_past": "지난 행사 숨기기",
         "button": "필터",
         "title": "이벤트 필터",
         "close": "필터 닫기",

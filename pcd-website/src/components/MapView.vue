@@ -3,7 +3,7 @@ import { computed, nextTick, ref, watch, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Icon } from '@iconify/vue';
 import type { Node } from '../lib/nodes';
-import { makePopupContent } from '../lib/popup';
+import { makePopupContent, fitPopupActivities } from '../lib/popup';
 import { isPastEvent } from '../lib/format';
 import NodePanel from './NodePanel.vue';
 import LanguageSwitcher from './LanguageSwitcher.vue';
@@ -27,7 +27,7 @@ const selectedNode = ref<Node | null>(null);
 const filterPanelOpen = ref(false);
 const filterButtonRef = ref<HTMLButtonElement | null>(null);
 const filterCloseRef = ref<HTMLButtonElement | null>(null);
-type DateFilter = 'future' | 'past' | 'all';
+type DateFilter = 'future' | 'past' | 'all' | 'not-past';
 const dateFilter = ref<DateFilter>('all');
 const selectedFormats = ref<string[]>([]);
 const selectedActivities = ref<string[]>([]);
@@ -48,9 +48,11 @@ function matchesFilters(node: Node): boolean {
   const today = localDateKey();
   const endDate = node.event_end_date ?? node.event_date;
   const matchesDate = dateFilter.value === 'all' || (
-    dateFilter.value === 'past'
-      ? !!endDate && endDate < today
-      : !!node.event_date && (!endDate || endDate >= today)
+    dateFilter.value === 'not-past'
+      ? !isPastEvent(node)
+      : dateFilter.value === 'past'
+        ? !!endDate && endDate < today
+        : !!node.event_date && (!endDate || endDate >= today)
   );
   const format = node.online_event ? 'online' : 'in-person';
   const matchesFormat = selectedFormats.value.length === 0 || selectedFormats.value.includes(format);
@@ -79,6 +81,14 @@ function clearFilters() {
   dateFilter.value = 'all';
   selectedFormats.value = [];
   selectedActivities.value = [];
+}
+
+async function hidePastEvents() {
+  mapInstance?.closePopup();
+  closePanel();
+  dateFilter.value = 'not-past';
+  await nextTick();
+  filterButtonRef.value?.focus();
 }
 
 const INFO_MODAL_SUPPRESS_KEY = 'pcd-info-modal-suppressed';
@@ -119,6 +129,7 @@ let openPopupNodeId: string | null = null;
 let slidingWindowHandler: ((e: FocusEvent) => void) | null = null;
 let pendingPopupMarker: import('leaflet').Marker | null = null;
 let teardownMarkerPopupListeners: (() => void) | null = null;
+let teardownPopupActivities: (() => void) | null = null;
 
 // --- Tile layer config ---
 interface TileLayerConfig { url: string; options: Record<string, unknown>; }
@@ -407,7 +418,11 @@ onMounted(async () => {
       ? (node.online_event ? pastOnlineMarkerIcon : pastMarkerIcon)
       : (node.online_event ? onlineMarkerIcon : markerIcon);
     const marker = L.marker([node.lat, node.lng], { icon });
-    marker.bindPopup(() => makePopupContent(node), { maxWidth: 340 });
+    marker.bindPopup(() => makePopupContent(node), {
+      maxWidth: 340,
+      autoPanPaddingTopLeft: L.point(16, 80),
+      autoPanPaddingBottomRight: L.point(16, 24),
+    });
     markerMap.set(node.id, marker);
     clusterGroup.addLayer(marker);
   });
@@ -425,6 +440,7 @@ onMounted(async () => {
       if (!visibleIds.has(id) && isVisible) clusterGroup!.removeLayer(marker);
     });
     if (selectedNode.value && !visibleIds.has(selectedNode.value.id)) closePanel();
+    syncMarkerDOM();
   });
 
   // Apply accessible names to marker elements. Leaflet creates marker DOM elements
@@ -601,6 +617,8 @@ onMounted(async () => {
   };
 
   const onPopupClose = () => {
+    teardownPopupActivities?.();
+    teardownPopupActivities = null;
     openPopupNodeId = null;
   };
 
@@ -622,18 +640,24 @@ onMounted(async () => {
   map.on('popupopen', (e) => {
     const container = e.popup.getElement();
     if (!container) return;
+    teardownPopupActivities?.();
+    teardownPopupActivities = fitPopupActivities(container);
     // Track which node's popup is open
     const btn = container.querySelector<HTMLElement>('.read-more');
     openPopupNodeId = btn?.getAttribute('data-node-id') ?? null;
     const focusTarget = container.querySelector<HTMLElement>('button, a, [tabindex]');
-    focusTarget?.focus();
+    focusTarget?.focus({ preventScroll: true });
   });
 
-  // Delegated click for .read-more buttons in popups
+  // Delegated clicks for popup actions
   const mapEl = document.getElementById('map');
   if (mapEl) {
     mapEl.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
+      if (target.closest('[data-hide-past-events]')) {
+        hidePastEvents();
+        return;
+      }
       if (target.closest('a')) return; // let icon links open without triggering panel
       const btn = target.closest('.read-more');
       if (btn) {
@@ -672,6 +696,7 @@ onUnmounted(() => {
     slidingWindowHandler = null;
   }
   teardownMarkerPopupListeners?.();
+  teardownPopupActivities?.();
   teardownMarkerPopupListeners = null;
   mapInstance?.remove();
 });
@@ -727,6 +752,7 @@ onUnmounted(() => {
       <div class="filter-options">
         <label><input v-model="dateFilter" type="radio" value="future" /> {{ t('filters.future') }}</label>
         <label><input v-model="dateFilter" type="radio" value="past" /> {{ t('filters.past') }}</label>
+        <label><input v-model="dateFilter" type="radio" value="not-past" /> {{ t('filters.hide_past') }}</label>
         <label><input v-model="dateFilter" type="radio" value="all" /> {{ t('filters.all') }}</label>
       </div>
     </fieldset>
@@ -752,7 +778,7 @@ onUnmounted(() => {
       {{ t('filters.clear') }}
     </button>
   </aside>
-  <NodePanel :node="selectedNode" @close="closePanel" />
+  <NodePanel :node="selectedNode" @close="closePanel" @hide-past-events="hidePastEvents" />
   <div id="map" tabindex="-1" :aria-label="t('map.aria_label')"></div>
 </template>
 

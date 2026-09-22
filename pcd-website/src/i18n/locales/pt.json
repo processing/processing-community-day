@@ -39,7 +39,7 @@
     "panel": {
         "event_eyebrow": "Processing Community Day",
         "more_about_pcd": "Mais sobre este PCD",
-        "past_event": "Evento passado",
+        "event_over": "Este evento terminou",
         "find_out_more": "Saiba mais",
         "event_page": "Página do evento",
         "forum_thread": "Tópico do fórum",
@@ -142,6 +142,7 @@
         "description": "Explore os eventos do Processing Community Day 2026 ao redor do mundo. Encontre seu evento local no mapa interativo."
     },
     "filters": {
+        "hide_past": "Ocultar eventos passados",
         "button": "Filtrar",
         "title": "Filtrar eventos",
         "close": "Fechar filtros",

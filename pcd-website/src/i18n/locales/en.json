@@ -39,7 +39,7 @@
     "panel": {
         "event_eyebrow": "Processing Community Day",
         "more_about_pcd": "More about this PCD",
-        "past_event": "Past event",
+        "event_over": "This event is over",
         "find_out_more": "Join this PCD",
         "event_page": "Event Page",
         "forum_thread": "Forum Thread",
@@ -142,6 +142,7 @@
         "description": "Explore Processing Community Day 2026 nodes around the world. Find your local event on the interactive map."
     },
     "filters": {
+        "hide_past": "Hide past events",
         "button": "Filter",
         "title": "Filter events",
         "close": "Close filters",

@@ -39,7 +39,7 @@
     "panel": {
         "event_eyebrow": "Processing Community Day",
         "more_about_pcd": "更多关于本次 PCD 的信息",
-        "past_event": "已结束的活动",
+        "event_over": "此活动已结束",
         "find_out_more": "了解更多",
         "event_page": "活动页面",
         "forum_thread": "论坛主题",
@@ -142,6 +142,7 @@
         "description": "探索全球 Processing Community Day 2026 节点，在互动地图上找到您附近的活动。"
     },
     "filters": {
+        "hide_past": "隐藏已结束的活动",
         "button": "筛选",
         "title": "筛选活动",
         "close": "关闭筛选",

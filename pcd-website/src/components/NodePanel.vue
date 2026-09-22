@@ -18,6 +18,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   close: [];
+  'hide-past-events': [];
 }>();
 
 const { t, locale } = useI18n();
@@ -283,6 +284,10 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
         </button>
       </div>
       <div class="panel-content">
+        <div v-if="isPastEvent(node)" class="past-event-notice">
+          <span>{{ t('panel.event_over') }}</span>
+          <button type="button" @click="emit('hide-past-events')">{{ t('filters.hide_past') }}</button>
+        </div>
         <div v-if="node.placeholder" class="panel-placeholder">
           {{ t('panel.placeholder_warning') }}
         </div>
@@ -362,7 +367,6 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
                 </button>
               </div>
             </div>
-            <span v-else-if="isPastEvent(node)" class="info-card-past-label">{{ t('panel.past_event') }}</span>
           </div>
           <!-- Venue + address (OSM link) or Online platform -->
           <template v-if="node.online_event || !node.location_tbd || !isPastEvent(node)">
@@ -1063,19 +1067,6 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   flex: 0 1 auto;
   max-width: 8rem;
   margin-left: auto;
-}
-
-.info-card-past-label {
-  flex: 0 1 auto;
-  max-width: 8rem;
-  margin-left: auto;
-  padding: 4px 8px;
-  border-radius: 4px;
-  background: #eeeeee;
-  color: var(--color-text-muted);
-  font-size: 0.8125rem;
-  line-height: 1.4;
-  text-align: center;
 }
 
 .info-card-cal-trigger-wrap .quick-action-menu {
