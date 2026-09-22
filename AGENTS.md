@@ -101,6 +101,7 @@ The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anc
 - **`open-location-code`** exports `{ OpenLocationCode }` as a named export — use `new OpenLocationCode()` (not static methods).
 - **`leaflet.markercluster`** causes a circular dependency warning, suppressed via `rollupOptions.onwarn` in `astro.config.mjs`.
 - **Initial map view:** Open at the default world view (center `[20, 10]`, zoom `3`) without requesting the visitor's location. Event deep links still focus their event.
+- **Past event markers:** Individual map dots use grey after the event's final day in the visitor's local time, using `isPastEvent()` from `src/lib/format.ts`. Online events retain their online symbol; upcoming and undated dots remain purple.
 - **Deep linking:** `?event=<id-or-uid>` query param auto-opens the event detail panel. Both the slug `id` and the short `uid` are accepted.
 - **Event UIDs:** Each event has a stable 7-char hex `uid` stored in both `metadata.json` and `content.md` frontmatter. UIDs never change after creation. Three static URL formats are generated per event: `/event/<slug>` (redirects to canonical), `/event/<slug>-<uid>` (canonical, has OG tags, redirects into SPA), and `/event/<uid>` (short form, redirects to canonical). The canonical URL is what the share button copies.
 

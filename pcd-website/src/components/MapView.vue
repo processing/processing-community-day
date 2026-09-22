@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n';
 import { Icon } from '@iconify/vue';
 import type { Node } from '../lib/nodes';
 import { makePopupContent } from '../lib/popup';
+import { isPastEvent } from '../lib/format';
 import NodePanel from './NodePanel.vue';
 import LanguageSwitcher from './LanguageSwitcher.vue';
 import InfoModal from './InfoModal.vue';
@@ -390,10 +391,21 @@ onMounted(async () => {
     popupAnchor: [0, -13],
   });
 
+  const pastMarkerIcon = L.divIcon({
+    ...markerIcon.options,
+    className: 'marker-node marker-node--past',
+  });
+  const pastOnlineMarkerIcon = L.divIcon({
+    ...onlineMarkerIcon.options,
+    className: 'marker-node marker-node--online marker-node--past',
+  });
+
   // Add markers
   props.nodes.forEach((node) => {
     nodeMap.set(node.id, node);
-    const icon = node.online_event ? onlineMarkerIcon : markerIcon;
+    const icon = isPastEvent(node)
+      ? (node.online_event ? pastOnlineMarkerIcon : pastMarkerIcon)
+      : (node.online_event ? onlineMarkerIcon : markerIcon);
     const marker = L.marker([node.lat, node.lng], { icon });
     marker.bindPopup(() => makePopupContent(node), { maxWidth: 340 });
     markerMap.set(node.id, marker);
@@ -950,6 +962,10 @@ onUnmounted(() => {
 </style>
 
 <style>
+.marker-node--past svg circle {
+  fill: #757575;
+}
+
 .marker-node.marker-active svg {
   overflow: visible;
   filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 10px rgba(86, 1, 164, 0.9));
