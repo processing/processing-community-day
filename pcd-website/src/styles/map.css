@@ -117,56 +117,27 @@ body {
   font-size: 0.75rem;
 }
 
-.popup-content .popup-date .time-tbd-pill {
+.popup-content .popup-date .time-tbd-pill,
+.popup-content .popup-date .past-event-pill {
   padding-block: 0;
   align-self: center;
 }
 
-.past-event-notice {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.25rem 1rem;
-  margin-bottom: 1rem;
-  padding: 0.625rem 0.875rem;
-  border-radius: 4px;
-  border: 1px solid var(--color-callout-placeholder-border);
-  background: var(--color-callout-placeholder-bg);
-  color: var(--color-callout-placeholder-text);
-  font-size: 0.8125rem;
-  line-height: 1.5;
-}
-
-.past-event-notice button,
-.popup-past-event button {
-  min-height: 32px;
-  padding: 0.25rem 0;
+.hide-past-events-link {
+  padding: 0;
   border: 0;
   background: none;
   color: var(--color-primary);
   font: inherit;
+  font-size: 0.8125rem;
   text-align: left;
   text-decoration: underline;
   text-underline-offset: 3px;
   cursor: pointer;
 }
 
-.past-event-notice button:hover,
-.popup-past-event button:hover {
+.hide-past-events-link:hover {
   text-decoration-thickness: 2px;
-}
-
-.popup-past-event {
-  margin-top: 0.75rem;
-  font-size: 0.8125rem;
-  line-height: 1.5;
-  text-align: center;
-}
-
-.popup-past-event .past-event-notice {
-  margin-bottom: 0.25rem;
-  text-align: left;
 }
 
 .leaflet-popup-content-wrapper {

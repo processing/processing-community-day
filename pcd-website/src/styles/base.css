@@ -176,3 +176,5 @@ body {
 
 
 .date-tbd-pill.time-tbd-pill { background: #81b4d9; color: #fff; }
+
+.date-tbd-pill.past-event-pill { background: var(--color-callout-placeholder-border); color: var(--color-callout-placeholder-text); }

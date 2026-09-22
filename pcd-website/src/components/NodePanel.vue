@@ -284,10 +284,6 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
         </button>
       </div>
       <div class="panel-content">
-        <div v-if="isPastEvent(node)" class="past-event-notice">
-          <span>{{ t('panel.event_over') }}</span>
-          <button type="button" @click="emit('hide-past-events')">{{ t('filters.hide_past') }}</button>
-        </div>
         <div v-if="node.placeholder" class="panel-placeholder">
           {{ t('panel.placeholder_warning') }}
         </div>
@@ -318,6 +314,10 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
               <span v-if="node.date_tbd" class="date-tbd-pill">{{ t('panel.date_tbd') }}</span>
               <div v-else class="info-card-date-line">
                 <span class="info-card-date">{{ formatDateRange(node.event_date ?? '', node.event_end_date, false, locale) }}</span>
+                <template v-if="isPastEvent(node)">
+                  <span class="date-tbd-pill past-event-pill">{{ t('panel.past_event') }}</span>
+                  <button type="button" class="hide-past-events-link" @click="emit('hide-past-events')">{{ t('filters.hide_past') }}</button>
+                </template>
                 <span v-if="node.event_start_time" class="info-card-time">
                   {{ formatTimeRange(node.event_start_time, node.event_end_time) }}<span class="info-card-time-note">{{ t('panel.local_time') }}</span>
                 </span>
@@ -1026,7 +1026,8 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   gap: 0.125rem 0.75rem;
 }
 
-.info-card-date-line .time-tbd-pill {
+.info-card-date-line .time-tbd-pill,
+.info-card-date-line .past-event-pill {
   padding-block: 0;
   align-self: center;
 }

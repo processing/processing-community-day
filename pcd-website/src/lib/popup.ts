@@ -84,7 +84,8 @@ export function makePopupContent(node: Node): string {
 
   const onlineBadgeHtml = node.online_event ? `<span class="popup-online-badge">${t('popup.online_event')}</span>` : '';
   const timeHint = !node.date_tbd && node.time_tbd && !past ? ` <span class="date-tbd-pill time-tbd-pill">${escapeHtml(t('popup.time_tbd'))}</span>` : '';
-  const dateLineContent = `${date}${timeHint}`;
+  const pastHint = past ? ` <span class="date-tbd-pill past-event-pill">${escapeHtml(t('panel.past_event'))}</span> <button type="button" class="hide-past-events-link" data-hide-past-events>${escapeHtml(t('filters.hide_past'))}</button>` : '';
+  const dateLineContent = `${date}${timeHint}${pastHint}`;
 
   const venueNameHtml = node.online_event
     ? ''
@@ -147,10 +148,7 @@ export function makePopupContent(node: Node): string {
         ${activitiesHtml}
         <button class="read-more" data-node-id="${escapeHtml(node.id)}" aria-label="${escapeHtml(t('popup.see_details'))} ${escapeHtml(node.event_name)}">${t('popup.see_details')} &rarr;</button>
       </div>
-      ${past ? `<div class="popup-past-event">
-        <div class="past-event-notice">${escapeHtml(t('panel.event_over'))}</div>
-        <button type="button" data-hide-past-events>${escapeHtml(t('filters.hide_past'))}</button>
-      </div>` : ''}
+
     </div>
   `.trim();
 }
