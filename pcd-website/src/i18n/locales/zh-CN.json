@@ -39,6 +39,7 @@
         "date_tbd": "日期待定"
     },
     "panel": {
+        "event_eyebrow": "Processing Community Day",
         "more_about_pcd": "更多关于本次 PCD 的信息",
         "past_event": "已结束的活动",
         "find_out_more": "了解更多",
