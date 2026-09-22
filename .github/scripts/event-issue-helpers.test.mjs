@@ -18,9 +18,19 @@ import {
   formatLongDescription,
   buildPlusCodeNoteBlocks,
   buildPrBody,
+  addressPlusCodeWarning,
 } from './event-issue-helpers.mjs';
 
 // ── parseIssueSections ────────────────────────────────────────────────────────
+
+test('address changes warn only when the resolved Plus Code is unchanged', () => {
+  const previous = { address: '123 Old St', plus_code: '8FW4V75V+8Q' };
+  const warning = addressPlusCodeWarning(previous, { address: '456 New St', plus_code: '8fw4v75v+8q' }, 'Check {plus_code_url} in {issue_reference}.', 'issue #10');
+  assert.equal(warning, 'Check https://plus.codes/8FW4V75V+8Q in issue #10.');
+  assert.equal(addressPlusCodeWarning(previous, { ...previous, address: '123 Old St ' }), '');
+  assert.equal(addressPlusCodeWarning(previous, { address: '456 New St', plus_code: '8FW4V75V+9Q' }), '');
+  assert.equal(addressPlusCodeWarning(previous, { address: '456 New St', plus_code: '' }), '');
+});
 
 describe('parseIssueSections', () => {
   test('parses normal sections', () => {

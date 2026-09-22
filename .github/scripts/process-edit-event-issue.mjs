@@ -23,6 +23,7 @@ import {
   buildEditEventTable,
   formatLongDescription,
   buildPlusCodeNoteBlocks,
+  addressPlusCodeWarning,
   buildPrBody,
 } from './event-issue-helpers.mjs';
 
@@ -244,6 +245,11 @@ async function main() {
   const longDescriptionSection = descChanged ? formatLongDescription(newDescBody) : null;
 
   const noteBlocks = buildPlusCodeNoteBlocks(plusCodeNote, rawPlusCode, resolvedPlusCode);
+  const locationWarning = addressPlusCodeWarning(existingMeta.event_location, nodeRecord.event_location, process.env.LOCATION_WARNING_TEMPLATE, 'this issue');
+  if (locationWarning) {
+    const prLocationWarning = addressPlusCodeWarning(existingMeta.event_location, nodeRecord.event_location, process.env.LOCATION_WARNING_TEMPLATE, `issue #${issueNumber}`);
+    noteBlocks.push(`> [!WARNING]\n> ${prLocationWarning}`);
+  }
   const canonicalEventUrl = `https://day.processing.org/event/${eventId}-${uid}`;
   const prBodyPath = path.join(RUNNER_TEMP, `pr-body-${issueNumber}.md`);
   await fs.writeFile(prBodyPath, buildPrBody({ mode: 'edit', number: issueNumber, eventName, submitterLogin, plusCodeForLink: plusCode, dataTable, longDescriptionSection, noteBlocks, forumThreadUrl, eventUrl: canonicalEventUrl }));
@@ -257,6 +263,7 @@ async function main() {
   await setOutput('event_name', eventName);
   await setOutput('event_url', canonicalEventUrl);
   await setOutput('forum_thread_url', forumThreadUrl);
+  await setOutput('location_warning', locationWarning);
   await setOutput('pr_label', 'edit event');
   await setOutput('action_verb', 'updated on');
 }
