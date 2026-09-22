@@ -50,6 +50,7 @@ No install needed — `open-location-code` is already available at `pcd-website/
 
 - Tests live alongside the code they test in `.github/scripts/`.
 - Use `node:test` + `node:assert` (built into Node — no test framework needed).
+- Build-test assertions for shared icons should allow extra SVG attributes, attribute reordering, and either self-closing or paired path tags; scope checks to the relevant control.
 - Mock `globalThis.fetch` with `beforeEach`/`afterEach` for any test that triggers a Nominatim call; always restore the original after each test.
 - When adding new functions to `.github/scripts/`, extract pure/testable logic into a separate `*.mjs` module (as was done for `plus-code.mjs`) so it can be imported without triggering the main script's top-level side effects.
 

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { cpSync, copyFileSync, existsSync, readFileSync, rmSync } from 'node:fs';
+import { cpSync, copyFileSync, existsSync, readdirSync, readFileSync, rmSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
 
@@ -25,6 +25,8 @@ function hrefForFilename(html, filename) {
 
 test('a populated zine collection emits linked assets and renders entries in frontmatter order', () => {
   assert.ok(!existsSync(DEST), `${DEST} already exists — refusing to overwrite`);
+  const publishedZines = readdirSync(ZINES_DIR, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && existsSync(join(ZINES_DIR, entry.name, 'index.md')));
   let created = true;
   try {
     cpSync(FIXTURE, DEST, { recursive: true });
@@ -89,16 +91,19 @@ test('a populated zine collection emits linked assets and renders entries in fro
       'order 2 should render before order 13',
     );
     assert.equal((library.match(/Submit a Zine/g) ?? []).length, 1, 'the grid should render one submission card');
+    const submissionCard = library.match(/<a\b[^>]*class="guide-card guide-card--add"[^>]*>([\s\S]*?)<\/a>/);
+    assert.ok(submissionCard, 'the grid should render a submission link');
+    // Shared icons can add SVG attributes and emit self-closing paths.
     assert.match(
-      library,
-      /guide-card guide-card--add[^>]*>[\s\S]*?<svg class="guide-card__plus" aria-hidden="true" viewBox="0 0 16 16">\s*<path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0Z[^>]+><\/path>\s*<\/svg>\s*<span>Submit a Zine<\/span>/,
+      submissionCard[1],
+      /<svg\b(?=[^>]*\bclass="guide-card__plus")(?=[^>]*\baria-hidden="true")(?=[^>]*\bviewBox="0 0 16 16")[^>]*>\s*<path\b[^>]*\bd="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0Z[^"]*"[^>]*(?:\/>|>\s*<\/path>)\s*<\/svg>\s*<span>Submit a Zine<\/span>/,
       'the submission card should render the feed-plus Octicon followed by its label',
     );
-    assert.match(library, /href="https:\/\/github\.com\/processing\/processing-community-day\/issues\/new\?template=05-new-zine\.yml"/, 'the submission card should link to the public New Zine GitHub issue form');
+    assert.match(submissionCard[0], /href="https:\/\/github\.com\/processing\/processing-community-day\/issues\/new\?template=05-new-zine\.yml"/, 'the submission card should link to the public New Zine GitHub issue form');
     assert.doesNotMatch(library, /guide-card--empty|<strong>Variables<\/strong>/);
     const grid = library.match(/<ul class="guide-grid">([\s\S]*?)<\/ul>/);
     assert.ok(grid, 'the library should render its grid');
-    assert.equal((grid[1].match(/<li>/g) ?? []).length, 3, 'the grid should contain published zines plus submission');
+    assert.equal((grid[1].match(/<li>/g) ?? []).length, publishedZines.length + 2, 'the grid should contain published zines, the fixture, and submission');
     const gridCover = grid[1].match(/<img[^>]+src="([^"]+)"/);
     assert.ok(gridCover, 'the zine card should render a cover image');
     assert.ok(existsSync(emittedPath(gridCover[1])), 'the card cover should be emitted');
