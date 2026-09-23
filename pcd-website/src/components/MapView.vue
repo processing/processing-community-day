@@ -28,6 +28,15 @@ const { t } = useI18n();
 
 const selectedNode = ref<Node | null>(null);
 const filterPanelOpen = ref(false);
+const FILTER_CLOSE_LEARNED_KEY = 'pcd-filter-close-learned';
+const filterCloseLearned = ref(safeStorage.get(FILTER_CLOSE_LEARNED_KEY) === 'true');
+
+function handleFilterTabClick() {
+  filterCloseLearned.value = true;
+  safeStorage.set(FILTER_CLOSE_LEARNED_KEY, 'true');
+  closeFilterPanel();
+}
+
 const filterButtonRef = ref<HTMLButtonElement | null>(null);
 const filterCloseRef = ref<HTMLButtonElement | null>(null);
 const filterBackRef = ref<HTMLButtonElement | null>(null);
@@ -101,6 +110,7 @@ const activeFilterCount = computed(() =>
 function toggleFilterPanel() {
   filterPanelOpen.value = !filterPanelOpen.value;
   if (filterPanelOpen.value) {
+    mapInstance?.closePopup();
     closePanel();
     nextTick(() => {
       const closeButton = filterBackRef.value?.getClientRects().length
@@ -783,7 +793,7 @@ onUnmounted(() => {
     :inert="!filterPanelOpen"
     :aria-label="t('filters.title')"
   >
-    <button ref="filterCloseRef" type="button" class="filter-panel-tab" :aria-label="t('filters.close')" @click="closeFilterPanel()">
+    <button ref="filterCloseRef" type="button" class="filter-panel-tab" :class="{ 'close-direction-hint': filterPanelOpen && !filterCloseLearned }" :aria-label="t('filters.close')" @click="handleFilterTabClick()">
       <Icon icon="bi:chevron-left" width="1em" height="1em" aria-hidden="true" />
     </button>
     <div class="filter-panel-mobile-back">
@@ -1001,6 +1011,18 @@ onUnmounted(() => {
   filter: drop-shadow(4px 0 16px rgba(0, 0, 0, 0.18));
 }
 
+/* Extend behind the viewport edge without changing the panel's layout. */
+.map-filter-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: calc(100% - 1px);
+  width: 33px;
+  background: var(--color-bg-panel);
+  pointer-events: none;
+}
+
 .filter-panel-scroll {
   flex: 1;
   min-height: 0;
@@ -1015,7 +1037,10 @@ onUnmounted(() => {
   z-index: 1;
 }
 
-.filter-panel-enter-active,
+.filter-panel-enter-active {
+  transition: var(--transition-panel-open);
+}
+
 .filter-panel-leave-active {
   transition: var(--transition-panel);
 }
@@ -1069,7 +1094,7 @@ onUnmounted(() => {
   background: var(--color-bg-popup);
   border: none;
   cursor: pointer;
-  color: var(--color-text-muted);
+  color: var(--color-primary);
   padding: 0;
   z-index: 0;
   /* drop-shadow renders along the clipped shape outline, acting as a border */
@@ -1115,7 +1140,12 @@ onUnmounted(() => {
 
 .filter-panel-tab:hover {
   background: var(--color-bg-popup-hover);
-  color: var(--color-text);
+}
+
+.filter-panel-tab :deep(svg) {
+  stroke: currentColor;
+  stroke-width: 0.75;
+  stroke-linejoin: round;
 }
 
 .filter-panel-tab:focus-visible {

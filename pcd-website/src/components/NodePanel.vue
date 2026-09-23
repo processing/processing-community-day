@@ -6,6 +6,7 @@ import { Icon } from '@iconify/vue';
 import type { Node } from '../lib/nodes';
 import { formatDateRange, formatTimeRange, calendarLinks, onlinePlatformName, isPastEvent } from '../lib/format';
 import { cartoTileUrl } from '../lib/carto';
+import { safeStorage } from '../lib/safeStorage.mjs';
 import { getOsmUrl } from '../lib/popup';
 import { GITHUB_EDIT_EVENT_URL, GITHUB_CONTENT_ISSUE_URL } from '../config';
 import ShareMenu from './ShareMenu.vue';
@@ -22,6 +23,15 @@ const emit = defineEmits<{
 }>();
 
 const { t, locale } = useI18n();
+const DETAILS_CLOSE_LEARNED_KEY = 'pcd-details-close-learned';
+const detailsCloseLearned = ref(safeStorage.get(DETAILS_CLOSE_LEARNED_KEY) === 'true');
+
+function handleDetailsTabClick() {
+  detailsCloseLearned.value = true;
+  safeStorage.set(DETAILS_CLOSE_LEARNED_KEY, 'true');
+  emit('close');
+}
+
 const dateBadge = computed(() => {
   if (!props.node?.event_date || props.node.date_tbd) return null;
   const date = new Date(`${props.node.event_date}T00:00:00Z`);
@@ -269,8 +279,9 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
       v-if="node !== null"
       ref="tabButtonRef"
       class="panel-tab"
+      :class="{ 'close-direction-hint': !detailsCloseLearned }"
       :aria-label="t('panel.close_details')"
-      @click="emit('close')"
+      @click="handleDetailsTabClick()"
     >
       <Icon icon="bi:chevron-right" width="1em" height="1em" aria-hidden="true" />
     </button>
@@ -562,8 +573,27 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   flex-direction: column;
 }
 
+/* Extend behind the viewport edge without changing the panel's layout. */
+.node-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(100% - 1px);
+  width: 33px;
+  background: var(--color-bg-panel);
+  pointer-events: none;
+}
+
 .node-panel--open {
   transform: translateX(0);
+  transition: var(--transition-panel-open);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .node-panel {
+    transition: none;
+  }
 }
 
 .panel-scroll {
@@ -591,7 +621,7 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   background: var(--color-bg-popup);
   border: none;
   cursor: pointer;
-  color: var(--color-text-muted);
+  color: var(--color-primary);
   padding: 0;
   z-index: 0;
   /* drop-shadow renders along the clipped shape outline, acting as a border */
@@ -637,7 +667,12 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
 
 .panel-tab:hover {
   background: var(--color-bg-popup-hover);
-  color: var(--color-text);
+}
+
+.panel-tab :deep(svg) {
+  stroke: currentColor;
+  stroke-width: 0.75;
+  stroke-linejoin: round;
 }
 
 .panel-tab:focus-visible {
@@ -675,7 +710,6 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
 @media (max-width: 720px) {
   .node-panel {
     width: 100vw;
-    overflow: hidden;
   }
   .panel-tab {
     display: none;

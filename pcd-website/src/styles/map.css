@@ -1,5 +1,28 @@
 @import "./base.css";
 
+/* Pause 350ms after the 350ms panel entrance. The filter tab's mirrored parent
+   turns the positive translation into a leftward closing hint. */
+@media (prefers-reduced-motion: no-preference) {
+  .close-direction-hint svg {
+    animation: close-direction-nudge 1200ms ease-in-out 700ms;
+  }
+}
+
+@keyframes close-direction-nudge {
+  0%, 100% {
+    translate: 0;
+    scale: 1;
+  }
+  15%, 50%, 85% {
+    translate: 0;
+    scale: 1.2;
+  }
+  32.5%, 67.5% {
+    translate: 4px 0;
+    scale: 1.2;
+  }
+}
+
 /* ─── Fixed Viewport Lock (map only) ────────────────────────── */
 html,
 body {
