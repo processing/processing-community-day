@@ -30,6 +30,7 @@ const selectedNode = ref<Node | null>(null);
 const filterPanelOpen = ref(false);
 const filterButtonRef = ref<HTMLButtonElement | null>(null);
 const filterCloseRef = ref<HTMLButtonElement | null>(null);
+const filterBackRef = ref<HTMLButtonElement | null>(null);
 const dateCategories = ['future', 'past', 'other'] as const;
 type DateCategory = typeof dateCategories[number];
 const visibleDates = ref<DateCategory[]>([...dateCategories]);
@@ -101,7 +102,12 @@ function toggleFilterPanel() {
   filterPanelOpen.value = !filterPanelOpen.value;
   if (filterPanelOpen.value) {
     closePanel();
-    nextTick(() => filterCloseRef.value?.focus());
+    nextTick(() => {
+      const closeButton = filterBackRef.value?.getClientRects().length
+        ? filterBackRef.value
+        : filterCloseRef.value;
+      closeButton?.focus();
+    });
   }
 }
 
@@ -780,15 +786,22 @@ onUnmounted(() => {
     <button ref="filterCloseRef" type="button" class="filter-panel-tab" :aria-label="t('filters.close')" @click="closeFilterPanel()">
       <Icon icon="bi:chevron-left" width="1em" height="1em" aria-hidden="true" />
     </button>
+    <div class="filter-panel-mobile-back">
+      <button ref="filterBackRef" type="button" class="filter-back-button" @click="closeFilterPanel()">
+        {{ t('panel.back_to_map') }}
+        <Icon icon="bi:arrow-right" width="1em" height="1em" aria-hidden="true" />
+      </button>
+    </div>
     <div class="filter-panel-scroll">
     <div class="filter-panel-header">
       <h2>{{ t('filters.title') }}</h2>
-      <p>{{ t('filters.showing', { shown: filteredNodes.length, total: props.nodes.length }) }}</p>
+      <p :class="{ 'filter-no-matches': filteredNodes.length === 0 }" role="status">{{ filteredNodes.length === 0 ? t('filters.no_matches') : t('filters.showing', { shown: filteredNodes.length, total: props.nodes.length }) }}</p>
     </div>
 
     <fieldset>
       <legend class="date-filter-heading">
-        <span>{{ t('filters.when') }}</span>
+        <span class="date-filter-desktop-title">{{ t('filters.when') }}</span>
+        <span class="date-filter-mobile-title">{{ t('filters.title') }}</span>
         <span class="date-visibility-actions">
           <button type="button" class="show-all-dates" :disabled="visibleDates.length === dateCategories.length" @click="showAllDates">{{ t('filters.show_all') }}</button>
         </span>
@@ -841,11 +854,12 @@ onUnmounted(() => {
       </div>
     </fieldset>
 
+    </div>
     <div class="filter-panel-footer">
+    <p class="filter-panel-mobile-count" :class="{ 'filter-no-matches': filteredNodes.length === 0 }" role="status">{{ filteredNodes.length === 0 ? t('filters.no_matches') : t('filters.showing_compact', { shown: filteredNodes.length, total: props.nodes.length }) }}</p>
     <button type="button" class="clear-filters" :disabled="activeFilterCount === 0" @click="clearFilters">
       {{ t('filters.clear') }}
     </button>
-    </div>
     </div>
   </aside>
   </Transition>
@@ -980,11 +994,17 @@ onUnmounted(() => {
   bottom: 0;
   left: 0;
   width: min(360px, calc(100vw - 40px));
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-panel);
+  overscroll-behavior: none;
   filter: drop-shadow(4px 0 16px rgba(0, 0, 0, 0.18));
 }
 
 .filter-panel-scroll {
-  height: 100%;
+  flex: 1;
+  min-height: 0;
+  overscroll-behavior-y: contain;
   padding: var(--spacing-lg) var(--spacing-lg) 0;
   display: flex;
   flex-direction: column;
@@ -1236,12 +1256,12 @@ onUnmounted(() => {
 }
 
 .filter-panel-footer {
-  position: sticky;
-  bottom: 0;
+  position: relative;
   z-index: 2;
   flex-shrink: 0;
-  margin: auto calc(-1 * var(--spacing-lg)) 0;
   padding: var(--spacing-md) var(--spacing-lg);
+  padding-bottom: max(var(--spacing-md), env(safe-area-inset-bottom));
+  touch-action: none;
   background: var(--color-bg-panel);
   border-top: 1px solid var(--color-border);
   box-shadow: 0 -8px 20px rgb(18 19 33 / 8%);
@@ -1267,6 +1287,95 @@ onUnmounted(() => {
 .clear-filters:disabled {
   opacity: 0.45;
   cursor: default;
+}
+
+.map-filter-panel .filter-no-matches {
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.filter-panel-mobile-back,
+.filter-panel-mobile-count,
+.date-filter-mobile-title {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .map-filter-panel {
+    width: 100%;
+  }
+
+  .filter-panel-tab,
+  .filter-panel-header,
+  .date-filter-desktop-title {
+    display: none;
+  }
+
+  .date-filter-mobile-title {
+    display: block;
+    font-size: 1.375rem;
+  }
+
+  .filter-panel-mobile-back {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    height: var(--header-height);
+    padding: 0 var(--spacing-lg);
+    position: relative;
+    z-index: 2;
+    background: var(--color-bg-panel);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 4px 12px rgb(18 19 33 / 8%);
+    touch-action: none;
+  }
+
+  .filter-back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    min-height: 44px;
+    padding: 0.5rem 0;
+    border: none;
+    background: transparent;
+    color: var(--color-primary);
+    font: 600 0.875rem/1.3 var(--font-family);
+    cursor: pointer;
+  }
+
+  .filter-back-button:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  .filter-panel-scroll {
+    border-right: none;
+  }
+
+  .filter-panel-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+  }
+
+  .filter-panel-mobile-count {
+    display: block;
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+  }
+
+  .clear-filters {
+    width: auto;
+    min-height: 44px;
+  }
+
+  .map-chrome--filters-open .host-btn-group {
+    z-index: calc(var(--z-controls) - 2);
+  }
 }
 
 @media (max-width: 600px) {

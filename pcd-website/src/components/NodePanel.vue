@@ -278,8 +278,8 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
     <div class="panel-scroll">
     <template v-if="node">
       <div class="panel-mobile-back">
-        <button class="panel-back-btn" @click="emit('close')">
-          <Icon icon="bi:chevron-left" width="1em" height="1em" aria-hidden="true" />
+        <button type="button" class="panel-back-btn" @click="emit('close')">
+          <Icon icon="bi:arrow-left" width="1em" height="1em" aria-hidden="true" />
           {{ t('panel.back_to_map') }}
         </button>
       </div>
@@ -647,29 +647,29 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
 
 .panel-mobile-back {
   display: none;
-  padding: 0.75rem 1rem 0.625rem;
+  padding: var(--spacing-sm) var(--spacing-lg) 0;
   position: sticky;
   top: 0;
   z-index: 10;
   background: var(--color-bg-panel);
-  border-bottom: 1px solid var(--color-border);
 }
 
 .panel-back-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
-  background: none;
+  gap: var(--spacing-sm);
+  min-height: 44px;
+  padding: 0.5rem 0;
   border: none;
-  padding: 0.25rem 0;
+  background: transparent;
+  color: var(--color-primary);
+  font: 600 0.875rem/1.3 var(--font-family);
   cursor: pointer;
-  font-family: var(--font-family);
-  font-size: 0.875rem;
-  color: var(--color-text-muted);
 }
 
-.panel-back-btn:hover {
-  color: var(--color-text);
+.panel-back-btn:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
 @media (max-width: 720px) {
