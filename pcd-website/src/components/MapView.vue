@@ -842,7 +842,7 @@ onUnmounted(() => {
             </g>
             <path v-if="!visibleDates.includes(category)" d="m3 3 18 18" />
           </svg>
-          {{ t(`filters.${category}`) }}
+          {{ t(`filters.${visibleDates.includes(category) ? 'hide_' : ''}${category}`) }}
         </button>
       </div>
     </fieldset>
