@@ -1,0 +1,46 @@
+[Front cover/page 1 background image: A digitally manipulated still from LaJuné McMillan's "A Child's Prayer."]
+
+Radical Futures:Creative Code, Agency, and HumanityDiscussion GuidePCD @ Worldwide 2026
+
+--
+
+[Page 2 background image: A digitally manipulated image featuring elekhlekha performing "Network Gong Ensemble Archive."]
+
+About “Radical Futures”Radical Futures: Creative Code, Agency, and Humanity was an exhibition that took place at Ars Electronica: Negotiating Humanity (September 9–13, 2026), celebrating the 25th anniversary of Processing.Curated by media artist and Processing Mentor Roopa Vasudevan for Processing Foundation, the show featured the work of artists and collectives who use, contribute to, and are deeply inspired by Processing, p5.js, and open source creative technology at large.The show explored the role of creative code in an art and technology world that is increasingly conversant with automated systems. The featured artists — elekhlekha อีเหละเขละขละ, Spencer Chang, and LaJuné McMillan — engage with creative approaches to automation while still making space for dynamic human intervention.Spanning video, live performance and interactive systems, the presented works wrestled with how we might continue to exert technological agency and self-determination in an increasingly automated world, through embodiment, tactility and collective creation. Together, these artists explored the continued power of creating your own tools to find answers to questions that current systems cannot reach.
+
+--
+
+[Page 3 background image: A digitally manipulated image featuring a still from Spencer Chang's "we were browsing."]
+
+How to use this zineThe questions of agency, automation, and the place of creative coding are growing more urgent (and unavoidable) by the day. As artists and technologists who inhabit the space between these realms, we know too well that these topics contain more nuance and granularity than is frequently assumed. But we are not often given the chance to have real, meaningful discussions about these issues in ways that do not boil down to hot takes crafted for immediate consumption on social media. This zine was conceived as a small way to begin to change that.The next four pages of this zine each contain a quote taken from a conversation conducted between the Radical Futures artists and curator on August 3, 2026. The conversation spanned topics like community in open source software, the pros and cons of vibe coding, and the role of projects like Processing and p5.js in an increasingly machine-driven world.The quotes are paired with discussion questions related to both the artists’ perspectives and the major themes of the exhibition. We invite you to use these as starting points in your own exploration of these themes. Feel free to use the prompts as written, or to come up with your own based on your reading or interpretation of the zine’s content.Our hope is that connecting in person — and sharing honest thoughts and ideas about the state of creative coding today — offers a starting point for solidarity and community in our shared work going forward.
+
+--
+
+[Page 4 background image: A digitally manipulated image featuring a installation shot from Spencer Chang's "we were browsing" at Ars Electronica 2026.]
+
+"[Processing and p5.js are] almost like the safety net that lets people do the crazy, weird things, and gives people permission to let their creativity run wild... Not only having the tool or the infrastructure to do that, but giving that, almost, emotional and psychological safety is a really big part of giving people agency."
+- Spencer Chang
+
+Discussion QuestionsWhat have creative coding tools allowed you to do that you might not have otherwise thought was possible? What about the tools and/or community have allowed for this?What does creative coding offer for its practitioners that other art forms or technical practices cannot?Where do you feel safety or support in your work with Processing, p5.js, or other open source creative coding toolkits? Where does that safety make itself evident?
+
+--
+
+[Page 5 background image: A digitally manipulated image featuring a installation shot from elekhlekha's "Network Gong Ensemble Archive" at Ars Electronica 2026.]
+
+"We really value the process a lot, and a lot of times we can find a surprise moment, or happy accidents during improvisation and collaboration... There’s a lot of process and being together, even though we use technology... Using it as a tool, but it’s really human, it’s really meant for being there, being live, and being all together."- Nitcha (Fame) Tothong / elekhlekha อีเหละเขละขละ
+
+Discussion QuestionsWhat are the parts of your process that might not be visible in the final outcome? How important is the process to what you make, or to your practice as an artist/technologist?What does “liveness” mean to you when it comes to software and technology? How do you incorporate liveness in your work?What are the things that only become possible when other people interact with your work? What are the things you can’t predict?--
+
+[Page 6 background image: A digitally manipulated image featuring a installation shot from LaJuné McMillan's "A Child's Prayer" at Ars Electronica 2026.]
+
+"What does it mean to have a practice that is respectful of the lineage of all the people who came together to make something happen? All of the people who, like — it took so much time to just sit there and code... Processing [is] also very generous in that... there were a lot of really generous people who just shared their code, and they’re just like, 'Look under the hood, you can see how I’m making this, how I’m building this.'"- LaJuné McMillan
+
+Discussion QuestionsWhat is the lineage of your work? Whose labor are you building on top of, and who will build on top of yours?Where is the unseen human labor in building and maintaining software or technical systems?How do members of open source creative tech communities acknowledge the generosity that goes into the tools? Where do you see that acknowledgement happening? Where might it need to happen more?--
+
+[Page 7 background image: A digitally manipulated image featuring a installation shot from elekhlekha's "Network Gong Ensemble Archive" at Ars Electronica 2026.]
+
+"Maybe [AI] tools help you go forward quickly, but also sometimes you don’t understand how you get there. It’s kind of like, wait, how do I go even further when the tools already spit out something for you, you know?... I would still go back to the foundation. It still will be something that you can rely on all the time, and it’s something that you can build on all the time."- Kengchakaj / elekhlekha อีเหละเขละขละDiscussion QuestionsWhat does “going back to the foundation” mean for the work that you do? What are the crucial, important parts of your work that form the basis for everything else?When is moving forward quickly most important to your work? When is it more important to thoroughly understand everything that you’re doing?When do you feel the most freedom to push yourself and explore? What enables that for you?--
+
+[Back cover/page 8 background image: A digitally manipulated image featuring a installation shot featuring LaJuné McMillan interacting with Spencer Chang's "we were browsing" at Ars Electronica 2026.]
+
+This zine was created by Roopa Vasudevan for PCD @ Worldwide 2026.Visuals on pages 2 and 4–8 derived from documentation of Radical Futures at Ars Electronica 2026. Original photos courtesy of Ars Electronica and Processing Foundation. Visuals on pages 1 and 3 courtesy of the artists.All content licensed under CC-BY-SA 4.0.Thank you to Raphaël de Courville, Xin Xin, Spencer Chang, Kengchakaj, LaJuné McMillan, and Nitcha Tothong for your care, insight, and time.You can print this zine and make copies to distribute! Make sure to print double sided and imposed. Fold the printed pages in half, and staple along the spineFor more information about the exhibition and the featured works, visit http://tinyurl.com/processing-ars-2026.
