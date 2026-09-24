@@ -472,7 +472,7 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
           <section v-if="node.organizers.some(o => o.name)" aria-labelledby="panel-hosted-heading">
             <h2 id="panel-hosted-heading" class="panel-section-heading">{{ t('panel.hosted_by') }}</h2>
             <p class="panel-hosts">
-              <span v-if="!hostsExpanded" class="panel-hosts-line">
+              <span v-if="!hostsExpanded && hasMoreHosts(node.organizers)" class="panel-hosts-line">
                 <span class="panel-hosts-names panel-inline-md" v-html="formatOrganizers(node.organizers, false)"></span><template v-if="hasMoreHosts(node.organizers)"><span class="panel-hosts-more-wrap">…&nbsp;<button class="panel-hosts-more" :aria-label="t('panel.show_all_hosts')" @click="hostsExpanded = true">{{ t('panel.more') }}</button></span></template>
               </span>
               <span v-else class="panel-inline-md" v-html="formatOrganizers(node.organizers, true)"></span>
@@ -722,8 +722,14 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
 
 .panel-byline {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.25rem;
   margin-bottom: 1.25rem;
+}
+
+.panel-byline > section {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .panel-heading {
@@ -827,6 +833,10 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   align-items: baseline;
   gap: 0.3em;
   overflow: hidden;
+}
+
+.panel-hosts > .panel-inline-md {
+  min-width: 0;
 }
 
 .panel-hosts-line {
@@ -1337,13 +1347,13 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   cursor: pointer;
   font-family: var(--font-family);
   font-size: 0.875rem;
-  color: var(--color-text-muted);
+  color: var(--color-link);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 .panel-read-more:hover {
-  color: var(--color-text);
+  color: var(--color-link-hover);
 }
 
 /* ─── Disclaimer and report actions ─── */

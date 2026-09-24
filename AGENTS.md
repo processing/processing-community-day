@@ -209,7 +209,7 @@ For local map development, `pcd-website/.env` may define `PUBLIC_CARTO_API_KEY`.
 - The shared purple palette in `base.css` is `#5503a4`, `#7a3eb6`, `#9b6ac7`, `#ba95d8`, and `#d8c2e9` (`--color-purple-900` through `--color-purple-100`). Use semantic tokens for primary actions, links, focus, and event states; lighter palette tokens supply accents and tinted surfaces. Time pills retain their requested blue, past events remain grey, and warning colors retain their semantic meaning.
 
 - Event detail hero actions render directly in the panel without the former surrounding box or title bar; the localized hero heading remains plain text. The detail title uses dark grey while the eyebrow remains muted grey.
-- The detail byline sits below the hero actions and above About, as separate localized “Hosted by” then “Organized by” sections with names below each heading. Omit empty sections; retain inline Markdown links and host expansion.
+- The detail byline sits below the hero actions and above About, as separate localized “Hosted by” then “Organized by” sections with names below each heading. Omit empty sections; retain inline Markdown links and host expansion. Its grid uses a zero-minimum column and shrinkable sections so collapsed hosts reserve space for the ellipsis and More button within the panel. Organization names, expanded hosts, and host lists below the expansion threshold wrap, including unbroken names and links.
 
 - Do not use diagonal arrows for internal links; use a right-pointing arrow when a directional indicator is needed.
 
