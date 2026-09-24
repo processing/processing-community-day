@@ -6,9 +6,9 @@ description: Everything you need to organize a Processing Community Day in your 
 hideToc: true
 ---
 
-Thank you for registering to organize Processing Community Day!
+Welcome to PCD 2026!
 
-Processing Community Day (PCD) is a global celebration of art, code, and diversity, with events taking place on dates chosen by local organizers throughout October 2026.
+Processing Community Day (PCD) is a global celebration of art, code, and diversity, with events taking place throughout October 2026.
 
 We understand that it can take enormous physical and emotional effort to organize a community event, therefore we have compiled this Organizer's Kit to help you get things started. Think of it as an inspiration rather than a set of instructions to follow like a rule book. 
 
