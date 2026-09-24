@@ -1,26 +1,49 @@
 {
   "id": "pcd-london-2026",
   "uid": "1a376d4",
-  "organizers": [],
+  "organizers": [
+    {
+      "name": "Considerate Digital"
+    },
+    {
+      "name": "Creative Computing Institute"
+    },
+    {
+      "name": "Goldsmiths, University of London"
+    },
+    {
+      "name": "Peckham Digital"
+    },
+    {
+      "name": "SpokeBoard"
+    },
+    {
+      "name": "UCL Art + Tech"
+    }
+  ],
   "primary_contact": {
     "name": "Kenneth Lim",
     "email": "k.lim@arts.ac.uk"
   },
-  "organization_name": "UAL Creative Computing Institute",
-  "organization_url": "https://www.arts.ac.uk/creative-computing-institute",
+  "organization_name": "Peckham Digital in collaboration with Creative Computing Institute",
+  "organization_url": "https://peckhamdigital.org/",
   "organization_type": "",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ London",
   "event_location": {
-    "address": "42 Bonar Rd, London SE15 5FB, United Kingdom",
+    "address": "The Hub, 42 Bonar Rd, London SE15 5FB, United Kingdom",
     "plus_code": "9C3XFWGJ+C4"
   },
   "event_date": "2026-10-24",
-  "event_start_time": "",
-  "event_end_time": "",
+  "event_start_time": "10:00",
+  "event_end_time": "22:00",
   "event_short_description": "",
-  "event_activities": [],
+  "event_activities": [
+    "Hands-on workshops",
+    "Exhibition",
+    "Panel discussions"
+  ],
   "event_page_url": "",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-london-2026/48132",
   "city": "London",
