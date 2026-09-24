@@ -48,6 +48,42 @@ const calDropdownOpen = ref(false);
 const descExpanded = ref(false);
 const descHasMore = ref(false);
 const hostsExpanded = ref(false);
+const locatingDirections = ref(false);
+let directionsRequest = 0;
+
+function getDirections() {
+  const node = props.node;
+  if (!node || locatingDirections.value) return;
+  const request = ++directionsRequest;
+  locatingDirections.value = true;
+  const openDirections = (coords?: GeolocationCoordinates) => {
+    if (request !== directionsRequest) return;
+    locatingDirections.value = false;
+    const destination = `${node.lat},${node.lng}`;
+    const url = new URL('https://www.openstreetmap.org/directions');
+    if (coords) {
+      url.searchParams.set('route', `${coords.latitude},${coords.longitude};${destination}`);
+    } else {
+      url.searchParams.set('to', destination);
+    }
+    // Same-tab navigation works after asynchronous permission prompts, without pop-up blocking.
+    window.location.assign(url.href);
+  };
+  if (!navigator.geolocation) {
+    openDirections();
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    ({ coords }) => openDirections(coords),
+    () => openDirections(),
+    { enableHighAccuracy: false, timeout: 10000, maximumAge: 0 },
+  );
+}
+
+function cancelDirections() {
+  directionsRequest += 1;
+  locatingDirections.value = false;
+}
 let trap: FocusTrap | null = null;
 let minimap: import('leaflet').Map | null = null;
 
@@ -84,6 +120,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+  cancelDirections();
   trap?.deactivate();
   destroyMinimap();
   document.removeEventListener('click', handleOutsideClick);
@@ -150,6 +187,7 @@ async function initMinimap(node: Node) {
 watch(
   () => props.node,
   async (newNode) => {
+    cancelDirections();
     calDropdownOpen.value = false;
     descExpanded.value = false;
     descHasMore.value = false;
@@ -481,16 +519,17 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
         <div v-if="!node.online_event && !node.location_tbd" class="panel-minimap-wrap">
           <div ref="minimapRef" class="panel-minimap" aria-hidden="true"></div>
           <div class="panel-minimap-shield" aria-hidden="true"></div>
-          <a
-            :href="getOsmUrl(node)"
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            :disabled="locatingDirections"
+            :aria-busy="locatingDirections"
+            @click="getDirections"
             class="panel-minimap-directions"
             :title="t('panel.get_directions_osm')"
           >
             <Icon icon="bi:map" width="1em" height="1em" aria-hidden="true" />
             {{ t('panel.get_directions') }}
-          </a>
+          </button>
         </div>
 
         <!-- Disclaimer -->
@@ -1215,6 +1254,11 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
 
 .panel-minimap-directions:hover {
   color: var(--color-primary);
+}
+
+.panel-minimap-directions:disabled {
+  cursor: wait;
+  opacity: 0.65;
 }
 
 .panel-minimap-directions:focus-visible {
