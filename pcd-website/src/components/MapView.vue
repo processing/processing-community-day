@@ -1303,19 +1303,28 @@ onUnmounted(() => {
   gap: var(--spacing-md);
   flex-shrink: 0;
   min-height: var(--header-height);
-  padding: 0 var(--spacing-lg);
+  padding: var(--spacing-sm) var(--spacing-lg);
   position: relative;
   z-index: 2;
   background: var(--color-bg-panel);
   border-bottom: 1px solid var(--color-border);
-  box-shadow: 0 4px 12px rgb(18 19 33 / 8%);
   touch-action: none;
 }
 
 .filter-panel-header h2 {
   margin: 0;
   margin-right: auto;
-  font-size: 1.375rem;
+  min-width: 0;
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+@media (min-width: 721px) {
+  .filter-panel-header {
+    min-height: 56px;
+    padding-block: 4px;
+    padding-right: var(--spacing-sm);
+  }
 }
 
 .filter-back-button {

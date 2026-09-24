@@ -19,6 +19,14 @@
   background: var(--color-bg-popup-hover);
 }
 
+@media (min-width: 721px) {
+  .panel-header-close {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+}
+
 .panel-header-close svg {
   fill: none;
   stroke: currentColor;

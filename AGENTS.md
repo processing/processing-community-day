@@ -115,6 +115,10 @@ Every event shows a “Processing Community Day” eyebrow above its title in bo
 
 ### Component roles
 
+Desktop double-caret close buttons sit 8px from their panel edge: the filter header uses 8px right padding and the event detail header uses 8px left padding. The opposite padding and mobile spacing remain unchanged.
+
+The map filter header (`.filter-panel-header`) and event detail header (`.panel-back-row`) use a 1px bottom border with no drop shadow. Both use symmetric padding, vertically centered contents, and no flex shrinking; they can grow to fit wrapped text. Above 720px, both have a 56px minimum height and 4px vertical padding, with 36px double-caret buttons and 1rem icons. At 720px and below, the headers retain their 64px minimum height (`--header-height`) and original padding and control sizes. The “Filter events” heading uses a compact 1rem font size and 1.3 line height.
+
 | File | Role |
 |---|---|
 | `src/components/EyelidBlink.vue` | Standalone CSS eyelid animation, reopen/complete events, reduced-motion fade, and lifecycle cleanup |

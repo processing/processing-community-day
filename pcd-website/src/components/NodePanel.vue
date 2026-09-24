@@ -651,11 +651,22 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-md);
-  padding: var(--spacing-sm) var(--spacing-lg) 0;
+  flex-shrink: 0;
+  min-height: var(--header-height);
+  padding: var(--spacing-sm) var(--spacing-lg);
   position: sticky;
   top: 0;
   z-index: 10;
   background: var(--color-bg-panel);
+  border-bottom: 1px solid var(--color-border);
+}
+
+@media (min-width: 721px) {
+  .panel-back-row {
+    min-height: 56px;
+    padding-block: 4px;
+    padding-left: var(--spacing-sm);
+  }
 }
 
 .panel-back-btn {
