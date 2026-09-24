@@ -1,7 +1,39 @@
 @import "./base.css";
 
-/* Pause 350ms after the 350ms panel entrance. The filter tab's mirrored parent
-   turns the positive translation into a leftward closing hint. */
+.panel-header-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-primary);
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.panel-header-close:hover {
+  background: var(--color-bg-popup-hover);
+}
+
+.panel-header-close svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linejoin: round;
+}
+
+.panel-header-close:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+
+/* Pause 350ms after the 350ms panel entrance. The filter button
+   sets --close-nudge-x to a negative value for a leftward closing hint. */
 @media (prefers-reduced-motion: no-preference) {
   .close-direction-hint svg {
     animation: close-direction-nudge 1200ms ease-in-out 700ms;
@@ -18,7 +50,7 @@
     scale: 1.2;
   }
   32.5%, 67.5% {
-    translate: 4px 0;
+    translate: var(--close-nudge-x, 4px) 0;
     scale: 1.2;
   }
 }

@@ -150,6 +150,7 @@
         "description": "Erkunde Processing Community Day 2026-Veranstaltungen weltweit. Finde deine lokale Veranstaltung auf der interaktiven Karte."
     },
     "filters": {
+        "done": "Fertig",
         "hide_past": "Vergangene Veranstaltungen ausblenden",
         "button": "Filter",
         "title": "Events filtern",
@@ -157,7 +158,7 @@
         "showing": "{shown} von {total} angezeigt",
         "showing_compact": "{shown} von {total}",
         "no_matches": "Keine passenden Veranstaltungen",
-        "when": "Zeitraum",
+        "visibility": "Events anzeigen/ausblenden",
         "future": "Zukünftige Veranstaltungen anzeigen",
         "hide_future": "Zukünftige Veranstaltungen ausblenden",
         "past": "Vergangene Veranstaltungen anzeigen",

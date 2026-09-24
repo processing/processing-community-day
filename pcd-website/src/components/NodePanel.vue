@@ -313,24 +313,30 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
     :inert="node === null"
     :class="['node-panel', { 'node-panel--open': node !== null }]"
   >
-    <button
-      v-if="node !== null"
-      ref="tabButtonRef"
-      class="panel-tab"
-      :class="{ 'close-direction-hint': !detailsCloseLearned }"
-      :aria-label="t('panel.close_details')"
-      @click="handleDetailsTabClick()"
-    >
-      <Icon icon="bi:chevron-right" width="1em" height="1em" aria-hidden="true" />
-    </button>
-
     <div class="panel-scroll">
     <template v-if="node">
-      <div class="panel-mobile-back">
+      <div class="panel-back-row">
+        <button
+          type="button"
+          ref="tabButtonRef"
+          class="panel-tab panel-header-close"
+          :class="{ 'close-direction-hint': !detailsCloseLearned }"
+          :aria-label="t('panel.close_details')"
+          @click="handleDetailsTabClick()"
+        >
+          <svg viewBox="0 0 18 16" width="1.125em" height="1em" aria-hidden="true"><path d="m2 2 6 6-6 6m8-12 6 6-6 6" /></svg>
+        </button>
+
         <button type="button" class="panel-back-btn" @click="emit('close')">
           <Icon icon="bi:arrow-left" width="1em" height="1em" aria-hidden="true" />
           {{ t('panel.back_to_map') }}
         </button>
+        <ShareMenu
+          class="panel-share-menu"
+          :markdown="getShareMarkdown(node)"
+          :permalink="getShareUrl(node)"
+          :qr-filename="`${node.id}-qr-code.png`"
+        />
       </div>
       <div class="panel-content">
         <div v-if="node.placeholder" class="panel-placeholder">
@@ -342,12 +348,6 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
             <p class="panel-eyebrow">{{ t('panel.event_eyebrow') }}</p>
             <h2 id="panel-title" class="panel-name">{{ node.event_name }}</h2>
           </div>
-          <ShareMenu
-            class="panel-share-menu"
-            :markdown="getShareMarkdown(node)"
-            :permalink="getShareUrl(node)"
-            :qr-filename="`${node.id}-qr-code.png`"
-          />
         </div>
 
         <!-- Info Card -->
@@ -646,81 +646,11 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   z-index: 1;
 }
 
-.panel-tab {
-  --tab-r: 12px;
-  position: absolute;
-  left: 1px;
-  top: 50%;
-  transform: translate(-100%, -50%);
+.panel-back-row {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 96px;
-  background: var(--color-bg-popup);
-  border: none;
-  cursor: pointer;
-  color: var(--color-primary);
-  padding: 0;
-  z-index: 0;
-  /* drop-shadow renders along the clipped shape outline, acting as a border */
-  filter: drop-shadow(-1px 0 0 var(--color-border))
-          drop-shadow(0 -1px 0 var(--color-border))
-          drop-shadow(0 1px 0 var(--color-border));
-  transition: background-color 0.12s ease, color 0.12s ease, filter 0.12s ease;
-  clip-path: shape(
-    /*
-     * Vertical tab, right edge meets the panel.
-     * Adapted from the horizontal tab example by rotating 90° CW:
-     * concave corners on the right, convex on the left.
-     */
-    from top right,
-    /* 1. Concave top-right */
-    curve to calc(100% - var(--tab-r)) var(--tab-r)
-      with 100% var(--tab-r),
-    /* 2. Top edge ← */
-    hline to var(--tab-r),
-    /* 3. Convex top-left */
-    curve to 0 calc(var(--tab-r) * 2)
-      with 0 var(--tab-r),
-    /* 4. Left edge ↓ */
-    vline to calc(100% - calc(var(--tab-r) * 2)),
-    /* 5. Convex bottom-left */
-    curve to var(--tab-r) calc(100% - var(--tab-r))
-      with 0 calc(100% - var(--tab-r)),
-    /* 6. Bottom edge → */
-    hline to calc(100% - var(--tab-r)),
-    /* 7. Concave bottom-right */
-    curve to 100% 100%
-      with 100% calc(100% - var(--tab-r))
-  );
-
-  @supports not (clip-path: shape(from top left, hline to 0)) {
-    left: 4px;
-    border: 1px solid var(--color-border);
-    border-right: none;
-    border-radius: 12px 0 0 12px;
-    clip-path: none;
-  }
-}
-
-.panel-tab:hover {
-  background: var(--color-bg-popup-hover);
-}
-
-.panel-tab :deep(svg) {
-  stroke: currentColor;
-  stroke-width: 0.75;
-  stroke-linejoin: round;
-}
-
-.panel-tab:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
-}
-
-.panel-mobile-back {
-  display: none;
+  justify-content: space-between;
+  gap: var(--spacing-md);
   padding: var(--spacing-sm) var(--spacing-lg) 0;
   position: sticky;
   top: 0;
@@ -729,7 +659,7 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
 }
 
 .panel-back-btn {
-  display: inline-flex;
+  display: none;
   align-items: center;
   gap: var(--spacing-sm);
   min-height: 44px;
@@ -753,8 +683,8 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
   .panel-tab {
     display: none;
   }
-  .panel-mobile-back {
-    display: block;
+  .panel-back-btn {
+    display: inline-flex;
   }
 }
 

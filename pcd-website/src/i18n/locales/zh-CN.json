@@ -150,6 +150,7 @@
         "description": "探索全球 Processing Community Day 2026 节点，在互动地图上找到您附近的活动。"
     },
     "filters": {
+        "done": "完成",
         "hide_past": "隐藏已结束的活动",
         "button": "筛选",
         "title": "筛选活动",
@@ -157,7 +158,7 @@
         "showing": "已显示 {shown}/{total} 个",
         "showing_compact": "{shown}/{total}",
         "no_matches": "没有符合条件的活动",
-        "when": "时间",
+        "visibility": "显示／隐藏活动",
         "future": "显示未来的活动",
         "hide_future": "隐藏未来的活动",
         "past": "显示过去的活动",

@@ -825,25 +825,20 @@ onUnmounted(() => {
     :inert="!filterPanelOpen"
     :aria-label="t('filters.title')"
   >
-    <button ref="filterCloseRef" type="button" class="filter-panel-tab" :class="{ 'close-direction-hint': filterPanelOpen && !filterCloseLearned }" :aria-label="t('filters.close')" @click="handleFilterTabClick()">
-      <Icon icon="bi:chevron-left" width="1em" height="1em" aria-hidden="true" />
-    </button>
-    <div class="filter-panel-mobile-back">
+    <div class="filter-panel-header">
+      <h2>{{ t('filters.title') }}</h2>
       <button ref="filterBackRef" type="button" class="filter-back-button" @click="closeFilterPanel()">
         {{ t('panel.back_to_map') }}
         <Icon icon="bi:arrow-right" width="1em" height="1em" aria-hidden="true" />
       </button>
+      <button ref="filterCloseRef" type="button" class="filter-panel-tab panel-header-close" :class="{ 'close-direction-hint': filterPanelOpen && !filterCloseLearned }" :aria-label="t('filters.close')" @click="handleFilterTabClick()">
+        <svg viewBox="0 0 18 16" width="1.125em" height="1em" aria-hidden="true"><path d="m8 2-6 6 6 6m8-12-6 6 6 6" /></svg>
+      </button>
     </div>
     <div class="filter-panel-scroll">
-    <div class="filter-panel-header">
-      <h2>{{ t('filters.title') }}</h2>
-      <p :class="{ 'filter-no-matches': filteredNodes.length === 0 }" role="status">{{ filteredNodes.length === 0 ? t('filters.no_matches') : t('filters.showing', { shown: filteredNodes.length, total: props.nodes.length }) }}</p>
-    </div>
-
     <fieldset>
       <legend class="date-filter-heading">
-        <span class="date-filter-desktop-title">{{ t('filters.when') }}</span>
-        <span class="date-filter-mobile-title">{{ t('filters.title') }}</span>
+        <span>{{ t('filters.visibility') }}</span>
         <span class="date-visibility-actions">
           <button type="button" class="show-all-dates" :disabled="visibleDates.length === dateCategories.length" @click="showAllDates">{{ t('filters.show_all') }}</button>
         </span>
@@ -898,10 +893,15 @@ onUnmounted(() => {
 
     </div>
     <div class="filter-panel-footer">
-    <p class="filter-panel-mobile-count" :class="{ 'filter-no-matches': filteredNodes.length === 0 }" role="status">{{ filteredNodes.length === 0 ? t('filters.no_matches') : t('filters.showing_compact', { shown: filteredNodes.length, total: props.nodes.length }) }}</p>
-    <button type="button" class="clear-filters" :disabled="activeFilterCount === 0" @click="clearFilters">
-      {{ t('filters.clear') }}
-    </button>
+    <p class="filter-panel-count" :class="{ 'filter-no-matches': filteredNodes.length === 0 }" role="status">{{ filteredNodes.length === 0 ? t('filters.no_matches') : t('filters.showing_compact', { shown: filteredNodes.length, total: props.nodes.length }) }}</p>
+    <div class="filter-panel-actions">
+      <button type="button" class="clear-filters" :disabled="activeFilterCount === 0" @click="clearFilters">
+        {{ t('filters.clear') }}
+      </button>
+      <button type="button" class="done-filters" @click="closeFilterPanel()">
+        {{ t('filters.done') }}
+      </button>
+    </div>
     </div>
   </aside>
   </Transition>
@@ -1007,7 +1007,8 @@ onUnmounted(() => {
 }
 
 .map-filter-button:focus-visible,
-.clear-filters:focus-visible {
+.clear-filters:focus-visible,
+.done-filters:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
@@ -1059,7 +1060,7 @@ onUnmounted(() => {
   flex: 1;
   min-height: 0;
   overscroll-behavior-y: contain;
-  padding: var(--spacing-lg) var(--spacing-lg) 0;
+  padding: var(--spacing-lg) var(--spacing-lg) 4.5rem;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -1089,105 +1090,9 @@ onUnmounted(() => {
   }
 }
 
-.filter-panel-header {
-  flex-shrink: 0;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--spacing-md);
-  margin-inline: calc(-1 * var(--spacing-lg));
-  padding: 0 var(--spacing-lg) var(--spacing-md);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.filter-panel-header h2 {
-  margin: 0;
-  font-size: 1.375rem;
-}
-
-.filter-panel-header p {
-  margin: 0;
-  text-align: right;
-  color: var(--color-text-muted);
-  font-size: 0.8125rem;
-}
-
 .filter-panel-tab {
-  --tab-r: 12px;
-  position: absolute;
-  right: 1px;
-  top: 50%;
-  transform: translate(100%, -50%) scaleX(-1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 96px;
-  background: var(--color-bg-popup);
-  border: none;
-  cursor: pointer;
-  color: var(--color-primary);
-  padding: 0;
-  z-index: 0;
-  /* drop-shadow renders along the clipped shape outline, acting as a border */
-  filter: drop-shadow(-1px 0 0 var(--color-border))
-          drop-shadow(0 -1px 0 var(--color-border))
-          drop-shadow(0 1px 0 var(--color-border));
-  transition: background-color 0.12s ease, color 0.12s ease, filter 0.12s ease;
-  clip-path: shape(
-    /*
-     * Vertical tab, right edge meets the panel.
-     * Adapted from the horizontal tab example by rotating 90° CW:
-     * concave corners on the right, convex on the left.
-     */
-    from top right,
-    /* 1. Concave top-right */
-    curve to calc(100% - var(--tab-r)) var(--tab-r)
-      with 100% var(--tab-r),
-    /* 2. Top edge ← */
-    hline to var(--tab-r),
-    /* 3. Convex top-left */
-    curve to 0 calc(var(--tab-r) * 2)
-      with 0 var(--tab-r),
-    /* 4. Left edge ↓ */
-    vline to calc(100% - calc(var(--tab-r) * 2)),
-    /* 5. Convex bottom-left */
-    curve to var(--tab-r) calc(100% - var(--tab-r))
-      with 0 calc(100% - var(--tab-r)),
-    /* 6. Bottom edge → */
-    hline to calc(100% - var(--tab-r)),
-    /* 7. Concave bottom-right */
-    curve to 100% 100%
-      with 100% calc(100% - var(--tab-r))
-  );
-
-  @supports not (clip-path: shape(from top left, hline to 0)) {
-    right: 4px;
-    border: 1px solid var(--color-border);
-    border-right: none;
-    border-radius: 12px 0 0 12px;
-    clip-path: none;
-  }
-}
-
-.filter-panel-tab:hover {
-  background: var(--color-bg-popup-hover);
-}
-
-.filter-panel-tab :deep(svg) {
-  stroke: currentColor;
-  stroke-width: 0.75;
-  stroke-linejoin: round;
-}
-
-.filter-panel-tab:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
-}
-
-/* Mirror the tab shape without reversing the left-pointing arrow. */
-.filter-panel-tab :deep(svg) {
-  transform: scaleX(-1);
+  --close-nudge-x: -4px;
+  flex-shrink: 0;
 }
 
 .map-filter-panel fieldset {
@@ -1329,8 +1234,16 @@ onUnmounted(() => {
   box-shadow: 0 -8px 20px rgb(18 19 33 / 8%);
 }
 
-.clear-filters {
-  width: 100%;
+.filter-panel-actions {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.clear-filters,
+.done-filters {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
   padding: 0.625rem 1rem;
   border: 2px solid var(--color-primary);
   border-radius: 6px;
@@ -1340,7 +1253,16 @@ onUnmounted(() => {
   cursor: pointer;
 }
 
+.clear-filters {
+  background: transparent;
+  color: var(--color-primary);
+}
+
 .clear-filters:hover:not(:disabled) {
+  background: var(--color-purple-100);
+}
+
+.done-filters:hover {
   background: var(--color-primary-dark);
   border-color: var(--color-primary-dark);
   color: #fff;
@@ -1357,10 +1279,62 @@ onUnmounted(() => {
   font-size: 1rem;
 }
 
-.filter-panel-mobile-back,
-.filter-panel-mobile-count,
-.date-filter-mobile-title {
+.filter-panel-count {
+  display: block;
+  position: absolute;
+  right: var(--spacing-lg);
+  bottom: calc(100% + var(--spacing-md));
+  max-width: calc(100% - 2 * var(--spacing-lg));
+  margin: 0;
+  padding: 0.5rem 0.875rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-bg-panel);
+  box-shadow: 0 4px 12px rgb(18 19 33 / 12%);
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  pointer-events: none;
+}
+
+.filter-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  flex-shrink: 0;
+  min-height: var(--header-height);
+  padding: 0 var(--spacing-lg);
+  position: relative;
+  z-index: 2;
+  background: var(--color-bg-panel);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 4px 12px rgb(18 19 33 / 8%);
+  touch-action: none;
+}
+
+.filter-panel-header h2 {
+  margin: 0;
+  margin-right: auto;
+  font-size: 1.375rem;
+}
+
+.filter-back-button {
+  flex-shrink: 0;
   display: none;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-height: 44px;
+  padding: 0.5rem 0;
+  border: none;
+  background: transparent;
+  color: var(--color-primary);
+  font: 600 0.875rem/1.3 var(--font-family);
+  cursor: pointer;
+}
+
+.filter-back-button:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
 @media (max-width: 640px) {
@@ -1368,71 +1342,16 @@ onUnmounted(() => {
     width: 100%;
   }
 
-  .filter-panel-tab,
-  .filter-panel-header,
-  .date-filter-desktop-title {
+  .filter-panel-tab {
     display: none;
-  }
-
-  .date-filter-mobile-title {
-    display: block;
-    font-size: 1.375rem;
-  }
-
-  .filter-panel-mobile-back {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    flex-shrink: 0;
-    height: var(--header-height);
-    padding: 0 var(--spacing-lg);
-    position: relative;
-    z-index: 2;
-    background: var(--color-bg-panel);
-    border-bottom: 1px solid var(--color-border);
-    box-shadow: 0 4px 12px rgb(18 19 33 / 8%);
-    touch-action: none;
   }
 
   .filter-back-button {
     display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    min-height: 44px;
-    padding: 0.5rem 0;
-    border: none;
-    background: transparent;
-    color: var(--color-primary);
-    font: 600 0.875rem/1.3 var(--font-family);
-    cursor: pointer;
-  }
-
-  .filter-back-button:focus-visible {
-    outline: 2px solid var(--color-focus);
-    outline-offset: 2px;
   }
 
   .filter-panel-scroll {
     border-right: none;
-  }
-
-  .filter-panel-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--spacing-md);
-  }
-
-  .filter-panel-mobile-count {
-    display: block;
-    margin: 0;
-    color: var(--color-text-muted);
-    font-size: 0.875rem;
-  }
-
-  .clear-filters {
-    width: auto;
-    min-height: 44px;
   }
 
   .map-chrome--filters-open .host-btn-group {
