@@ -1,5 +1,9 @@
 {
     "map": {
+        "find_nearby": "내 주변 PCD 찾기",
+        "locating": "위치 요청 중…",
+        "location_denied": "주변 PCD를 찾으려면 브라우저에서 위치 접근을 허용하세요.",
+        "location_unavailable": "위치를 확인할 수 없습니다. 다시 시도하거나 지도를 둘러보세요.",
         "aria_label": "PCD 2026 이벤트 세계 지도"
     },
     "nav": {

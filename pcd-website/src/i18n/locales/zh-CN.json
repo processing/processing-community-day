@@ -1,5 +1,9 @@
 {
     "map": {
+        "find_nearby": "查找附近的 PCD",
+        "locating": "正在请求你的位置…",
+        "location_denied": "请允许浏览器访问你的位置，以查找附近的 PCD。",
+        "location_unavailable": "无法获取你的位置。请重试或浏览地图。",
         "aria_label": "PCD 2026 活动世界地图"
     },
     "nav": {

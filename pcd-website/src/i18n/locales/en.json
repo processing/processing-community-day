@@ -1,5 +1,9 @@
 {
     "map": {
+        "find_nearby": "Find PCDs near me",
+        "locating": "Requesting your location…",
+        "location_denied": "Allow location access in your browser to find PCDs near you.",
+        "location_unavailable": "Your location is unavailable. Please try again or explore the map.",
         "aria_label": "World map of PCD 2026 nodes"
     },
     "nav": {

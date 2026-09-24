@@ -1,5 +1,9 @@
 {
     "map": {
+        "find_nearby": "近くのPCDを探す",
+        "locating": "位置情報をリクエスト中…",
+        "location_denied": "近くのPCDを探すには、ブラウザーで位置情報へのアクセスを許可してください。",
+        "location_unavailable": "現在地を取得できません。もう一度試すか、地図を探索してください。",
         "aria_label": "PCD 2026 マップ"
     },
     "nav": {

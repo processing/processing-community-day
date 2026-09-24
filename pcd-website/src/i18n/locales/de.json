@@ -1,5 +1,9 @@
 {
     "map": {
+        "find_nearby": "PCDs in meiner Nähe finden",
+        "locating": "Standort wird angefragt…",
+        "location_denied": "Erlaube den Standortzugriff im Browser, um PCDs in deiner Nähe zu finden.",
+        "location_unavailable": "Dein Standort ist nicht verfügbar. Versuche es erneut oder erkunde die Karte.",
         "aria_label": "Weltkarte der PCD-2026-Veranstaltungen"
     },
     "nav": {

@@ -8,10 +8,9 @@ import { isPastEvent } from '../lib/format';
 import NodePanel from './NodePanel.vue';
 import LanguageSwitcher from './LanguageSwitcher.vue';
 import InfoModal from './InfoModal.vue';
-import SubmitModal from './SubmitModal.vue';
+import Snackbar from './Snackbar.vue';
 import EyelidBlink from './EyelidBlink.vue';
 import { currentLocale } from '../i18n/localeState';
-import { trackEvent, SUBMIT_EVENT_BUTTON_CLICK } from '../lib/analytics';
 import { cartoTileUrl } from '../lib/carto';
 import { safeStorage } from '../lib/safeStorage.mjs';
 import { i18n } from '../i18n/index';
@@ -145,11 +144,40 @@ async function hidePastEvents() {
 const INFO_MODAL_SUPPRESS_KEY = 'pcd-info-modal-suppressed';
 const infoModalOpen = ref(false);
 const infoModalAutoOpened = ref(false);
-const submitModalOpen = ref(false);
+const locating = ref(false);
+const locationError = ref('');
+const locationNoticeKey = ref(0);
 
-function handleSubmitClick() {
-  submitModalOpen.value = true;
-  trackEvent(SUBMIT_EVENT_BUTTON_CLICK);
+function findNearbyEvents() {
+  if (locating.value || !mapInstance) return;
+  locationError.value = '';
+  const showError = (key: string) => {
+    locating.value = false;
+    locationError.value = key;
+    locationNoticeKey.value += 1;
+  };
+  if (!navigator.geolocation) {
+    showError('map.location_unavailable');
+    return;
+  }
+  locating.value = true;
+  navigator.geolocation.getCurrentPosition(
+    ({ coords }) => {
+      locating.value = false;
+      if (!mapInstance) return;
+      mapInstance.closePopup();
+      closePanel();
+      closeFilterPanel({ refocus: false });
+      mapInstance.setView([coords.latitude, coords.longitude], 7, {
+        animate: !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+      });
+    },
+    (error) => {
+      if (!mapInstance) return;
+      showError(error.code === 1 ? 'map.location_denied' : 'map.location_unavailable');
+    },
+    { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 },
+  );
 }
 
 function handleInfoClick() {
@@ -284,7 +312,7 @@ function panToKeepInView(lat: number, lng: number): void {
 }
 
 function handleKeydown(e: KeyboardEvent) {
-  if (infoModalOpen.value || submitModalOpen.value) return;
+  if (infoModalOpen.value) return;
 
   const tag = (document.activeElement as HTMLElement)?.tagName?.toLowerCase();
   const isTextInput = tag === 'input' || tag === 'textarea' ||
@@ -752,6 +780,7 @@ onUnmounted(() => {
   teardownPopupActivities?.();
   teardownMarkerPopupListeners = null;
   mapInstance?.remove();
+  mapInstance = null;
 });
 </script>
 
@@ -774,7 +803,10 @@ onUnmounted(() => {
       <LanguageSwitcher />
     </div>
     <div class="host-btn-group">
-      <button id="host-btn" @click="handleSubmitClick()">{{ t('nav.submit_event') }}</button>
+      <button id="find-pcds-btn" type="button" :disabled="locating" :aria-busy="locating" @click="findNearbyEvents">
+        <Icon icon="bi:geo-alt" width="1em" height="1em" aria-hidden="true" />
+        <span aria-live="polite">{{ t(locating ? 'map.locating' : 'map.find_nearby') }}</span>
+      </button>
       <button
         id="info-btn"
         :aria-label="t('nav.info_button_label')"
@@ -783,7 +815,7 @@ onUnmounted(() => {
       >i</button>
     </div>
     <InfoModal :open="infoModalOpen" :bannerImageUrl="props.bannerImageUrl" :autoOpened="infoModalAutoOpened" @close="infoModalOpen = false" @suppress="suppressInfoModal" />
-    <SubmitModal :open="submitModalOpen" @close="submitModalOpen = false" />
+    <Snackbar v-if="locationError" :key="locationNoticeKey" :message="t(locationError)" :close-label="t('nav.submit_modal_close')" @dismiss="locationError = ''" />
   </div>
   <Transition name="filter-panel">
   <aside
