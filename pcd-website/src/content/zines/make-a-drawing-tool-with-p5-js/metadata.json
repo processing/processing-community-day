@@ -1,0 +1,44 @@
+{
+  "id": "make-a-drawing-tool-with-p5-js",
+  "title": "Make a Drawing Tool with p5.js",
+  "topic": "Use simple shapes and colors to make a drawing tool with p5.js.",
+  "created_by": "Amy B. Woodman",
+  "summary": "Make a Drawing Tool is a hand-drawn, beginner-friendly zine that walks you through building your own paintbrush program in p5.js. You'll learn to draw with the mouse, mix colors, add randomness and shapes, and switch between brushes with the keyboard. It goes with an OpenProcessing tutorial: scan the QR code, build your brushes, then use live collaboration to combine brushes with friends into one big shared drawing tool.",
+  "downloads": [
+    {
+      "file": "Drawing_Tool_Zine_Ordered.pdf",
+      "file_size": "2.7 MB",
+      "role": "reader-order"
+    },
+    {
+      "file": "Drawing_Tool_Zine_final.pdf",
+      "file_size": "3.9 MB",
+      "role": "print-ready"
+    }
+  ],
+  "license": "CC BY-SA 4.0",
+  "intake": {
+    "issue_number": 276,
+    "submitted_by_github": "amy-b",
+    "submitted_date": "2026-09-25",
+    "maintainer_notes": ""
+  },
+  "tags": [
+    "beginner",
+    "p5.js",
+    "collaborative",
+    "openprocessing",
+    "art+code"
+  ],
+  "languages": [
+    "English"
+  ],
+  "cover": {
+    "src": "cover.jpg",
+    "alt": "Make a Drawing Tool with p5.js"
+  },
+  "activity_type": "Classroom setting",
+  "zine_format": "Single-sheet, 8-page, folded mini-zine on A4",
+  "duration": "60 minutes",
+  "materials": "computer with browser and wifi, p5.js editor or OpenProcessing tutorial"
+}
