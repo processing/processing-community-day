@@ -4,6 +4,15 @@
   "organizers": [
     {
       "name": "Cathryn Ploehn"
+    },
+    {
+      "name": "Kate Shih"
+    },
+    {
+      "name": "Josh Stewart"
+    },
+    {
+      "name": "Violet Scott"
     }
   ],
   "primary_contact": {
@@ -11,22 +20,22 @@
     "email": "cathryn.ploehn@utexas.edu"
   },
   "organization_name": "The University of Texas at Austin, Department of Design",
-  "organization_url": "",
-  "organization_type": "School, university, library",
+  "organization_url": "https://design.utexas.edu/",
+  "organization_type": "",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Austin",
   "event_location": {
-    "address": "",
+    "address": "2501 Wichita Street  Austin, TX 78712",
     "plus_code": "862477Q6+GW5"
   },
   "event_date": "2026-10-17",
   "event_end_date": "2026-10-17",
-  "event_start_time": "",
-  "event_end_time": "",
-  "event_short_description": "",
+  "event_start_time": "13:00",
+  "event_end_time": "17:00",
+  "event_short_description": "Meet and create with other creative code enthusiasts The University of Texas at Austin's Design Department to celebrate Processing Community Day!",
   "event_activities": [],
-  "event_page_url": "",
+  "event_page_url": "https://www.eventbrite.com/e/austin-processing-community-day-tickets-2000661142333?aff=oddtdtcreator#location",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-austin-2026/48931",
   "city": "Austin",
   "country": "United States",
