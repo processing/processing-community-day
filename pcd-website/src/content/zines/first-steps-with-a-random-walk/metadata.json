@@ -1,0 +1,42 @@
+{
+  "id": "first-steps-with-a-random-walk",
+  "title": "First steps with a random walk",
+  "topic": "random walk algorithm",
+  "created_by": "Aleksandra Jovanić",
+  "summary": "Learn the basics of random walk algorithm in p5.js.",
+  "downloads": [
+    {
+      "file": "random_walk_zine_all_pages.pdf",
+      "file_size": "1 MB",
+      "role": "reader-order"
+    },
+    {
+      "file": "random_walk_zine_A4.pdf",
+      "file_size": "730.2 kB",
+      "role": "print-ready"
+    }
+  ],
+  "license": "CC BY-SA 4.0",
+  "intake": {
+    "issue_number": 283,
+    "submitted_by_github": "aleksandrajovanic",
+    "submitted_date": "2026-09-29",
+    "maintainer_notes": ""
+  },
+  "tags": [
+    "beginner",
+    "p5js",
+    "generative art",
+    "random walk"
+  ],
+  "languages": [
+    "english"
+  ],
+  "created_by_url": "https://aleksandrajovanic.com",
+  "cover": {
+    "src": "cover.jpg",
+    "alt": "First steps with a random walk"
+  },
+  "activity_type": "workshop, self-guided activity",
+  "duration": "45 minutes"
+}
