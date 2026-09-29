@@ -21,7 +21,7 @@
   },
   "organization_name": "Digitale Kultur und Koproduktionslabor - Dortmunder U",
   "organization_url": "https://dortmunder-u.de/digitale-kultur/digitales-koproduktionslabor/",
-  "organization_type": "Museum, gallery, media arts center",
+  "organization_type": "",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Dortmund",
@@ -35,12 +35,12 @@
   "event_end_time": "",
   "event_short_description": "PCD in Dortmund - Talks, Workshops, Meetup",
   "event_activities": [
-    "Show-and-tell",
     "Hands-on workshops",
     "Live coding",
+    "Exhibition",
     "Panel discussions",
-    "Creative coding jams or hack sessions",
-    "Other"
+    "Beginner introductions to Processing or p5.js",
+    "Creative coding jams or hack sessions"
   ],
   "event_page_url": "",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-dortmund-2026/49056",
