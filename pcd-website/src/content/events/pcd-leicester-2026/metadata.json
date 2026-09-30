@@ -12,7 +12,7 @@
   },
   "organization_name": "New Media Art Club",
   "organization_url": "https://www.newmediaart.club/",
-  "organization_type": "Other",
+  "organization_type": "Nonprofit, foundation, association",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Leicester",
@@ -20,17 +20,14 @@
     "address": "31 Rutland Street",
     "plus_code": "9C4WJVMC+RJ7"
   },
-  "event_date": "",
-  "event_start_time": "",
-  "event_end_time": "",
+  "event_date": "2026-10-30",
+  "event_start_time": "14:00",
+  "event_end_time": "17:00",
   "event_short_description": "",
   "event_activities": [
-    "Hands-on workshops",
-    "Live coding",
-    "Beginner introductions to Processing or p5.js",
-    "Creative coding jams or hack sessions"
+    "Other"
   ],
-  "event_page_url": "",
+  "event_page_url": "https://www.eventbrite.co.uk/e/processing-community-day-leicester-tickets-1999679971625",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-leicester-2026/48214",
   "city": "Leicester",
   "country": "England",
