@@ -391,8 +391,6 @@ describe('buildPrBody', () => {
     dataTable: '| Field | Value |\n|---|---|\n| Event name | PCD @ Tokyo |',
     longDescriptionSection: null,
     noteBlocks: [],
-    forumThreadUrl: 'https://discourse.processing.org/t/pcd-tokyo-2026/12345',
-    eventUrl: 'https://day.processing.org/event/pcd-tokyo-2026-abc1234',
   };
 
   test('new event body has correct structure', () => {
@@ -412,8 +410,9 @@ describe('buildPrBody', () => {
     assert.ok(body.includes('"Edit Event" issue form'));
     assert.ok(body.includes('The changes below are correct'));
     assert.ok(body.includes('### Changes'));
-    assert.ok(body.includes('[forum thread](https://discourse.processing.org/t/pcd-tokyo-2026/12345)'), 'should link the forum thread');
-    assert.ok(body.includes('[event page](https://day.processing.org/event/pcd-tokyo-2026-abc1234) will be updated as soon as this PR is merged.'), 'should explain when the event page updates');
+    assert.ok(!body.includes('keep your community posted'), 'forum reminder belongs in the issue reply only');
+    assert.ok(!body.includes('will be updated as soon as'), 'event page notice belongs in the issue reply only');
+    assert.ok(!body.includes('Organizer Kit'), 'Organizer Kit link belongs in the issue reply only');
   });
 
   test('long description section included when provided', () => {

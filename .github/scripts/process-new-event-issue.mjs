@@ -226,7 +226,7 @@ async function main() {
   const longDescriptionSection = formatLongDescription(fullDescription);
   const noteBlocks = buildPlusCodeNoteBlocks(plusCodeNote, rawPlusCode, resolvedPlusCode);
   const prBodyPath = path.join(RUNNER_TEMP, `pr-body-${issueNumber}.md`);
-  await fs.writeFile(prBodyPath, buildPrBody({ mode: 'new', number: issueNumber, eventName, submitterLogin, plusCodeForLink: plusCode, dataTable, longDescriptionSection, noteBlocks, forumThreadUrl }));
+  await fs.writeFile(prBodyPath, buildPrBody({ mode: 'new', number: issueNumber, eventName, submitterLogin, plusCodeForLink: plusCode, dataTable, longDescriptionSection, noteBlocks }));
 
   console.log(`[process-new-event-issue] validation passed — event id: ${eventId}, uid: ${uid}`);
   await setOutput('valid', 'true');

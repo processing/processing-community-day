@@ -250,7 +250,7 @@ export function buildPlusCodeNoteBlocks(plusCodeNote, rawPlusCode, resolvedPlusC
   return [`> [!NOTE]\n> The Plus Code was auto-recovered from the user's input (\`${rawPlusCode}\`) using the city as a reference. Please verify the map pin placement is correct (https://plus.codes/${resolvedPlusCode}).`];
 }
 
-export function buildPrBody({ mode, number, eventName, submitterLogin, plusCodeForLink, dataTable, longDescriptionSection, noteBlocks = [], forumThreadUrl = '', eventUrl = '' }) {
+export function buildPrBody({ mode, number, eventName, submitterLogin, plusCodeForLink, dataTable, longDescriptionSection, noteBlocks = [] }) {
   const submitterMention = submitterLogin ? `@${submitterLogin}` : 'the submitter';
   const isNew = mode === 'new';
   const formType = isNew ? 'New Event' : 'Edit Event';
@@ -278,15 +278,6 @@ export function buildPrBody({ mode, number, eventName, submitterLogin, plusCodeF
   if (longDescriptionSection) {
     lines.push('', '### Long description', '', longDescriptionSection);
   }
-
-  const forumThread = forumThreadUrl ? `[forum thread](${forumThreadUrl})` : 'forum thread';
-  lines.push('', `Please remember to keep your community posted on your ${forumThread}.`);
-
-  if (mode === 'edit' && eventUrl) {
-    lines.push('', `Your [event page](${eventUrl}) will be updated as soon as this PR is merged.`);
-  }
-
-  lines.push('', 'For information about organizing your PCD, visit the [Organizer Kit](https://day.processing.org/organize/).');
 
   return lines.join('\n');
 }
