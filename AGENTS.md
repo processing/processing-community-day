@@ -97,6 +97,8 @@ The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anc
 
 ### Key implementation details
 
+- **PCD logo assets:** Keep the 2026 logo variants in `src/images/PCD_2026_logo/`. The shared header imports its line and mini white SVGs from this folder; do not duplicate them directly in `src/images/`.
+
 - **Info modal banner:** The homepage, canonical event routes, and `InfoModal.vue` fallback all use the base-aware `/og-image.png` URL served from `public/og-image.png`, also used for social previews. Keep this as the single source of OG/banner artwork. Other imported and content images stay in `src/` for Astro asset processing; `public/` holds assets requiring stable, unprocessed URLs.
 
 - **Leaflet CSS** is loaded via `<link>` tags in `MapLayout.astro`, NOT via JS imports — avoids SSR issues since MapView is `client:only="vue"`.
