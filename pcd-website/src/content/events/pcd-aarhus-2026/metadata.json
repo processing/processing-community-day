@@ -1,7 +1,26 @@
 {
   "id": "pcd-aarhus-2026",
   "uid": "22d6c23",
-  "organizers": [],
+  "organizers": [
+    {
+      "name": "Aakanksha Agrawal"
+    },
+    {
+      "name": "Anders Aarvik"
+    },
+    {
+      "name": "Ulf Dalvad Berthelsen"
+    },
+    {
+      "name": "Margrete Lodahl Rolighed"
+    },
+    {
+      "name": "Sofie Meta Schroeder"
+    },
+    {
+      "name": "Anders Visti"
+    }
+  ],
   "primary_contact": {
     "name": "Anders Visti",
     "email": "mail@andersvisti.dk"
@@ -13,19 +32,19 @@
   "event_url": "",
   "event_name": "PCD @ Aarhus",
   "event_location": {
-    "address": "",
+    "address": "ALRUM, Kalkværksvej 32, 8000 Aarhus C, Denmark",
     "plus_code": "9F8G5626+39"
   },
-  "event_date": "",
-  "event_start_time": "",
-  "event_end_time": "",
-  "event_short_description": "",
+  "event_date": "2026-10-24",
+  "event_start_time": "10:00",
+  "event_end_time": "18:00",
+  "event_short_description": "PCD @ Aarhus 2026 invites you to explore with us what digital cultures can be when we think beyond extraction, surveillance and commodification. Big Tech was never built for us anyway. Most major platforms compromise their ethical obligations to their users by default, and it’s time to explore other options.",
   "event_activities": [
     "Show-and-tell",
     "Hands-on workshops",
-    "Creative coding jams or hack sessions"
+    "Beginner introductions to Processing or p5.js"
   ],
-  "event_page_url": "",
+  "event_page_url": "https://pcdaarhus.net",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-aarhus-2026/48852",
   "city": "Aarhus",
   "country": "Denmark",
