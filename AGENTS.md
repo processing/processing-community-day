@@ -37,13 +37,16 @@ node --test .github/scripts/plus-code.test.mjs
 node --test .github/scripts/zines.test.mjs
 node --test .github/scripts/zine-build.test.mjs
 node --test .github/scripts/process-new-zine-issue.test.mjs
+node --test .github/scripts/schema-org.test.mjs
+node --test .github/scripts/schema-org-fixture-build.test.mjs  # runs its own build with a placeholder fixture
 
 # Requires npm run build from pcd-website/ first:
 node --test .github/scripts/data-json.test.mjs
 node --test .github/scripts/og-images.test.mjs
+node --test .github/scripts/schema-org-build.test.mjs
 ```
 
-Need to run the tests end-to-end? `./scripts/run-tests.sh` executes the helper, event and zine intake, plus-code, and zine metadata suites; runs the zine fixture build; builds the Astro site via `npm --prefix pcd-website run build`; and then runs `data-json.test.mjs` in sequence. Run this script from the repo root after installing dependencies so you get the full battery of checks in one shot.
+Need to run the tests end-to-end? `./scripts/run-tests.sh` executes the helper, event and zine intake, plus-code, and zine metadata suites; runs the zine and schema.org placeholder fixture builds; builds the Astro site via `npm --prefix pcd-website run build`; and then runs `data-json.test.mjs`, `schema-org-build.test.mjs`, and `og-images.test.mjs` in sequence. Run this script from the repo root after installing dependencies so you get the full battery of checks in one shot.
 
 No install needed — `open-location-code` is already available at `pcd-website/node_modules/`.
 
@@ -96,6 +99,17 @@ The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anc
 
 **"Confirmed" events in data.json:** An event is included in the `/data.json` feed if it is present in `loadNodes()` and has no `placeholder: true` flag. There are currently no other event states (draft, hidden, etc.). If new states are added in future, the filter in `src/pages/data.json.ts` must be updated explicitly.
 
+### Structured data
+
+`src/lib/schema.mjs` builds Schema.org JSON-LD at build time from `loadNodes()` output; it is pure `.mjs` so `node --test` can import it, and it type-checks `Node` fields through a JSDoc typedef. Canonical, non-placeholder event pages (`/event/<slug>-<uid>/`) emit one `Event` in the head; redirect variants and placeholders emit none. The homepage emits an `@graph` of the Processing Foundation `Organization`, the `WebSite`, and the PCD `EventSeries` (names/URLs from `config.ts`) that each event references through `superEvent: { '@id' }`. `/events/` emits an `ItemList` of non-placeholder canonical event URLs; `SiteLayout.astro` forwards a `head` slot for this.
+
+- Every block must be serialized with `jsonLdScript()`, which escapes `<`, because `set:html` does not escape and descriptions come from GitHub issues.
+- Metadata has no timezone, so times carry no offset. Times are used only for single-day, non-online events with valid 0–23/0–59 values; an end time at or before the start is omitted rather than moved to the next day. Online and multi-day events use dates only. Dateless events omit `startDate`.
+- Location-TBD events keep their city/country `PostalAddress` but never emit `geo`, since the plus code only places the map pin.
+- Organizer and organization names go through `markdownToText()` (`src/lib/markdown-text.mjs`, shared with `nodes.ts`) because they may contain Markdown links; never use `*_html` fields. No `Person.url`, no `offers`, and never `primary_contact`.
+- `eventStatus` is always `EventScheduled` because withdrawn events are deleted. Adding a cancelled or postponed state requires updating `eventJsonLd()`.
+- Google event rich results require `startDate` and exclude online-only events, so dateless events and CC Fest are expected to be ineligible while still valid Schema.org. Location-TBD eligibility is unconfirmed. Event details render client-side, so verify eligibility with Google's Rich Results Test on a deployed URL.
+
 ### Key implementation details
 
 - **Organizer Kit OG images:** `src/pages/og/[...path].png.ts` prerenders 1200×630 PNGs for published Organizer Kit pages and all zines. `src/lib/og-image.mjs` uses Satori for layout and Sharp for rasterization, with local `@fontsource/space-grotesk` WOFF fonts (Latin and Latin extended), `src/images/og-background.png`, and the existing black PCD logo. No runtime adapter or build-time network requests are needed. Images live at `/og/organizer-kit/<entry-id>.png` and `/og/zines/<id>.png`; `ogImagePath()` keeps metadata URLs base-aware. `/organize/` shares the introduction image. The library shows up to the first five available covers (`OG_GALLERY_COVERS`, in `loadZines()` order) as two straight, unrotated columns of 232×330 rounded cards running off the top and bottom of the canvas. The left column sits half a card lower than the right; the first cover is the middle left card, the second and third fill the right column fully in view, and the fourth and fifth peek in above and below the left column (`GALLERY_SLOTS`). Library cards have rounded corners, a hairline ring, and a soft outer shadow but no inner shadow; individual zines show one 448px-wide rounded cover (24px radius, no shadow) inset 32px from the top, right, and bottom edges, cropped to fit, and missing covers use the title layout. `roundedPhoto()` in Sharp resizes each cover and bakes the corner rounding into the pixels so corners stay antialiased. `Zine.cover.sourcePath` is a build-only absolute source path used by the renderer. Cards use a bottom-anchored title block: a purple “Organizer Kit” chip (“Organizer Kit · Zine” for zines, set via the route’s `eyebrow` prop) above the Space Grotesk title (the chip is primary purple `#5503a4` in semibold; the title is dark grey `#292929` in the lighter Regular 400 weight, `TITLE_WEIGHT`, so it reads as distinct from the bold logo; zine cards also show a “by <author>” byline under the title, from `created_by`, passed as the renderer’s `author` option and included in the cache key, and each zine page’s meta description is “By <author>. <summary>”; the footer domain is a muted purple), with the logo top left and `day.processing.org` in the footer. The logo width scales with the final title font size (`LOGO_PER_FONT`, capped at 320px and the title column width) and is reduced as needed to keep 32px clear of the measured title block, so short titles get a large logo and long or wrapped titles a smaller one; the renderer lays out twice (once to fit the title, once with the final logo size). Titles shrink until the chip, title, and byline fit `MAX_BLOCK_HEIGHT`. The route calls `renderOgImageCached()`, which stores finished PNGs in `node_modules/.cache/pcd-og/<template-hash>/<content-hash>.png` (override with `PCD_OG_CACHE_DIR`). The content hash covers title, eyebrow, gallery flag, and cover file bytes; the template hash covers `og-image.mjs`, the background and logo artwork, font files, and the locked satori/sharp versions, so editing the design invalidates everything and stale template directories are pruned. Cache read/write failures fall back to rendering. On Netlify the cache only helps if the build cache restores `node_modules/.cache`; an empty cache just renders everything. Keep homepage/event OG artwork and info-modal banners on `/og-image.png`.
@@ -140,7 +154,7 @@ The map filter header (`.filter-panel-header`) and event detail header (`.panel-
 | `src/components/Footer.astro` | Shared site footer, policy links, community links, and sponsors |
 | `src/layouts/BaseLayout.astro` | Shared HTML document shell and metadata |
 | `src/layouts/MapLayout.astro` | Map-page shell and Leaflet stylesheet links |
-| `src/layouts/SiteLayout.astro` | Standard static content-page shell |
+| `src/layouts/SiteLayout.astro` | Standard static content-page shell; forwards a `head` slot to `BaseLayout` |
 | `src/layouts/DocsLayout.astro` | Organizer Kit shell with sidebar, page TOC, and footer |
 | `src/lib/analytics.ts` | `trackEvent()` Fathom helper + `AnalyticsEvent` type + event-name constants |
 | `src/lib/carto.ts` | Adds the optional local-development CARTO API key to basemap tile URLs |
@@ -148,6 +162,8 @@ The map filter header (`.filter-panel-header`) and event detail header (`.panel-
 | `src/lib/nodes.ts` | `Node` interface + `loadNodes()` |
 | `src/lib/format.ts` | `formatDate()`, `formatDateRange()`, `calendarLinks()`, etc. |
 | `src/lib/popup.ts` | Leaflet popup HTML generation (`makePopupContent()`) |
+| `src/lib/schema.mjs` | Build-time Schema.org JSON-LD for event pages, the homepage graph, and the `/events/` ItemList, plus the `jsonLdScript()` escaper |
+| `src/lib/markdown-text.mjs` | `markdownToText()` plain-text conversion shared by `nodes.ts` and `schema.mjs` |
 | `src/styles/base.css` | Shared design tokens, reset, typography, focus, and skip-link styles |
 | `src/styles/map.css` | Map layout, controls, popup styling, and Leaflet overrides |
 | `src/styles/prose.css` | Standard static content-page presentation styles |

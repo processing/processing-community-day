@@ -3,6 +3,7 @@ import { loadNodes, canonicalEventId } from '../../lib/nodes';
 import type { Node } from '../../lib/nodes';
 import MapView from '../../components/MapView.vue';
 import MapLayout from '../../layouts/MapLayout.astro';
+import { eventJsonLd, jsonLdScript, seriesId } from '../../lib/schema.mjs';
 
 export async function getStaticPaths() {
   const nodes = await loadNodes();
@@ -34,6 +35,10 @@ const bannerImageUrl = `${base}/og-image.png`;
 const title = `${node.event_name} — Processing Community Day 2026`;
 const locationLabel = node.city || 'your city';
 const description = node.event_short_description || node.details_text.slice(0, 200).trimEnd() || `Join the global celebration at Processing Community Day 2026 in ${locationLabel}. Find your local event on the map, or start a PCD in your community.`;
+// Structured data only on canonical, non-placeholder pages; redirect variants are noindex.
+const eventSchema = !redirectUrl && !node.placeholder
+  ? eventJsonLd(node, { url: canonicalUrl, description, imageUrl: ogImageUrl, seriesId: seriesId(`${siteUrl}${base}`) })
+  : null;
 ---
 
 <MapLayout
@@ -46,6 +51,7 @@ const description = node.event_short_description || node.details_text.slice(0, 2
 >
   <Fragment slot="head">
     {redirectUrl && <meta http-equiv="refresh" content={`0;url=${redirectUrl}`} />}
+    {eventSchema && <script type="application/ld+json" set:html={jsonLdScript(eventSchema)} />}
   </Fragment>
   {redirectUrl ? (
     <>
