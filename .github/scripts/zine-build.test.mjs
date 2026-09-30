@@ -30,12 +30,14 @@ test('a populated zine collection emits linked assets and renders entries in fro
   let created = true;
   try {
     cpSync(FIXTURE, DEST, { recursive: true });
-    copyFileSync(join(WEBSITE, 'src/images/og-image.png'), join(DEST, 'cover.png'));
+    copyFileSync(join(WEBSITE, 'public/og-image.png'), join(DEST, 'cover.png'));
     execFileSync('npm', ['run', 'build'], { cwd: WEBSITE, stdio: 'pipe' });
 
     const pagePath = join(DIST, 'activity-guide', SLUG, 'index.html');
     assert.ok(existsSync(pagePath), 'the zine page should be generated');
     const page = readFileSync(pagePath, 'utf8');
+    assert.ok(page.includes(`https://day.processing.org/og/zines/${SLUG}.png`), 'new zines should receive their own OG image');
+    assert.ok(existsSync(join(DIST, 'og/zines', `${SLUG}.png`)), 'the fixture OG image should be emitted');
     assert.match(page, /Loops with Shapes/);
     assert.doesNotMatch(page, /View the original submission/);
     const coverIndex = page.indexOf('class="activity-guide__cover"');

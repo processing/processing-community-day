@@ -1,5 +1,12 @@
 # Tests
 
+## Organizer Kit and zine OG images
+
+**File:** `.github/scripts/og-images.test.mjs`
+**Run:** `npm --prefix pcd-website run build && node --test .github/scripts/og-images.test.mjs`
+
+Checks every published Organizer Kit and zine page for matching absolute Open Graph/Twitter image URLs, decodes all referenced 1200×630 PNGs, checks that no unreferenced images are emitted, and verifies the Organizer Kit redirect image and deployment-base paths. Cache checks confirm identical input reuses the stored PNG (via a sentinel entry), that title, eyebrow, gallery flag, and cover bytes each produce a new entry, and that an unwritable cache directory never fails rendering. Renderer checks cover offline operation, long accented titles, absent covers, and galleries with fewer than five covers. The zine fixture build also verifies that newly added zines receive an emitted OG image. Included in `scripts/run-tests.sh`. Visually review a plain page, the library columns, and single-cover zines when changing the template.
+
 ## Map date visibility and eyelid blink
 
 Browser checks against a fresh production build cover desktop and mobile layouts, independent Future/Past/Other visibility, Show all, Hide all, and clearing filters. Hiding the last category starts the full-viewport CSS eyelids: all categories remain hidden through the closed pause, then only the last hidden category returns as the eyes reopen. Hide all restores the last currently visible category in display order. Check each category as the last hidden one, repeat the animation, verify keyboard focus stays on the trigger, and confirm Escape restores visibility immediately. Format/activity choices must survive the blink. Reduced motion uses an opacity fade without moving eyelids. Leaving the tab finishes the blink, and unmounting clears timers and keyboard/visibility listeners.

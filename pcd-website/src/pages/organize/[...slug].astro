@@ -6,6 +6,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 import { flattenKitNav, getKitNav } from '../../config/organizer-kit-nav';
 import { ZINE_SUBMIT_URL } from '../../config';
 import ZineGrid from '../../components/ZineGrid.astro';
+import { ogImagePath } from '../../lib/og-image.mjs';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const entries = await getCollection('organizerKit', (entry) => !entry.data.draft);
@@ -36,6 +37,7 @@ const markdown = `# ${entry.data.title}\n\n${entry.body?.trim() ?? ''}\n${markdo
 
 <DocsLayout
   title={entry.data.title}
+  ogImage={new URL(ogImagePath('organizer-kit', entry.id, import.meta.env.BASE_URL), Astro.site ?? Astro.url.origin).href}
   description={entry.data.description ?? `${entry.data.title} — the Processing Community Day Organizer's Kit.`}
   eyebrow={entry.data.section ?? "Organizer's Kit"}
   headings={headings}

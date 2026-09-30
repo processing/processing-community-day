@@ -13,6 +13,7 @@ import '../styles/docs.css';
 interface Props {
   title: string;
   description: string;
+  ogImage?: string;
   /** Rendered above the h1 as the section label. */
   eyebrow?: string;
   /** Page heading. Falls back to `title` when omitted. */
@@ -26,7 +27,7 @@ interface Props {
   editHref?: string;
 }
 
-const { title, description, eyebrow, heading, headings = [], hideToc = false, markdown, editHref } = Astro.props;
+const { title, description, ogImage, eyebrow, heading, headings = [], hideToc = false, markdown, editHref } = Astro.props;
 
 const hasToc = !hideToc && headings.filter((heading) => heading.depth === 2).length > 1;
 const nav = await getKitNav();
@@ -36,6 +37,7 @@ const permalink = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).hr
 <BaseLayout
   title={`${title} — Processing Community Day`}
   description={description}
+  ogImage={ogImage}
   bodyClass="site-body docs-body"
 >
   <a href="#main" class="skip-link">Skip to main content</a>

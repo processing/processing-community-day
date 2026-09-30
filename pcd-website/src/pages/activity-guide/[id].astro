@@ -8,6 +8,7 @@ import ZineDownloads from '../../components/ZineDownloads.astro';
 import { formatDate } from '../../lib/format';
 import { LICENSE_URLS } from '../../lib/zine-metadata.js';
 import { loadZines, type Zine } from '../../lib/zines';
+import { ogImagePath } from '../../lib/og-image.mjs';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const zines = await loadZines();
@@ -26,7 +27,11 @@ const creator = zine.created_by_url
 const markdown = `# ${zine.title}\n\nby ${creator}\n\n${zine.entry.body?.trim() ?? ''}`;
 ---
 
-<SiteLayout title={`${zine.title} — Processing Community Day`} description={zine.summary}>
+<SiteLayout
+  title={`${zine.title} — Processing Community Day`}
+  description={zine.summary}
+  ogImage={new URL(ogImagePath('zines', zine.id, import.meta.env.BASE_URL), Astro.site ?? Astro.url.origin).href}
+>
   <article class="prose activity-guide">
     <div class="activity-guide__actions">
       <BackButton href="/organize/zines/zine-library/" label="Back to Zine Library" />

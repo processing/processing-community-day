@@ -2,14 +2,12 @@
 import { loadNodes } from '../lib/nodes';
 import MapView from '../components/MapView.vue';
 import MapLayout from '../layouts/MapLayout.astro';
-import { getImage } from 'astro:assets';
-import ogImageSrc from '../images/PCD2026_og-image_tinyfied.png';
 
 const nodes = await loadNodes();
 
 const siteUrl = Astro.site ? Astro.site.href.replace(/\/$/, '') : '';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const bannerImage = await getImage({ src: ogImageSrc, format: 'webp', quality: 80, width: 960 });
+const bannerImageUrl = `${base}/og-image.png`;
 const ogImageUrl = `${siteUrl}${base}/og-image.png`;
 ---
 
@@ -21,5 +19,5 @@ const ogImageUrl = `${siteUrl}${base}/og-image.png`;
   ogImage={ogImageUrl}
 >
   <a href="#main" class="skip-link" id="skip-link">Skip to map</a>
-  <MapView nodes={nodes} bannerImageUrl={bannerImage.src} client:only="vue" />
+  <MapView nodes={nodes} bannerImageUrl={bannerImageUrl} client:only="vue" />
 </MapLayout>
