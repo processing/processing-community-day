@@ -30,6 +30,10 @@ test('every published Organizer Kit and zine page links to an emitted PNG in bot
       const twitter = html.match(/<meta name="twitter:image" content="([^"]+)"/);
       assert.ok(og, `${section}/${page} needs an OG image`);
       assert.equal(twitter?.[1], og[1]);
+      if (section === 'activity-guide') {
+        const description = html.match(/<meta property="og:description" content="([^"]+)"/);
+        assert.match(description?.[1] ?? '', /^By [^.]+\. /, `${section}/${page} description should lead with its author`);
+      }
       const url = new URL(og[1]);
       assert.equal(url.origin, 'https://day.processing.org');
       assert.ok(url.pathname.startsWith('/og/'));
@@ -58,7 +62,7 @@ test('rendering works offline with no cover, fewer than five gallery covers, and
     const cover = resolve('src/content/zines/make-your-first-generative-artwork/cover.jpg');
     const renders = [];
     for (const covers of [[], [cover], [cover, cover]]) {
-      const png = await renderOgImage({ title: 'Créer ensemble — an introduction to creative coding and organizing your first community event', covers, gallery: true });
+      const png = await renderOgImage({ author: 'María José Ñandú-Ünal', title: 'Créer ensemble — an introduction to creative coding and organizing your first community event', covers, gallery: true });
       await assertPng(png);
       renders.push(png);
     }

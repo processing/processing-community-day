@@ -29,7 +29,7 @@ const markdown = `# ${zine.title}\n\nby ${creator}\n\n${zine.entry.body?.trim() 
 
 <SiteLayout
   title={`${zine.title} — Processing Community Day`}
-  description={zine.summary}
+  description={`By ${zine.created_by}. ${zine.summary}`}
   ogImage={new URL(ogImagePath('zines', zine.id, import.meta.env.BASE_URL), Astro.site ?? Astro.url.origin).href}
 >
   <article class="prose activity-guide">
