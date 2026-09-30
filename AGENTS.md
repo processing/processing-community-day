@@ -97,7 +97,7 @@ The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anc
 
 ### Key implementation details
 
-- **Info modal banner:** Both the homepage and canonical event routes pass a 960px WebP generated from `PCD2026_og-image_tinyfied.png` to `MapView`. The `InfoModal.vue` fallback uses that same current artwork; do not restore the older `community_background_2x.png` fallback.
+- **Info modal banner:** The homepage, canonical event routes, and `InfoModal.vue` fallback all use the base-aware `/og-image.png` URL served from `public/og-image.png`, also used for social previews. Keep this as the single source of OG/banner artwork. Other imported and content images stay in `src/` for Astro asset processing; `public/` holds assets requiring stable, unprocessed URLs.
 
 - **Leaflet CSS** is loaded via `<link>` tags in `MapLayout.astro`, NOT via JS imports — avoids SSR issues since MapView is `client:only="vue"`.
 - **Mobile Organizer Kit navigation** lives in the shared header below 641px: “Organize” becomes a native “Organizer Kit” disclosure populated by `getKitNav()`, with nested section disclosures and 48px touch targets. The separate docs navigation is hidden at that breakpoint; tablet and desktop navigation remain in the docs shell. Keep both navigation trees sourced from `getKitNav()`.

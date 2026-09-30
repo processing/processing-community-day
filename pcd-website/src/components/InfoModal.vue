@@ -3,7 +3,7 @@ import { ref, watch, nextTick, onUnmounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Icon } from '@iconify/vue';
 import { createFocusTrap, type FocusTrap } from 'focus-trap';
-import fallbackBannerImage from '../images/PCD2026_og-image_tinyfied.png?url';
+const fallbackBannerImage = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/og-image.png`;
 
 const props = defineProps<{ open: boolean; bannerImageUrl?: string; autoOpened?: boolean }>();
 const bannerImage = computed(() => props.bannerImageUrl ?? fallbackBannerImage);

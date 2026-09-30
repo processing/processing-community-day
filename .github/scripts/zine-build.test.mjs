@@ -30,7 +30,7 @@ test('a populated zine collection emits linked assets and renders entries in fro
   let created = true;
   try {
     cpSync(FIXTURE, DEST, { recursive: true });
-    copyFileSync(join(WEBSITE, 'src/images/og-image.png'), join(DEST, 'cover.png'));
+    copyFileSync(join(WEBSITE, 'public/og-image.png'), join(DEST, 'cover.png'));
     execFileSync('npm', ['run', 'build'], { cwd: WEBSITE, stdio: 'pipe' });
 
     const pagePath = join(DIST, 'activity-guide', SLUG, 'index.html');
