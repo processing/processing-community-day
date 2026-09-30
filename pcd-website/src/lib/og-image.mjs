@@ -13,7 +13,7 @@ const LOGO_ASPECT = 1198 / 2072; // PCD_2026_Logo_Black.svg viewBox
 const LOGO_TOP = 52;
 const LOGO_GAP = 32; // minimum space between the logo and the title block
 const LOGO_PER_FONT = 6.5; // logo width as a multiple of the title font size
-const MAX_LOGO_WIDTH = 400;
+const MAX_LOGO_WIDTH = 320;
 const TITLE_BOTTOM = 88;
 const INK = '#292929';
 const MUTED = '#6c567d';
@@ -22,9 +22,13 @@ const ASSET_PATHS = {
   background: 'src/images/og-background.png',
   logo: 'src/images/PCD_2026_logo/PCD_2026_Logo_Black.svg',
 };
-const fontPaths = () => ['latin', 'latin-ext'].map((subset) => require.resolve(
-  `@fontsource/space-grotesk/files/space-grotesk-${subset}-600-normal.woff`,
-));
+// The chip and footer use the semibold weight; the page title is lighter so it
+// reads as distinct from the bold logo wordmark.
+const TITLE_WEIGHT = 400;
+const FONTS = [600, TITLE_WEIGHT].flatMap((weight) => ['latin', 'latin-ext'].map((subset) => ({
+  weight,
+  path: require.resolve(`@fontsource/space-grotesk/files/space-grotesk-${subset}-${weight}-normal.woff`),
+})));
 
 export function ogImagePath(section, id, base = '/') {
   return `${base.replace(/\/$/, '')}/og/${section}/${id}.png`;
@@ -38,11 +42,11 @@ function loadSharedAssets() {
   return sharedAssets ??= Promise.all([
     sharp(resolve(ASSET_PATHS.background)).resize(OG_WIDTH, OG_HEIGHT).png().toBuffer(),
     sharp(resolve(ASSET_PATHS.logo)).resize({ width: 1000 }).png().toBuffer(),
-    ...fontPaths().map((path) => readFile(path)),
+    ...FONTS.map(({ path }) => readFile(path)),
   ]).then(([background, logo, ...fonts]) => ({
     background: pngUri(background),
     logo: pngUri(logo),
-    fonts: fonts.map((data) => ({ name: 'Space Grotesk', data, weight: 600, style: 'normal' })),
+    fonts: fonts.map((data, index) => ({ name: 'Space Grotesk', data, weight: FONTS[index].weight, style: 'normal' })),
   }));
 }
 
@@ -64,8 +68,10 @@ const GALLERY_SLOTS = [
   { x: GALLERY_LEFT, y: 177 - GALLERY_STEP },
   { x: GALLERY_LEFT, y: 177 + GALLERY_STEP },
 ];
-// A single zine's cover fills the right edge flush, cropped to the canvas height.
-const SINGLE = { width: 480, height: OG_HEIGHT, radius: 0 };
+// A single zine's cover is a rounded rectangle inset from the right, top, and
+// bottom edges, cropped to fit.
+const SINGLE_INSET = 32;
+const SINGLE = { width: 448, height: OG_HEIGHT - SINGLE_INSET * 2, radius: 24 };
 
 /** A cover resized to the card, with antialiased rounded corners baked in. */
 async function roundedPhoto(input, { width, height, radius, fit = 'cover' }) {
@@ -108,7 +114,7 @@ export async function renderOgImage({ title, covers = [], gallery = false, eyebr
           fontSize: 18, letterSpacing: '0.1em', textTransform: 'uppercase',
         }, eyebrow),
         element('div', {
-          width: titleWidth, marginLeft: -4, fontSize, lineHeight: 1.08, letterSpacing: '-0.04em',
+          width: titleWidth, marginLeft: -4, fontSize, lineHeight: 1.08, letterSpacing: '-0.04em', fontWeight: TITLE_WEIGHT,
         }, title, { id: 'page-title' }),
       ], { id: 'title-block' }),
       element('div', {
@@ -117,7 +123,7 @@ export async function renderOgImage({ title, covers = [], gallery = false, eyebr
       ...photos.map((photo, index) => {
         if (!gallery) {
           return img(photo.src, photo.width, photo.height, {
-            position: 'absolute', right: 0, top: 0,
+            position: 'absolute', right: SINGLE_INSET, top: SINGLE_INSET,
           });
         }
         const { x, y } = GALLERY_SLOTS[index];
@@ -173,7 +179,7 @@ let templateHashPromise;
 function templateHash() {
   return templateHashPromise ??= (async () => {
     // The source path, not import.meta.url: bundled builds run from a generated chunk.
-    const files = [resolve('src/lib/og-image.mjs'), ...Object.values(ASSET_PATHS).map((path) => resolve(path)), ...fontPaths()];
+    const files = [resolve('src/lib/og-image.mjs'), ...Object.values(ASSET_PATHS).map((path) => resolve(path)), ...FONTS.map(({ path }) => path)];
     const contents = await Promise.all(files.map((path) => readFile(path)));
     let versions = '';
     try {
