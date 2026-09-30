@@ -23,12 +23,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
     })),
     ...zines.map((zine) => ({
       params: { path: `zines/${zine.id}` },
-      props: { title: zine.title, eyebrow: 'Organizer Kit · Zine', covers: zine.cover ? [zine.cover.sourcePath] : [] },
+      props: { title: zine.title, eyebrow: 'Organizer Kit · Zine', author: zine.created_by, covers: zine.cover ? [zine.cover.sourcePath] : [] },
     })),
   ];
 };
 
 export const GET: APIRoute = async ({ props }) => {
-  const png = await renderOgImageCached(props as { title: string; eyebrow: string; covers: string[]; gallery?: boolean });
+  const png = await renderOgImageCached(props as { title: string; eyebrow: string; author?: string; covers: string[]; gallery?: boolean });
   return new Response(new Uint8Array(png), { headers: { 'Content-Type': 'image/png' } });
 };

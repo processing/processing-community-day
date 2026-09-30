@@ -15,6 +15,7 @@ const LOGO_GAP = 32; // minimum space between the logo and the title block
 const LOGO_PER_FONT = 6.5; // logo width as a multiple of the title font size
 const MAX_LOGO_WIDTH = 320;
 const TITLE_BOTTOM = 88;
+const MAX_BLOCK_HEIGHT = 310; // chip, title, and byline; longer titles shrink to fit
 const INK = '#292929';
 const MUTED = '#6c567d';
 const PURPLE = '#5503a4';
@@ -84,14 +85,13 @@ async function roundedPhoto(input, { width, height, radius, fit = 'cover' }) {
 }
 
 /** Render a static share card. Covers are source file paths in library order. */
-export async function renderOgImage({ title, covers = [], gallery = false, eyebrow = 'Organizer Kit' }) {
+export async function renderOgImage({ title, covers = [], gallery = false, eyebrow = 'Organizer Kit', author }) {
   const assets = await loadSharedAssets();
   const photos = await Promise.all(covers.slice(0, gallery ? OG_GALLERY_COVERS : 1).map((path) => (gallery
     ? roundedPhoto(path, GALLERY)
     : roundedPhoto(path, SINGLE))));
   const hasPhotos = photos.length > 0;
   const titleWidth = hasPhotos ? 545 : 1060;
-  const titleHeight = 250;
 
   const layout = async (fontSize, logoWidth) => {
     const measured = { title: 0, block: 0 };
@@ -116,6 +116,9 @@ export async function renderOgImage({ title, covers = [], gallery = false, eyebr
         element('div', {
           width: titleWidth, marginLeft: -4, fontSize, lineHeight: 1.08, letterSpacing: '-0.04em', fontWeight: TITLE_WEIGHT,
         }, title, { id: 'page-title' }),
+        ...(author ? [element('div', {
+          width: titleWidth, marginTop: 14, fontSize: 26, fontWeight: TITLE_WEIGHT, color: MUTED,
+        }, `by ${author}`)] : []),
       ], { id: 'title-block' }),
       element('div', {
         position: 'absolute', left: 64, bottom: 36, fontSize: 20, color: MUTED,
@@ -148,7 +151,7 @@ export async function renderOgImage({ title, covers = [], gallery = false, eyebr
   // of the logo. This also handles new content without manual line breaks.
   let fontSize = hasPhotos ? 68 : 92;
   let result = await layout(fontSize, 0);
-  while (result.title > titleHeight && fontSize > 28) {
+  while (result.block > MAX_BLOCK_HEIGHT && fontSize > 28) {
     fontSize -= 2;
     result = await layout(fontSize, 0);
   }
@@ -212,10 +215,10 @@ async function pruneStaleTemplates(cacheDir, current) {
 
 /** Like `renderOgImage`, but reuses a cached PNG when nothing it depends on changed. */
 export async function renderOgImageCached(options, { cacheDir = defaultOgCacheDir() } = {}) {
-  const { title, covers = [], gallery = false, eyebrow = 'Organizer Kit' } = options;
+  const { title, covers = [], gallery = false, eyebrow = 'Organizer Kit', author } = options;
   const template = await templateHash();
   const used = covers.slice(0, gallery ? OG_GALLERY_COVERS : 1);
-  const key = sha256(JSON.stringify({ title, gallery, eyebrow, covers: await Promise.all(used.map(coverHash)) }));
+  const key = sha256(JSON.stringify({ title, gallery, eyebrow, author, covers: await Promise.all(used.map(coverHash)) }));
   const dir = join(cacheDir, template);
   const file = join(dir, `${key}.png`);
 
