@@ -30,3 +30,6 @@ npm --prefix "${root_dir}/pcd-website" run build
 
 printf '\n=== .github/scripts/data-json.test.mjs ===\n'
 node --test ".github/scripts/data-json.test.mjs"
+
+printf '\n=== .github/scripts/og-images.test.mjs ===\n'
+node --test ".github/scripts/og-images.test.mjs"

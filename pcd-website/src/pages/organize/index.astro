@@ -1,6 +1,7 @@
 ---
 import { getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { ogImagePath } from '../../lib/og-image.mjs';
 
 // `/organize/` is the short, shareable entry point to the Organizer Kit that we
 // hand out in announcements. Astro's `output: 'static'` build cannot emit a real
@@ -23,7 +24,7 @@ const description = intro?.data.description ?? '';
 <BaseLayout
   title={title}
   description={description}
-  ogImage={`${siteUrl}${base}/og-image.png`}
+  ogImage={new URL(ogImagePath('organizer-kit', 'getting-started/introduction', import.meta.env.BASE_URL), Astro.site ?? Astro.url.origin).href}
   canonical={`${siteUrl}${redirectUrl}`}
 >
   <Fragment slot="head">

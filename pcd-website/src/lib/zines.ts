@@ -1,6 +1,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import type { ImageMetadata } from 'astro';
 import { getImage } from 'astro:assets';
+import { resolve } from 'node:path';
 import {
   assertIdentity, assertUniqueIds, parseZineMetadata,
   resolveZineAssets, type ZineLicense,
@@ -24,7 +25,7 @@ export interface Zine {
   duration?: string;
   materials?: string;
   summary: string;
-  cover?: { src: ImageMetadata; alt: string };
+  cover?: { src: ImageMetadata; alt: string; sourcePath: string };
   downloads: { url: string; filename: string; fileSize: string; role?: 'reader-order' | 'print-ready' }[];
   license?: ZineLicense;
   intake: {
@@ -120,7 +121,7 @@ export async function loadZines(): Promise<Zine[]> {
       ...metadata,
       order: entry.data.order,
       cover: metadata.cover && coverImage
-        ? { src: coverImage, alt: metadata.cover.alt }
+        ? { src: coverImage, alt: metadata.cover.alt, sourcePath: resolve('src/content/zines', slug, metadata.cover.src) }
         : undefined,
       downloads: await Promise.all(metadata.downloads.map(async (download) => {
         if ('url' in download) return {

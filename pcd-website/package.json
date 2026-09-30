@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@astrojs/vue": "^5.1.4",
+    "@fontsource/space-grotesk": "^5.3.0",
     "@iconify-json/bi": "^1.2.7",
     "@iconify/vue": "^5.0.0",
     "@luomus/leaflet-smooth-wheel-zoom": "^1.0.0",
@@ -24,6 +25,8 @@
     "micromark-extension-gfm": "^3.0.0",
     "open-location-code": "^1.0.3",
     "qrcode": "^1.5.4",
+    "satori": "^0.33.5",
+    "sharp": "^0.34.5",
     "unist-util-visit": "^5.1.0",
     "vue": "^3.5.29",
     "vue-i18n": "^11.3.0"
