@@ -35,6 +35,9 @@ function makeEventPayload(body, { number = 1, login = 'testuser' } = {}) {
 // Build a valid new-event issue body
 function makeValidBody({
   eventName = 'PCD @ Test City',
+  startTime = '_No response_',
+  endTime = '_No response_',
+  endDate = '_No response_',
   plusCode = '8FW4V75V+8Q',
   format = 'In person',
   primaryContactName = 'Jane Doe',
@@ -102,13 +105,13 @@ function makeValidBody({
     '_No response_',
     '',
     '### End date (for multi-day events)',
-    '_No response_',
+    endDate,
     '',
     '### Start time',
-    '_No response_',
+    startTime,
     '',
     '### End time',
-    '_No response_',
+    endTime,
     '',
     '### Event URL (only for online events)',
     '_No response_',
@@ -180,6 +183,43 @@ describe('process-new-event-issue', () => {
 
   after(async () => {
     await fs.rm(tmpDir, { recursive: true, force: true });
+  });
+
+  test('normalizes times in metadata and PR output before chronological comparisons', async () => {
+    const metaPath = path.join(path.resolve(SCRIPTS_DIR, '../..'), 'pcd-website/src/content/events/pcd-test-city-2026', 'metadata.json');
+    try {
+      for (const [startTime, endTime, expectedStart, expectedEnd] of [
+        ['9:45', '2:30 p.m.', '09:45', '14:30'],
+        ['12 a.m.', '12 PM', '00:00', '12:00'],
+        ['2 PM', '3pm', '14:00', '15:00'],
+      ]) {
+        const { outputs } = await runScript(makeValidBody({ startTime, endTime }), { tmpDir });
+        assert.equal(outputs.valid, 'true');
+        const meta = JSON.parse(await fs.readFile(metaPath, 'utf8'));
+        assert.equal(meta.event_start_time, expectedStart);
+        assert.equal(meta.event_end_time, expectedEnd);
+        const prBody = await fs.readFile(outputs.pr_body_path, 'utf8');
+        assert.ok(prBody.includes(expectedStart));
+        assert.ok(prBody.includes(expectedEnd));
+        await fs.rm(path.dirname(metaPath), { recursive: true, force: true });
+      }
+    } finally {
+      await fs.rm(path.dirname(metaPath), { recursive: true, force: true });
+    }
+  });
+
+  test('rejects invalid times and non-increasing normalized single-day times', async () => {
+    for (const [startTime, endTime, expectedMessage] of [
+      ['13pm', '3 PM', 'Invalid time'],
+      ['9 AM', '9:60 AM', 'Invalid time'],
+      ['2 PM', '9 AM', 'End time must be later'],
+      ['9:45 AM', '09:45', 'End time must be later'],
+    ]) {
+      const { outputs } = await runScript(makeValidBody({ startTime, endTime }), { tmpDir });
+      assert.equal(outputs.valid, 'false');
+      const comment = await fs.readFile(outputs.validation_comment_path, 'utf8');
+      assert.ok(comment.includes(expectedMessage), comment);
+    }
   });
 
   test('valid new-event issue body produces metadata.json with uid', async () => {

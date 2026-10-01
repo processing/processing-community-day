@@ -62,10 +62,29 @@ export function isValidDate(value) {
     date.getUTCDate() === day;
 }
 
+// Intake accepts common local-time spellings; stored metadata always uses HH:MM.
+// Empty optional fields stay empty; null means an invalid non-empty input.
+export function normalizeTime(value) {
+  const input = value.trim();
+  if (!input) return '';
+  const match = input.match(/^(\d{1,2})(?::(\d{2}))?\s*([ap])\.?\s*m\.?$/i);
+  const clock = match ?? input.match(/^(\d{1,2}):(\d{2})$/);
+  if (!clock) return null;
+  let hours = Number(clock[1]);
+  const minutes = Number(clock[2] ?? 0);
+  if (minutes > 59) return null;
+  if (match) {
+    if (hours < 1 || hours > 12) return null;
+    hours = hours % 12 + (match[3].toLowerCase() === 'p' ? 12 : 0);
+  } else if (hours > 23) {
+    return null;
+  }
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+}
+
 export function isValidTime(value) {
-  if (!/^\d{2}:\d{2}$/.test(value)) return false;
-  const [hours, minutes] = value.split(':').map(Number);
-  return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
+  const normalized = normalizeTime(value);
+  return normalized !== null && normalized !== '';
 }
 
 export function isValidEmail(value) {

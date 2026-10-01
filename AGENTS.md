@@ -254,6 +254,8 @@ New zines use `.github/ISSUE_TEMPLATE/05-new-zine.yml` and `.github/workflows/ne
 
 ### Shared helpers
 
+Event intake normalizes start/end times with `normalizeTime()` before validation, chronological comparisons, and metadata/PR generation. Accept one- or two-digit hours with two-digit minutes in 24-hour input, or 1–12 hours with optional minutes and case-insensitive AM/PM (optional spaces and periods). Store only zero-padded 24-hour `HH:MM`; blank optional fields remain empty. Reject invalid ranges and ambiguous bare hours without AM/PM.
+
 Pure functions shared by both intake scripts live in `.github/scripts/event-issue-helpers.mjs`. This includes `parseIssueSections`, validation helpers, `slugify`, `parseActivities`, `parseOrganizers`, `buildValidationComment`, and `generateUniqueUid`.
 
 ### Template detection

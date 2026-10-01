@@ -13,7 +13,7 @@ import {
   required,
   requiredAny,
   isValidDate,
-  isValidTime,
+  normalizeTime,
   isValidEmail,
   isValidHttpUrl,
   normalizeUrl,
@@ -92,8 +92,10 @@ async function main() {
   const address = fields.get('Street address of the event venue')?.trim() ?? '';
   const eventDate = fields.get('Date of the event')?.trim() ?? '';
   const eventEndDate = fields.get('End date (for multi-day events)')?.trim() ?? '';
-  const startTime = fields.get('Start time')?.trim() ?? '';
-  const endTime = fields.get('End time')?.trim() ?? '';
+  const rawStartTime = fields.get('Start time')?.trim() ?? '';
+  const startTime = normalizeTime(rawStartTime);
+  const rawEndTime = fields.get('End time')?.trim() ?? '';
+  const endTime = normalizeTime(rawEndTime);
   const eventPageUrl = normalizeUrl(fields.get('Event page URL')?.trim() ?? '');
   const organizers = parseOrganizers(fields.get('Organizers')?.trim() ?? '');
   const shortDescription = fields.get('Short description')?.trim() ?? '';
@@ -112,17 +114,15 @@ async function main() {
   if (eventDate && !isValidDate(eventDate)) errors.push({ field: 'Event date', found: eventDate, message: 'Invalid format. Please use `YYYY-MM-DD`, e.g. `2026-03-21`.' });
   if (eventEndDate && !isValidDate(eventEndDate)) errors.push({ field: 'End date', found: eventEndDate, message: 'Invalid format. Please use `YYYY-MM-DD`, e.g. `2026-03-22`.' });
   if (isValidDate(eventDate) && eventEndDate && isValidDate(eventEndDate) && eventEndDate < eventDate) errors.push({ field: 'End date', found: eventEndDate, message: 'The end date must be on or after the event date.' });
-  if (startTime && !isValidTime(startTime)) errors.push({ field: 'Start time', found: startTime, message: 'Invalid format. Please use 24-hour `HH:MM`, e.g. `14:00`.' });
-  if (endTime && !isValidTime(endTime)) errors.push({ field: 'End time', found: endTime, message: 'Invalid format. Please use 24-hour `HH:MM`, e.g. `16:30`.' });
+  if (startTime === null) errors.push({ field: 'Start time', found: rawStartTime, message: 'Invalid time. Use 24-hour `H:MM` or `HH:MM` (e.g. `9:45`, `14:00`), or AM/PM (e.g. `9:45 AM`, `2 pm`, `2:30 p.m.`).' });
+  if (endTime === null) errors.push({ field: 'End time', found: rawEndTime, message: 'Invalid time. Use 24-hour `H:MM` or `HH:MM` (e.g. `9:45`, `14:00`), or AM/PM (e.g. `9:45 AM`, `2 pm`, `2:30 p.m.`).' });
   if (
     startTime &&
     endTime &&
-    isValidTime(startTime) &&
-    isValidTime(endTime) &&
     (!eventEndDate || eventEndDate === eventDate) &&
     endTime <= startTime
   ) {
-    errors.push({ field: 'End time', found: endTime, message: 'End time must be later than start time for single-day events.' });
+    errors.push({ field: 'End time', found: rawEndTime, message: 'End time must be later than start time for single-day events.' });
   }
   if (eventPageUrl && !isValidHttpUrl(eventPageUrl)) errors.push({ field: 'Event page URL', found: eventPageUrl, message: 'Not a valid URL. Please enter a web address like `https://example.com/pcd`.' });
   if (forumThreadUrl && !isValidHttpUrl(forumThreadUrl)) errors.push({ field: 'Forum discussion URL', found: forumThreadUrl, message: 'Not a valid URL. Please enter a web address like `https://forum.example.com/thread`.' });

@@ -153,13 +153,13 @@ body:
     id: event_start_time
     attributes:
       label: Start time
-      description: 24-hour time. Leave blank if the start time is not yet determined.
+      description: Local time in 24-hour format (9:45, 14:00) or with AM/PM (9:45 AM, 2 pm, 2:30 p.m.). Leave blank if the start time is not yet determined.
       placeholder: "19:00"
   - type: input
     id: event_end_time
     attributes:
       label: End time
-      description: 24-hour time. Leave blank if the end time is not yet determined.
+      description: Local time in 24-hour format (9:45, 14:00) or with AM/PM (9:45 AM, 2 pm, 2:30 p.m.). Leave blank if the end time is not yet determined.
       placeholder: "21:30"
   - type: input
     id: event_page_url
