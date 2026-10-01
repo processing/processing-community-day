@@ -27,17 +27,15 @@
     "plus_code": "87G8M2V7+72"
   },
   "event_date": "2026-10-03",
-  "event_start_time": "",
-  "event_end_time": "",
+  "event_start_time": "09:45",
+  "event_end_time": "20:00",
   "event_short_description": "",
   "event_activities": [
     "Hands-on workshops",
     "Exhibition",
-    "Panel discussions",
-    "Beginner introductions to Processing or p5.js",
-    "Creative coding jams or hack sessions"
+    "Beginner introductions to Processing or p5.js"
   ],
-  "event_page_url": "",
+  "event_page_url": "https://pcd2026nyc.eventbrite.com",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-new-york-city-2026/48393",
   "city": "New York City",
   "country": "United States",
