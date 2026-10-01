@@ -19,8 +19,8 @@
     "name": "Tanvi Kumar",
     "email": "tanvikumar777@gmail.com"
   },
-  "organization_name": "",
-  "organization_url": "",
+  "organization_name": "CC Sante India",
+  "organization_url": "https://ccsante.in",
   "organization_type": "Meetup, code club, community group",
   "online_event": false,
   "event_url": "",
@@ -29,14 +29,15 @@
     "address": "NID Bengaluru",
     "plus_code": "7J5V2GMP+V2"
   },
-  "event_date": "",
-  "event_start_time": "",
-  "event_end_time": "",
-  "event_short_description": "",
+  "event_date": "2026-10-10",
+  "event_start_time": "09:30",
+  "event_end_time": "17:30",
+  "event_short_description": "PCD Bengaluru is happening at NID. With talks, workshops, an algorave and a code walk, there is something for everyone",
   "event_activities": [
     "Show-and-tell",
     "Hands-on workshops",
     "Live coding",
+    "Panel discussions",
     "Beginner introductions to Processing or p5.js",
     "Creative coding jams or hack sessions"
   ],
