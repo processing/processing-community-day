@@ -468,10 +468,10 @@ jobs:
             const prLink = `[#${process.env.PR_NUMBER}](${process.env.PR_URL})`;
             const body = (isEdit ? [
               marker,
+              ...(process.env.LOCATION_WARNING ? ['> [!WARNING]', `> ${process.env.LOCATION_WARNING}`, ''] : []),
               `${submitter}, your updates to **${process.env.EVENT_NAME}** are ready for review in ${prLink}.`,
               '',
               `Your [event page](${process.env.EVENT_URL}) will be updated as soon as ${prLink} is merged.`,
-              ...(process.env.LOCATION_WARNING ? ['', '> [!WARNING]', `> ${process.env.LOCATION_WARNING}`] : []),
             ] : [
               marker,
               `${submitter}, thanks for submitting **${process.env.EVENT_NAME}**! Your new event is ready for review in ${prLink}.`,

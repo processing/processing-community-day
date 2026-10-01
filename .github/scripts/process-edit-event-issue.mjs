@@ -252,7 +252,7 @@ async function main() {
   }
   const canonicalEventUrl = `https://day.processing.org/event/${eventId}-${uid}`;
   const prBodyPath = path.join(RUNNER_TEMP, `pr-body-${issueNumber}.md`);
-  await fs.writeFile(prBodyPath, buildPrBody({ mode: 'edit', number: issueNumber, eventName, submitterLogin, plusCodeForLink: plusCode, dataTable, longDescriptionSection, noteBlocks, forumThreadUrl, eventUrl: canonicalEventUrl }));
+  await fs.writeFile(prBodyPath, buildPrBody({ mode: 'edit', number: issueNumber, eventName, submitterLogin, plusCodeForLink: plusCode, dataTable, longDescriptionSection, noteBlocks }));
 
   console.log(`[process-edit-event-issue] validation passed — event id: ${eventId}`);
   await setOutput('valid', 'true');
