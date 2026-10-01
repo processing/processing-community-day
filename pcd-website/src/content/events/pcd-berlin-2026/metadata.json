@@ -16,16 +16,18 @@
     "address": "Ackerstraße 76",
     "plus_code": "9F4MG9QM+CQ"
   },
-  "event_date": "",
-  "event_start_time": "",
-  "event_end_time": "",
+  "event_date": "2026-10-21",
+  "event_start_time": "17:00",
+  "event_end_time": "21:00",
   "event_short_description": "",
   "event_activities": [
+    "Show-and-tell",
     "Hands-on workshops",
     "Live coding",
-    "Beginner introductions to Processing or p5.js"
+    "Exhibition",
+    "Creative coding jams or hack sessions"
   ],
-  "event_page_url": "",
+  "event_page_url": "https://luma.com/v7o2c4fn",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-berlin-2026/48870",
   "city": "Berlin",
   "country": "Germany",
