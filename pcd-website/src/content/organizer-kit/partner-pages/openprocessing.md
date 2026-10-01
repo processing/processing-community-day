@@ -2,12 +2,12 @@
 title: OpenProcessing
 hideFromNav: true
 order: 2
-description: One free month of OpenProcessing ProfessorPlus
+description: All organizers and participants get free Plus+ Memberships for 3 months to organize their workshop, create sketches and collaborate on OpenProcessing.
 draft: false
 hideToc: true
 partnerCard:
   logo: ../../../images/openprocessing_logo.svg
-  summary: Get one free month of ProfessorPlus membership for your workshop during October 2026.
+  summary: All organizers and participants get free Plus+ Memberships for 3 months to organize their workshop, create sketches and collaborate on OpenProcessing.
 ---
 
 [OpenProcessing](https://openprocessing.org) is a social creative coding platform for creating, sharing, and exploring p5.js sketches together with the community.
