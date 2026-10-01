@@ -32,6 +32,7 @@ const TOP_LEVEL: ReadonlyArray<string | { page: string }> = [
   { page: 'peer-support-sessions' },
   { page: 'code-of-conduct' },
   { page: 'faq' },
+  { page: 'partners' },
   { page: 'about-processing-foundation' },
   { page: 'contact' },
   { page: 'documents' },
@@ -49,13 +50,14 @@ function toPage(entry: KitEntry): KitPage {
 
 /**
  * Builds the sidebar tree by walking TOP_LEVEL and pulling matching entries out
- * of the collection. Throws if an entry exists that TOP_LEVEL never places, so
+ * of the collection. Pages with `hideFromNav` remain published but are omitted.
+ * Throws if any other entry exists that TOP_LEVEL never places, so
  * adding a Markdown file without listing it here fails the build rather than
  * silently producing an unreachable page.
  */
 export async function getKitNav(): Promise<KitNavNode[]> {
   const allEntries = await getCollection('organizerKit');
-  const entries = allEntries.filter((entry) => !entry.data.draft);
+  const entries = allEntries.filter((entry) => !entry.data.draft && !entry.data.hideFromNav);
   const allIds = new Set(allEntries.map((entry) => entry.id));
 
   const byId = new Map(entries.map((entry) => [entry.id, entry]));
