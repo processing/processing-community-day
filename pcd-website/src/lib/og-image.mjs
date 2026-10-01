@@ -14,11 +14,16 @@ const LOGO_TOP = 52;
 const LOGO_GAP = 32; // minimum space between the logo and the title block
 const LOGO_PER_FONT = 6.5; // logo width as a multiple of the title font size
 const MAX_LOGO_WIDTH = 320;
-const TITLE_BOTTOM = 88;
-const MAX_BLOCK_HEIGHT = 310; // chip, title, and byline; longer titles shrink to fit
+const TITLE_BOTTOM = 64;
+const MAX_BLOCK_HEIGHT = 310; // eyebrow, title, and byline; longer titles shrink to fit
 const INK = '#292929';
 const MUTED = '#6c567d';
 const PURPLE = '#5503a4';
+const PILL = {
+  display: 'flex', padding: '10px 22px', borderRadius: 999,
+  backgroundColor: 'rgba(85, 3, 164, 0.09)', color: PURPLE,
+  fontSize: 24, letterSpacing: '0.1em', textTransform: 'uppercase',
+};
 const ASSET_PATHS = {
   background: 'src/images/og-background.png',
   logo: 'src/images/PCD_2026_logo/PCD_2026_Logo_Black.svg',
@@ -84,8 +89,12 @@ async function roundedPhoto(input, { width, height, radius, fit = 'cover' }) {
   return { src: pngUri(data), width: w, height: h };
 }
 
-/** Render a static share card. Covers are source file paths in library order. */
-export async function renderOgImage({ title, covers = [], gallery = false, eyebrow = 'Organizer Kit', author }) {
+/**
+ * Render a static share card. Covers are source file paths in library order.
+ * `badge` is an optional pill at the top right; `eyebrow` is optional plain
+ * purple text above the title.
+ */
+export async function renderOgImage({ title, covers = [], gallery = false, eyebrow, badge, author }) {
   const assets = await loadSharedAssets();
   const photos = await Promise.all(covers.slice(0, gallery ? OG_GALLERY_COVERS : 1).map((path) => (gallery
     ? roundedPhoto(path, GALLERY)
@@ -104,25 +113,25 @@ export async function renderOgImage({ title, covers = [], gallery = false, eyebr
       img(assets.logo, logoWidth, Math.round(logoWidth * LOGO_ASPECT), { position: 'absolute', top: LOGO_TOP, left: 64, objectFit: 'contain' }),
       // The title block hangs from the bottom so every page shares a baseline
       // above the footer, whatever the title length.
+      ...(badge ? [element('div', { ...PILL, position: 'absolute', top: LOGO_TOP, right: 64 }, badge)] : []),
       element('div', {
         position: 'absolute', left: 64, bottom: TITLE_BOTTOM, width: titleWidth,
         display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
       }, [
-        element('div', {
-          display: 'flex', padding: '7px 16px', marginBottom: 22, borderRadius: 999,
-          backgroundColor: 'rgba(85, 3, 164, 0.09)', color: PURPLE,
-          fontSize: 18, letterSpacing: '0.1em', textTransform: 'uppercase',
-        }, eyebrow),
+        ...(eyebrow ? [element('div', {
+          marginBottom: 14, color: PURPLE, fontSize: 32, letterSpacing: '0.06em', textTransform: 'uppercase',
+        }, eyebrow)] : []),
         element('div', {
           width: titleWidth, marginLeft: -4, fontSize, lineHeight: 1.08, letterSpacing: '-0.04em', fontWeight: TITLE_WEIGHT,
         }, title, { id: 'page-title' }),
         ...(author ? [element('div', {
-          width: titleWidth, marginTop: 14, fontSize: 26, fontWeight: TITLE_WEIGHT, color: MUTED,
-        }, `by ${author}`)] : []),
+          width: titleWidth, marginTop: 16, display: 'flex', flexWrap: 'wrap', columnGap: 12,
+          fontSize: 36, fontWeight: TITLE_WEIGHT, color: MUTED,
+        }, [
+          element('div', {}, 'by'),
+          element('div', { color: PURPLE, fontWeight: 600 }, author),
+        ])] : []),
       ], { id: 'title-block' }),
-      element('div', {
-        position: 'absolute', left: 64, bottom: 36, fontSize: 20, color: MUTED,
-      }, 'day.processing.org'),
       ...photos.map((photo, index) => {
         if (!gallery) {
           return img(photo.src, photo.width, photo.height, {
@@ -215,10 +224,10 @@ async function pruneStaleTemplates(cacheDir, current) {
 
 /** Like `renderOgImage`, but reuses a cached PNG when nothing it depends on changed. */
 export async function renderOgImageCached(options, { cacheDir = defaultOgCacheDir() } = {}) {
-  const { title, covers = [], gallery = false, eyebrow = 'Organizer Kit', author } = options;
+  const { title, covers = [], gallery = false, eyebrow, badge, author } = options;
   const template = await templateHash();
   const used = covers.slice(0, gallery ? OG_GALLERY_COVERS : 1);
-  const key = sha256(JSON.stringify({ title, gallery, eyebrow, author, covers: await Promise.all(used.map(coverHash)) }));
+  const key = sha256(JSON.stringify({ title, gallery, eyebrow, badge, author, covers: await Promise.all(used.map(coverHash)) }));
   const dir = join(cacheDir, template);
   const file = join(dir, `${key}.png`);
 
