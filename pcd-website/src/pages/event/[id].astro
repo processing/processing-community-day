@@ -1,4 +1,5 @@
 ---
+import bannerImageUrl from "../../images/og-background-withPhotos.png?url";
 import { loadNodes, canonicalEventId } from '../../lib/nodes';
 import type { Node } from '../../lib/nodes';
 import MapView from '../../components/MapView.vue';
@@ -30,7 +31,6 @@ const canonicalUrl = `${siteUrl}${base}/event/${canonicalId}/`;
 const redirectUrl = redirectTo ? `${base}/event/${redirectTo}/` : null;
 
 const ogImageUrl = redirectUrl ? '' : `${siteUrl}${base}/og-image.png`;
-const bannerImageUrl = `${base}/og-image.png`;
 const title = `${node.event_name} — Processing Community Day 2026`;
 const locationLabel = node.city || 'your city';
 const description = node.event_short_description || node.details_text.slice(0, 200).trimEnd() || `Join the global celebration at Processing Community Day 2026 in ${locationLabel}. Find your local event on the map, or start a PCD in your community.`;
