@@ -17,20 +17,18 @@
   "event_url": "",
   "event_name": "PCD @ Melbourne, Australia",
   "event_location": {
-    "address": "",
+    "address": "Melbourne CBD",
     "plus_code": "4RJ752GP+XH"
   },
-  "event_date": "",
-  "event_start_time": "",
-  "event_end_time": "",
-  "event_short_description": "I will host PCD Melbourne in October as part of the programming for the Radical Computing exhibition. Dates tbc.",
+  "event_date": "2026-10-24",
+  "event_start_time": "11:00",
+  "event_end_time": "17:00",
+  "event_short_description": "I will host PCD Melbourne on the 24 October. We have a cyberdeck workshop planned and more to be announced. Check Instagram for latest but I will also update here when I can.",
   "event_activities": [
-    "Hands-on workshops",
-    "Live coding",
-    "Exhibition",
-    "Beginner introductions to Processing or p5.js"
+    "Show-and-tell",
+    "Hands-on workshops"
   ],
-  "event_page_url": "",
+  "event_page_url": "https://www.instagram.com/creativetechnologymelb?stkn=aHJ1d3JycW1hZGVi",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-melbourne-2026/48807",
   "city": "Melbourne",
   "country": "Australia",
