@@ -23,7 +23,7 @@
   "organization_url": "https://equills.letrismo.com",
   "organization_type": "Meetup, code club, community group",
   "online_event": false,
-  "event_url": "https://letrismo.github.io/calli-graph/",
+  "event_url": "",
   "event_name": "PCD @ Mexico City",
   "event_location": {
     "address": "",
@@ -41,7 +41,7 @@
     "Creative coding jams or hack sessions",
     "Other"
   ],
-  "event_page_url": "",
+  "event_page_url": "https://letrismo.github.io/calli-graph/",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-mexico-2026/48924",
   "city": "CDMX",
   "country": "México",
