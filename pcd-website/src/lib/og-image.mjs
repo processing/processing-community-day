@@ -79,6 +79,22 @@ const GALLERY_SLOTS = [
 const SINGLE_INSET = 32;
 const SINGLE = { width: 448, height: OG_HEIGHT - SINGLE_INSET * 2, radius: 24 };
 
+// A partner's logo stands in for the title text, scaled to fit this box.
+const TITLE_IMAGE = { width: 640, height: 150 };
+
+/** An image (raster or SVG) scaled up to fit the box, kept in proportion. */
+async function fittedImage(input, { width, height }) {
+  const sized = await sharp(input, { density: 300 })
+    .resize({ width: width * 2, height: height * 2, fit: 'inside' }).png()
+    .toBuffer({ resolveWithObject: true });
+  const scale = Math.min(width / sized.info.width, height / sized.info.height);
+  return {
+    src: pngUri(sized.data),
+    width: Math.round(sized.info.width * scale),
+    height: Math.round(sized.info.height * scale),
+  };
+}
+
 /** A cover resized to the card, with antialiased rounded corners baked in. */
 async function roundedPhoto(input, { width, height, radius, fit = 'cover' }) {
   const sized = await sharp(input).rotate().resize({ width, height, fit }).png()
@@ -94,8 +110,9 @@ async function roundedPhoto(input, { width, height, radius, fit = 'cover' }) {
  * `badge` is an optional pill at the top right; `eyebrow` is optional plain
  * purple text above the title.
  */
-export async function renderOgImage({ title, covers = [], gallery = false, eyebrow, badge, author }) {
+export async function renderOgImage({ title, titleImage, covers = [], gallery = false, eyebrow, badge, author }) {
   const assets = await loadSharedAssets();
+  const titleArt = titleImage && await fittedImage(titleImage, TITLE_IMAGE);
   const photos = await Promise.all(covers.slice(0, gallery ? OG_GALLERY_COVERS : 1).map((path) => (gallery
     ? roundedPhoto(path, GALLERY)
     : roundedPhoto(path, SINGLE))));
@@ -121,9 +138,11 @@ export async function renderOgImage({ title, covers = [], gallery = false, eyebr
         ...(eyebrow ? [element('div', {
           marginBottom: 14, color: PURPLE, fontSize: 32, letterSpacing: '0.06em', textTransform: 'uppercase',
         }, eyebrow)] : []),
-        element('div', {
-          width: titleWidth, marginLeft: -4, fontSize, lineHeight: 1.08, letterSpacing: '-0.04em', fontWeight: TITLE_WEIGHT,
-        }, title, { id: 'page-title' }),
+        titleArt
+          ? img(titleArt.src, titleArt.width, titleArt.height, { objectFit: 'contain' })
+          : element('div', {
+            width: titleWidth, marginLeft: -4, fontSize, lineHeight: 1.08, letterSpacing: '-0.04em', fontWeight: TITLE_WEIGHT,
+          }, title, { id: 'page-title' }),
         ...(author ? [element('div', {
           width: titleWidth, marginTop: 16, display: 'flex', flexWrap: 'wrap', columnGap: 12,
           fontSize: 36, fontWeight: TITLE_WEIGHT, color: MUTED,
@@ -224,10 +243,10 @@ async function pruneStaleTemplates(cacheDir, current) {
 
 /** Like `renderOgImage`, but reuses a cached PNG when nothing it depends on changed. */
 export async function renderOgImageCached(options, { cacheDir = defaultOgCacheDir() } = {}) {
-  const { title, covers = [], gallery = false, eyebrow, badge, author } = options;
+  const { title, titleImage, covers = [], gallery = false, eyebrow, badge, author } = options;
   const template = await templateHash();
   const used = covers.slice(0, gallery ? OG_GALLERY_COVERS : 1);
-  const key = sha256(JSON.stringify({ title, gallery, eyebrow, badge, author, covers: await Promise.all(used.map(coverHash)) }));
+  const key = sha256(JSON.stringify({ title, titleImage: titleImage && await coverHash(titleImage), gallery, eyebrow, badge, author, covers: await Promise.all(used.map(coverHash)) }));
   const dir = join(cacheDir, template);
   const file = join(dir, `${key}.png`);
 

@@ -133,3 +133,17 @@ test('an unwritable cache location never fails rendering', async () => {
     rmSync(blocker, { recursive: true, force: true });
   }
 });
+
+test('a title image replaces the title text and an SVG logo renders', async () => {
+  const originalCwd = process.cwd();
+  process.chdir(WEBSITE);
+  try {
+    const logo = join(WEBSITE, 'src/images/openprocessing_logo.svg');
+    const withLogo = await renderOgImage({ title: 'OpenProcessing', titleImage: logo, badge: 'Organizer Kit', eyebrow: 'Partners' });
+    await assertPng(withLogo);
+    const withText = await renderOgImage({ title: 'OpenProcessing', badge: 'Organizer Kit', eyebrow: 'Partners' });
+    assert.notDeepEqual(withLogo, withText);
+  } finally {
+    process.chdir(originalCwd);
+  }
+});
