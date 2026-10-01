@@ -32,6 +32,7 @@ watch(
           onDeactivate: () => handleClose(),
           escapeDeactivates: true,
           allowOutsideClick: true,
+          initialFocus: () => modalRef.value!.querySelector<HTMLButtonElement>('.info-modal-show-map-btn')!,
           fallbackFocus: () => modalRef.value!,
         });
         trap.activate();
@@ -63,15 +64,15 @@ onUnmounted(() => {
         :aria-label="t('nav.info_modal_title')"
         class="info-modal"
       >
-        <button
-          class="modal-close-button info-modal-close"
-          type="button"
-          :aria-label="t('nav.info_modal_back_to_map')"
-          @click="handleClose()"
-        >
-          <Icon icon="bi:x-lg" width="1.125em" height="1.125em" aria-hidden="true" />
-        </button>
         <div class="info-modal-banner">
+          <button
+            class="modal-close-button info-modal-close"
+            type="button"
+            :aria-label="t('nav.info_modal_back_to_map')"
+            @click="handleClose()"
+          >
+            <Icon icon="bi:x-lg" width="1.125em" height="1.125em" aria-hidden="true" />
+          </button>
           <img :src="bannerImage" class="info-modal-banner-background" alt="" />
           <img :src="pcdLogo" class="info-modal-banner-pcd" alt="Processing Community Day 2026" />
           <img :src="foundationLogo" class="info-modal-banner-foundation" alt="Processing Foundation" />
@@ -132,12 +133,28 @@ onUnmounted(() => {
   top: var(--spacing-sm);
   right: var(--spacing-sm);
   z-index: 1;
-  background: rgba(0, 0, 0, 0.35);
-  color: #fff;
+  background: #fff;
+  color: var(--color-primary);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.info-modal-banner:hover .info-modal-close,
+.info-modal-close:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .info-modal-close:hover {
-  background: rgba(0, 0, 0, 0.55);
+  background: #fff;
+  color: var(--color-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .info-modal-close {
+    transition: none;
+  }
 }
 
 .info-modal-banner {
