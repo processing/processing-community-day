@@ -1,0 +1,42 @@
+{
+  "id": "hexagonal-grids-with-p5js",
+  "title": "Hexagonal Grids with p5js",
+  "topic": "Use p5js to create a 10 print like pattern - in a hexagonal grids. Square grids can be fun, hexagonal grids are amazing",
+  "created_by": "Tanvi Kumar",
+  "summary": "Simplifying Hexagonal Grids - an introduction to making fun art in these grids with p5js.",
+  "downloads": [
+    {
+      "file": "Hex_Grids_Zine_All_Pages.pdf",
+      "file_size": "661 kB",
+      "role": "reader-order"
+    },
+    {
+      "file": "Hex_Grids_Zine_A4.pdf",
+      "file_size": "661.4 kB",
+      "role": "print-ready"
+    }
+  ],
+  "license": "CC BY-SA 4.0",
+  "intake": {
+    "issue_number": 318,
+    "submitted_by_github": "TanviKumar",
+    "submitted_date": "2026-10-01",
+    "maintainer_notes": ""
+  },
+  "tags": [
+    "beginner",
+    "p5js",
+    "grids",
+    "creativecoding"
+  ],
+  "languages": [
+    "English"
+  ],
+  "cover": {
+    "src": "cover.png",
+    "alt": "Hexagonal Grids with p5js"
+  },
+  "activity_type": "Self-Guided Activity",
+  "zine_format": "Single-sheet folded zine on A4",
+  "duration": "1 hour"
+}
