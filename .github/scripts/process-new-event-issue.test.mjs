@@ -192,6 +192,7 @@ describe('process-new-event-issue', () => {
         ['9:45', '2:30 p.m.', '09:45', '14:30'],
         ['12 a.m.', '12 PM', '00:00', '12:00'],
         ['2 PM', '3pm', '14:00', '15:00'],
+        ['8 PM', '12 AM', '20:00', '00:00'],
       ]) {
         const { outputs } = await runScript(makeValidBody({ startTime, endTime }), { tmpDir });
         assert.equal(outputs.valid, 'true');

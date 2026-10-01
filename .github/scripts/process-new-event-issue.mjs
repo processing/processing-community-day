@@ -14,6 +14,7 @@ import {
   requiredAny,
   isValidDate,
   normalizeTime,
+  isEndTimeAfterStart,
   isValidEmail,
   isValidHttpUrl,
   normalizeUrl,
@@ -120,7 +121,7 @@ async function main() {
     startTime &&
     endTime &&
     (!eventEndDate || eventEndDate === eventDate) &&
-    endTime <= startTime
+    !isEndTimeAfterStart(startTime, endTime)
   ) {
     errors.push({ field: 'End time', found: rawEndTime, message: 'End time must be later than start time for single-day events.' });
   }

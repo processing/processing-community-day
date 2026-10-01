@@ -82,6 +82,11 @@ export function normalizeTime(value) {
   return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 }
 
+// Compares normalized HH:MM times; an end time of 00:00 means the end of the day.
+export function isEndTimeAfterStart(startTime, endTime) {
+  return (endTime === '00:00' ? '24:00' : endTime) > startTime;
+}
+
 export function isValidTime(value) {
   const normalized = normalizeTime(value);
   return normalized !== null && normalized !== '';

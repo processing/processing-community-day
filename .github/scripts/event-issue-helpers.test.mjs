@@ -5,6 +5,7 @@ import {
   isValidDate,
   isValidTime,
   normalizeTime,
+  isEndTimeAfterStart,
   isValidEmail,
   isValidHttpUrl,
   normalizeUrl,
@@ -68,6 +69,17 @@ describe('isValidDate', () => {
   test('out-of-range month', () => assert.equal(isValidDate('2026-13-01'), false));
   test('out-of-range day', () => assert.equal(isValidDate('2026-01-32'), false));
   test('empty string', () => assert.equal(isValidDate(''), false));
+});
+
+// ── isEndTimeAfterStart ───────────────────────────────────────────────────────
+
+describe('isEndTimeAfterStart', () => {
+  test('later end time', () => assert.equal(isEndTimeAfterStart('14:00', '16:30'), true));
+  test('equal times', () => assert.equal(isEndTimeAfterStart('14:00', '14:00'), false));
+  test('earlier end time', () => assert.equal(isEndTimeAfterStart('14:00', '09:00'), false));
+  test('midnight end time is end of day', () => assert.equal(isEndTimeAfterStart('20:00', '00:00'), true));
+  test('midnight to midnight spans the day', () => assert.equal(isEndTimeAfterStart('00:00', '00:00'), true));
+  test('midnight start is start of day', () => assert.equal(isEndTimeAfterStart('00:00', '09:00'), true));
 });
 
 // ── isValidTime ───────────────────────────────────────────────────────────────
