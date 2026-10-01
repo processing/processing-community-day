@@ -244,6 +244,59 @@
   color: var(--color-text);
 }
 
+.docs-prose .partner-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: var(--spacing-md);
+  margin: var(--spacing-lg) 0;
+}
+
+.docs-prose .partner-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+.docs-prose .partner-card > p:first-child {
+  margin-top: 0;
+}
+
+.docs-prose .partner-card > p:first-child img {
+  display: block;
+  width: auto;
+  height: 30px;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: left;
+  margin: 0;
+}
+
+.docs-prose .partner-card p:last-child {
+  margin-top: auto;
+  margin-bottom: 0;
+  padding-top: var(--spacing-sm);
+}
+
+.docs-prose .partner-card p:last-child a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.docs-prose .partner-card:hover {
+  border-color: var(--color-primary);
+}
+
+.docs-prose .partner-card:has(a:focus-visible) {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
 .placeholder-note {
   border: 1px dashed var(--color-border);
   border-radius: 6px;
