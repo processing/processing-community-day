@@ -53,7 +53,8 @@ const pageUrl = Astro.url.href;
         {ogImage && <meta name="twitter:image" content={ogImage} />}
       </>
     )}
-    <link rel="icon" type="image/x-icon" href={`${base}/favicon.ico`} />
+    <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href={`${base}/favicon.ico`} />
+    <link rel="icon" type="image/svg+xml" sizes="any" href={`${base}/favicon.svg`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
     <slot name="head" />
