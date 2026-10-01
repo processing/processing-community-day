@@ -4,6 +4,8 @@ import {
   parseIssueSections,
   isValidDate,
   isValidTime,
+  normalizeTime,
+  isEndTimeAfterStart,
   isValidEmail,
   isValidHttpUrl,
   normalizeUrl,
@@ -69,6 +71,17 @@ describe('isValidDate', () => {
   test('empty string', () => assert.equal(isValidDate(''), false));
 });
 
+// ── isEndTimeAfterStart ───────────────────────────────────────────────────────
+
+describe('isEndTimeAfterStart', () => {
+  test('later end time', () => assert.equal(isEndTimeAfterStart('14:00', '16:30'), true));
+  test('equal times', () => assert.equal(isEndTimeAfterStart('14:00', '14:00'), false));
+  test('earlier end time', () => assert.equal(isEndTimeAfterStart('14:00', '09:00'), false));
+  test('midnight end time is end of day', () => assert.equal(isEndTimeAfterStart('20:00', '00:00'), true));
+  test('midnight to midnight spans the day', () => assert.equal(isEndTimeAfterStart('00:00', '00:00'), true));
+  test('midnight start is start of day', () => assert.equal(isEndTimeAfterStart('00:00', '09:00'), true));
+});
+
 // ── isValidTime ───────────────────────────────────────────────────────────────
 
 describe('isValidTime', () => {
@@ -77,6 +90,35 @@ describe('isValidTime', () => {
   test('hour 25 is invalid', () => assert.equal(isValidTime('25:00'), false));
   test('bad format - missing colon', () => assert.equal(isValidTime('1430'), false));
   test('minute 60 is invalid', () => assert.equal(isValidTime('14:60'), false));
+});
+
+describe('normalizeTime', () => {
+  const accepted = [
+    ['9:45', '09:45'], ['09:45', '09:45'], ['23:59', '23:59'],
+    ['9:45am', '09:45'], ['09:45 AM', '09:45'], ['9:45 a.m.', '09:45'],
+    ['9:45 A.M', '09:45'], ['9:45 a m', '09:45'], ['9 AM', '09:00'],
+    ['2pm', '14:00'], ['2 PM', '14:00'], ['2:30 p.m.', '14:30'],
+    ['12am', '00:00'], ['12:30 AM', '00:30'], ['12pm', '12:00'],
+    ['12:30 PM', '12:30'], ['  9:45\u00a0AM  ', '09:45'],
+  ];
+  for (const [input, expected] of accepted) {
+    test(`${input} normalizes to ${expected}`, () => {
+      assert.equal(normalizeTime(input), expected);
+      assert.equal(isValidTime(input), true);
+    });
+  }
+  for (const input of ['24:00', '25:00', '9:60', '0 AM', '00:30 PM', '13pm',
+    '9:5', '9:5 AM', '9', '1430', '9:45:00', '9:45 AM UTC', '9-10 PM',
+    '9:45 AM\n10:00', '-1:00', '99:00', '9:45 XM']) {
+    test(`rejects ${JSON.stringify(input)}`, () => {
+      assert.equal(normalizeTime(input), null);
+      assert.equal(isValidTime(input), false);
+    });
+  }
+  test('blank optional time stays empty and is not a valid time', () => {
+    assert.equal(normalizeTime('  '), '');
+    assert.equal(isValidTime(''), false);
+  });
 });
 
 // ── isValidEmail ──────────────────────────────────────────────────────────────

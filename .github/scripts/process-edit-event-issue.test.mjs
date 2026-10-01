@@ -55,6 +55,9 @@ function makeEventPayload(body, { number = 10, login = 'edituser' } = {}) {
 
 function makeValidEditBody({
   canonicalId = TEST_CANONICAL_ID,
+  startTime = '19:00',
+  endTime = '21:30',
+  endDate = '_No response_',
   eventName = 'PCD @ Edit Test City',
   plusCode = '8FW4V75V+8Q',
   format = 'In person',
@@ -114,13 +117,13 @@ function makeValidEditBody({
     '2026-10-17',
     '',
     '### End date (for multi-day events)',
-    '_No response_',
+    endDate,
     '',
     '### Start time',
-    '19:00',
+    startTime,
     '',
     '### End time',
-    '21:30',
+    endTime,
     '',
     '### Event page URL',
     '_No response_',
@@ -205,6 +208,40 @@ describe('process-edit-event-issue', () => {
 
   afterEach(async () => {
     await fs.rm(TEST_EVENT_DIR, { recursive: true, force: true });
+  });
+
+  test('normalizes times in metadata and PR output before chronological comparisons', async () => {
+    const metaPath = path.join(TEST_EVENT_DIR, 'metadata.json');
+    for (const [startTime, endTime, expectedStart, expectedEnd] of [
+      ['9:45', '2:30 p.m.', '09:45', '14:30'],
+      ['12 a.m.', '12 PM', '00:00', '12:00'],
+      ['2 PM', '3pm', '14:00', '15:00'],
+      ['8 PM', '12 AM', '20:00', '00:00'],
+    ]) {
+      const { outputs } = await runScript(makeValidEditBody({ startTime, endTime }), { tmpDir });
+      assert.equal(outputs.valid, 'true');
+      const meta = JSON.parse(await fs.readFile(metaPath, 'utf8'));
+      assert.equal(meta.event_start_time, expectedStart);
+      assert.equal(meta.event_end_time, expectedEnd);
+      const prBody = await fs.readFile(outputs.pr_body_path, 'utf8');
+      assert.ok(prBody.includes(expectedStart));
+      assert.ok(prBody.includes(expectedEnd));
+
+    }
+  });
+
+  test('rejects invalid times and non-increasing normalized single-day times', async () => {
+    for (const [startTime, endTime, expectedMessage] of [
+      ['13pm', '3 PM', 'Invalid time'],
+      ['9 AM', '9:60 AM', 'Invalid time'],
+      ['2 PM', '9 AM', 'End time must be later'],
+      ['9:45 AM', '09:45', 'End time must be later'],
+    ]) {
+      const { outputs } = await runScript(makeValidEditBody({ startTime, endTime }), { tmpDir });
+      assert.equal(outputs.valid, 'false');
+      const comment = await fs.readFile(outputs.validation_comment_path, 'utf8');
+      assert.ok(comment.includes(expectedMessage), comment);
+    }
   });
 
   test('valid edit issue updates metadata.json and preserves uid and intake', async () => {

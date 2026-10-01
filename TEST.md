@@ -49,7 +49,7 @@ These tests cover the shared pure functions extracted into `event-issue-helpers.
 |---|---|
 | `parseIssueSections` | Normal sections, `_No response_` cleaning, empty body, `\r\n` normalization |
 | `isValidDate` | Valid date, missing leading zero, non-ISO format, out-of-range month/day, empty string |
-| `isValidTime` | Valid time, midnight, hour 25, missing colon, minute 60 |
+| `normalizeTime`, `isValidTime` | Single-digit and zero-padded 24-hour times; AM/PM case, spacing, periods, optional minutes; midnight/noon; blanks, invalid ranges and ambiguous formats |
 | `isValidEmail` | Valid email, missing `@`, missing TLD, empty string |
 | `isValidHttpUrl` | `http`/`https` valid, `ftp` rejected, non-URL string, empty string |
 | `slugify` | Accent removal, lowercase+space→dash, leading/trailing dash strip, multiple dash collapse, special char removal |
@@ -67,6 +67,7 @@ These tests cover the shared pure functions extracted into `event-issue-helpers.
 
 | Case | Expected |
 |---|---|
+| Flexible start/end times | Metadata and PR show normalized `HH:MM`; invalid inputs and non-increasing single-day times rejected |
 | Valid new-event issue body | `valid=true`, writes `metadata.json` with all fields including `uid` (7 hex chars) |
 | `Event page URL` field present | Value appears in `metadata.json` as `event_page_url` (regression for the `Event website` field-name bug) |
 | Duplicate event directory | `valid=false`, validation comment mentions the generated id |
@@ -84,6 +85,7 @@ These tests cover the shared pure functions extracted into `event-issue-helpers.
 
 | Case | Expected |
 |---|---|
+| Flexible start/end times | Metadata and PR show normalized `HH:MM`; invalid inputs and non-increasing single-day times rejected |
 | Valid edit issue, event exists | `valid=true`, `pr_label=edit event`, `action_verb=updated on`, metadata updated, `uid` and `intake` preserved |
 | Blank `full_description` | Existing `content.md` unchanged |
 | All activities unchecked | Existing `event_activities` preserved (checkbox prefill limitation) |
