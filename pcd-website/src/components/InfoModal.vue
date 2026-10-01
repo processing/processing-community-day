@@ -3,7 +3,9 @@ import { ref, watch, nextTick, onUnmounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Icon } from '@iconify/vue';
 import { createFocusTrap, type FocusTrap } from 'focus-trap';
-const fallbackBannerImage = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/og-image.png`;
+import fallbackBannerImage from '../images/og-background-withPhotos.png?url';
+import pcdLogo from '../images/PCD_2026_logo/PCD_2026_Logo_Black.svg?url';
+import foundationLogo from '../images/processing_foundation_logo.svg?url';
 
 const props = defineProps<{ open: boolean; bannerImageUrl?: string; autoOpened?: boolean }>();
 const bannerImage = computed(() => props.bannerImageUrl ?? fallbackBannerImage);
@@ -30,6 +32,7 @@ watch(
           onDeactivate: () => handleClose(),
           escapeDeactivates: true,
           allowOutsideClick: true,
+          initialFocus: () => modalRef.value!.querySelector<HTMLButtonElement>('.info-modal-show-map-btn')!,
           fallbackFocus: () => modalRef.value!,
         });
         trap.activate();
@@ -61,20 +64,19 @@ onUnmounted(() => {
         :aria-label="t('nav.info_modal_title')"
         class="info-modal"
       >
-        <button
-          class="modal-close-button info-modal-close"
-          type="button"
-          :aria-label="t('nav.info_modal_back_to_map')"
-          @click="handleClose()"
-        >
-          <Icon icon="bi:x-lg" width="1.125em" height="1.125em" aria-hidden="true" />
-        </button>
-        <img
-          :src="bannerImage"
-          class="info-modal-banner"
-          alt="Processing Community Day 2026 banner with bold text and collage of community photos showing groups of people at events, alongside the Processing Foundation logo."
-          loading="lazy"
-        />
+        <div class="info-modal-banner">
+          <button
+            class="modal-close-button info-modal-close"
+            type="button"
+            :aria-label="t('nav.info_modal_back_to_map')"
+            @click="handleClose()"
+          >
+            <Icon icon="bi:x-lg" width="1.125em" height="1.125em" aria-hidden="true" />
+          </button>
+          <img :src="bannerImage" class="info-modal-banner-background" alt="" />
+          <img :src="pcdLogo" class="info-modal-banner-pcd" alt="Processing Community Day 2026" />
+          <img :src="foundationLogo" class="info-modal-banner-foundation" alt="Processing Foundation" />
+        </div>
         <div class="info-modal-body">
           <h2 class="info-modal-title">{{ t('nav.info_modal_title') }}</h2>
           <p class="info-modal-description">{{ t('nav.info_modal_description') }}</p>
@@ -131,19 +133,58 @@ onUnmounted(() => {
   top: var(--spacing-sm);
   right: var(--spacing-sm);
   z-index: 1;
-  background: rgba(0, 0, 0, 0.35);
-  color: #fff;
+  background: #fff;
+  color: var(--color-primary);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.info-modal-banner:hover .info-modal-close,
+.info-modal-close:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .info-modal-close:hover {
-  background: rgba(0, 0, 0, 0.55);
+  background: #fff;
+  color: var(--color-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .info-modal-close {
+    transition: none;
+  }
 }
 
 .info-modal-banner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1200 / 630;
+}
+
+.info-modal-banner-background {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 100%;
   object-fit: cover;
+}
+
+.info-modal-banner-pcd,
+.info-modal-banner-foundation {
+  position: absolute;
+  left: 4.333%;
+  height: auto;
+}
+
+.info-modal-banner-pcd {
+  top: 9.206%;
+  width: 41.667%;
+}
+
+.info-modal-banner-foundation {
+  bottom: 6.349%;
+  width: 27%;
 }
 
 .info-modal-body {
