@@ -6,6 +6,7 @@ import SiteLayout from '../../layouts/SiteLayout.astro';
 import { loadNodes, canonicalEventId } from '../../lib/nodes';
 import { formatDateRange, formatTimeRange, isPastEvent } from '../../lib/format';
 import { confirmationFields, dateHeading, eventGroupDay, localDay, matchesEvent } from '../../lib/event-list.mjs';
+import { eventListJsonLd, jsonLdScript } from '../../lib/schema.mjs';
 import '../../styles/event-list.css';
 
 const today = localDay();
@@ -20,9 +21,15 @@ const events = (await loadNodes()).map(node => ({
       node.online_event ? 'online' : ''].filter(Boolean).join(' '),
   },
 }));
+const siteUrl = Astro.site ? Astro.site.href.replace(/\/$/, '') : '';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const eventListSchema = eventListJsonLd(events
+  .filter(({ node }) => !node.placeholder)
+  .map(({ node }) => ({ name: node.event_name, url: `${siteUrl}${base}/event/${canonicalEventId(node)}/` })));
 const days = [...new Set(events.map(({ record }) => eventGroupDay(record, today)))].sort((a, b) => (a || '9999').localeCompare(b || '9999'));
 ---
 <SiteLayout title="Events | Processing Community Day 2026" description="Find Processing Community Day events around the world. Search upcoming and past events by date, place, and more.">
+  <script slot="head" type="application/ld+json" set:html={jsonLdScript(eventListSchema)} />
   <div class="event-list-page">
     <div class="event-list-intro">
       <div><h1>Find your community.</h1><p>Explore events celebrating art, code, and creative communities around the world.</p></div>

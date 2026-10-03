@@ -1,4 +1,7 @@
 export const PCD_EMAIL = "day@processing.org";
+export const PCD_SITE_NAME = "Processing Community Day 2026";
+export const PCD_ORG_NAME = "Processing Foundation";
+export const PCD_ORG_URL = "https://processingfoundation.org/";
 export const SUBMIT_EVENT_URL =
   "https://github.com/processing/processing-community-day/issues/new?template=01-new-event.yml";
 export const GITHUB_EDIT_EVENT_URL =
