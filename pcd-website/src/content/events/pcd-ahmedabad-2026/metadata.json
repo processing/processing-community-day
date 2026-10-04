@@ -24,24 +24,20 @@
   "organization_type": "School, university, library",
   "online_event": false,
   "event_url": "",
-  "event_name": "PCD @ Ahmedabad 2026",
+  "event_name": "PCD @ Ahmedabad",
   "event_location": {
     "address": "Sanskardham Campus, Bopal-Ghuma-Sanand Road, Ahmedabad, Gujarat 382115",
     "plus_code": "7JMJ2CHG+49"
   },
-  "event_date": "",
-  "event_start_time": "",
-  "event_end_time": "",
+  "event_date": "2026-10-22",
+  "event_start_time": "11:00",
+  "event_end_time": "16:00",
   "event_short_description": "Processing Community Day is coming to Anant National University this October bring your curiosity and get ready to turn code into art, no experience required!",
   "event_activities": [
-    "Show-and-tell",
     "Hands-on workshops",
-    "Live coding",
-    "Beginner introductions to Processing or p5.js",
-    "Creative coding jams or hack sessions",
-    "Student project presentations"
+    "Live coding"
   ],
-  "event_page_url": "",
+  "event_page_url": "https://luma.com/29p6ba1r",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-ahemdabad-2026/49534",
   "city": "Ahmedabad",
   "country": "India",
