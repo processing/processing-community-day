@@ -4,11 +4,14 @@
   "organizers": [
     {
       "name": "Murat Atimtay"
+    },
+    {
+      "name": "Daniele Savasta"
     }
   ],
   "primary_contact": {
     "name": "Murat Atimtay",
-    "email": "atimtay@gmail.com"
+    "email": "pcdizmir@gmail.com"
   },
   "organization_name": "",
   "organization_url": "",
@@ -17,21 +20,24 @@
   "event_url": "",
   "event_name": "PCD @ Izmir",
   "event_location": {
-    "address": "",
-    "plus_code": "8GC9C4GV+28"
+    "address": "Sakarya Caddesi, No:156 35330 Balçova - İzmir / TÜRKİYE",
+    "plus_code": "8GC992PW+XJ"
   },
-  "event_date": "",
-  "event_start_time": "",
-  "event_end_time": "",
-  "event_short_description": "",
+  "event_date": "2026-10-26",
+  "event_start_time": "12:00",
+  "event_end_time": "18:30",
+  "event_short_description": "PCD İzmir brings together artists, designers, students, educators, and creative coders for a day of talks, workshops, exhibitions, and shared experimentation around art, code, and technology.",
   "event_activities": [
     "Show-and-tell",
-    "Hands-on workshops"
+    "Hands-on workshops",
+    "Exhibition",
+    "Beginner introductions to Processing or p5.js",
+    "Screening"
   ],
-  "event_page_url": "",
+  "event_page_url": "https://pcdizmir.kodart.xyz/",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-izmir-2026/48699",
   "city": "Izmir",
-  "country": "Turkey",
+  "country": "Türkiye",
   "placeholder": false,
   "intake": {
     "issue_number": 131,
