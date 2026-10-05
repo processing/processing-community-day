@@ -3,28 +3,28 @@
   "uid": "d0e8f8d",
   "organizers": [],
   "primary_contact": {
-    "name": "Natalie Freed",
-    "email": "nataliefreed@txstate.edu"
+    "name": "Families Learning Together",
+    "email": "hello@fltsmtx.org"
   },
   "organization_name": "Families Learning Together",
   "organization_url": "https://fltsmtx.org/",
-  "organization_type": "",
+  "organization_type": "Fablab, makerspace, hackerspace",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ San Marcos, TX",
   "event_location": {
-    "address": "",
-    "plus_code": "76X4V3M5+3J"
+    "address": "Expressive STEM Center at Centro Cultural Hispano de San Marcos, 211 Lee St, San Marcos, TX 78666",
+    "plus_code": "76X4V3F6+XV"
   },
   "event_date": "2026-10-17",
   "event_start_time": "10:00",
   "event_end_time": "14:00",
-  "event_short_description": "",
+  "event_short_description": "Patches & Pixels: Processing Community Day San Marcos. Join us at the Expressive STEM Center for this special all-ages event celebrating the fun and possibilities of creative coding.",
   "event_activities": [
     "Hands-on workshops",
     "Beginner introductions to Processing or p5.js"
   ],
-  "event_page_url": "",
+  "event_page_url": "https://fltsmtx.org/signup/signup.php?event=patches-pixels-processing-community-day-20261017-cultural-center",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-san-marcos-tx-2026/48884",
   "city": "San Marcos, TX",
   "country": "USA",
