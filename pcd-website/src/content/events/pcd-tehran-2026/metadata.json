@@ -7,12 +7,6 @@
     },
     {
       "name": "Arash Ebrahimifar"
-    },
-    {
-      "name": "Hesam Hajati"
-    },
-    {
-      "name": "Saeed Khangheshlaghi"
     }
   ],
   "primary_contact": {
@@ -21,23 +15,24 @@
   },
   "organization_name": "Art and Technology Group Iran",
   "organization_url": "https://www.atgiran.ir",
-  "organization_type": "Nonprofit, foundation, association",
+  "organization_type": "",
   "online_event": false,
-  "event_url": "",
+  "event_url": "https://atgiran.ir/pcdtehran2026",
   "event_name": "PCD @ Tehran",
   "event_location": {
     "address": "Iran Computer Museum, Ostad Hassan Banna (Majidieh), Tehran, Iran.",
     "plus_code": "8H7HPFXC+46"
   },
   "event_date": "2026-10-16",
-  "event_start_time": "",
-  "event_end_time": "",
+  "event_end_date": "2026-10-22",
+  "event_start_time": "11:00",
+  "event_end_time": "20:00",
   "event_short_description": "",
   "event_activities": [
     "Show-and-tell",
     "Hands-on workshops",
-    "Live coding",
-    "Exhibition"
+    "Exhibition",
+    "Screening"
   ],
   "event_page_url": "https://atgiran.ir/PCDTehran2026",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-tehran-2026/48894",
