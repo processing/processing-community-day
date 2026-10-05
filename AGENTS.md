@@ -238,6 +238,8 @@ Must follow standard accessibility best practices (semantic HTML, ARIA attribute
 
 New events are submitted via GitHub Issues using `.github/ISSUE_TEMPLATE/01-new-event.yml`. The workflow `.github/workflows/new-event-intake.yml` (`process-new-event` job) runs `.github/scripts/process-new-event-issue.mjs` to validate the issue and, if valid, opens a PR with generated `metadata.json` + `content.md` files. A stable `uid` is generated at intake and written into both files.
 
+If the generated event ID already exists, the script skips all other field errors and posts a duplicate-event comment (`buildDuplicateEventComment()`) linking to the existing canonical event page and telling the submitter to use its “Edit this event data” button. It does not ask them to edit the issue.
+
 ### Edit events
 
 When an edit changes the address but retains the same resolved Plus Code, both the issue confirmation and PR body show a warning linking to the Plus Code so organizers can verify the map location. Comparison trims addresses and normalizes Plus Code case and whitespace. Edit the shared copy in `LOCATION_WARNING_TEMPLATE` in `.github/workflows/new-event-intake.yml`; `{plus_code_url}` and `{issue_reference}` are substituted by the edit script. Direct script runs must supply this environment variable when an address-change warning is needed.

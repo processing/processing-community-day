@@ -22,6 +22,7 @@ import {
   parseActivities,
   parseOrganizers,
   buildValidationComment,
+  buildDuplicateEventComment,
   generateUniqueUid,
   eventDataToDisplayMap,
   buildNewEventTable,
@@ -144,11 +145,28 @@ async function main() {
   const markdownPath = path.join(eventDirPath, 'content.md');
   const metadataPath = path.join(eventDirPath, 'metadata.json');
 
+  let existingEvent = null;
   try {
     await fs.access(eventDirPath);
-    errors.push({ field: 'Event name', found: eventName, message: `An event with the generated ID \`${eventId}\` already exists. If you need to update an existing event, post in the [PCD 2026 forum thread](${PCD_FORUM_THREAD_URL}) (recommended) or write to ${PCD_CONTACT_EMAIL}.` });
+    existingEvent = await fs.readFile(metadataPath, 'utf8').then(JSON.parse).catch(() => ({}));
   } catch {
     // Directory does not exist yet.
+  }
+
+  // A duplicate supersedes other field errors: fixing this issue cannot succeed,
+  // so direct the submitter to the existing event's edit flow instead.
+  if (existingEvent) {
+    console.log(`[process-new-event-issue] event \`${eventId}\` already exists; directing submitter to the edit flow.`);
+    const canonicalEventUrl = existingEvent.uid ? `https://day.processing.org/event/${eventId}-${existingEvent.uid}/` : '';
+    const validationCommentPath = path.join(RUNNER_TEMP, `validation-${issueNumber}.md`);
+    await fs.writeFile(validationCommentPath, buildDuplicateEventComment({
+      eventId,
+      existingEventName: existingEvent.event_name,
+      canonicalEventUrl,
+    }));
+    await setOutput('valid', 'false');
+    await setOutput('validation_comment_path', validationCommentPath);
+    process.exit(0);
   }
 
   if (errors.length > 0) {

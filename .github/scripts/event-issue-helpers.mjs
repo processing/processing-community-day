@@ -175,6 +175,29 @@ export function buildValidationComment(errors) {
   ].join('\n');
 }
 
+// Comment for a new-event submission whose generated ID matches an existing
+// event. Editing this issue cannot help, so point to the edit flow instead.
+export function buildDuplicateEventComment({ eventId, existingEventName, canonicalEventUrl }) {
+  const eventLink = canonicalEventUrl
+    ? `[${existingEventName || eventId}](${canonicalEventUrl})`
+    : `\`${eventId}\``;
+  return [
+    'Thanks for submitting your event to Processing Community Day 2026! 🌍',
+    '',
+    `It looks like this event is already on the map: ${eventLink}.`,
+    '',
+    'To update it, please don\'t edit this issue or submit a new event. Instead:',
+    '',
+    `1. Open the event page: ${canonicalEventUrl || eventLink}`,
+    '2. Click **Edit this event data** in the event details panel.',
+    '3. Fill in the form that opens. It is prefilled with the current event data.',
+    '',
+    'You can close this issue once your edit is submitted.',
+    '',
+    `If this is a different event that happens to have the same name, please ask in the [PCD 2026 forum thread](${PCD_FORUM_THREAD_URL}) or write to ${PCD_CONTACT_EMAIL}.`,
+  ].join('\n');
+}
+
 export function generateUniqueUid(existingUids) {
   let uid;
   let attempts = 0;
