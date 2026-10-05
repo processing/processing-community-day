@@ -298,13 +298,18 @@ describe('process-new-event-issue', () => {
       eventId
     );
     await fs.mkdir(dupDir, { recursive: true });
+    await fs.writeFile(path.join(dupDir, 'metadata.json'), JSON.stringify({ id: eventId, uid: 'abc1234', event_name: 'PCD @ Test City' }));
     try {
-      const { outputs } = await runScript(makeValidBody(), { tmpDir, eventsDir, number: 3 });
+      const { outputs } = await runScript(makeValidBody({ startTime: 'bogus' }), { tmpDir, eventsDir, number: 3 });
       assert.equal(outputs.valid, 'false');
-      // validation comment should mention the generated id
       const commentPath = outputs.validation_comment_path;
       const comment = await fs.readFile(commentPath, 'utf8');
-      assert.ok(comment.includes(eventId), `Expected comment to mention ${eventId}`);
+      // Links to the existing event page and its edit button
+      assert.ok(comment.includes(`[PCD @ Test City](https://day.processing.org/event/${eventId}-abc1234/)`));
+      assert.ok(comment.includes('**Edit this event data**'));
+      // Does not tell the submitter to edit this issue, nor list unrelated field errors
+      assert.ok(!comment.includes('edit and save the issue'));
+      assert.ok(!comment.includes('Start time'));
     } finally {
       await fs.rm(dupDir, { recursive: true, force: true });
     }
