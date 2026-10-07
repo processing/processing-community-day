@@ -10,12 +10,12 @@ _PCD is a global network of community-led events that brings together artists, d
 
 ## OVERVIEW
 
-PCD Chicago 2026 is a one-day event hosted by [The Center for Concrete and Abstract Machine](https://ccam.world) and [Peripheral Study](https://instagram.com/peripheral_study) bringing together artists, designers, and educators at any level interested in using creative code in their artistic practices or curricula. We are gathering around the topics of Emergence and Improvisation to explore the possibilities of handwritten code in enabling new possibilities for artistic creation. 
+[CCAM](https://ccam.world/) and [Peripheral Study](https://study.peripheral.zone/) will hold Processing Community Day on October 11th from 2-6pm at MANA Contemporary. In preparing this event, we began to wonder: what does it mean to convene a Processing community, and an art in technology community more broadly, in Chicago? Instead of focusing on the technical know-how of creative code through workshops and tutorials, we envision PCD as a convening for collective imagining. What is the state of the art in Chicago, in an inflection point of accelerating technological development and artistic transformation? On the occasion of Processing’s 25th anniversary, we invite you to join a group of artists, educators, technologists, designers, and other practitioners to consider this question through a facilitated workshop and discussion. 
 
-The event will feature introductory workshops using [p5.js](https://p5js.org/), an accessible, browser-based programming tool, to create audiovisual art. Participants may choose workshop topics such as typography and Risograph printing, vector graphics and pen plotter, real-time video audio-visual composition, and 3D graphics/shaders. Additionally, event participants will come together in “fishbowl”-style discussions and community building around their own usage of computational tools in their creative practices and in the classroom. The day’s proceedings will close with a celebration of our creative outputs through live audio-visual performances (e.g. live coding, DJ/VJ performances) along with a gallery display of participants’ creations.    
+Guided by the themes of Emergence and Improvisation, the event will bring together participants from across creative communities in Chicago for discussions, exchange, and community building. Additionally, participants will have the opportunity to share their computational artworks or ongoing projects made using tools such as p5.js.
 
-PCD Chicago’s ambition is to create a sense of community in Chicago for people interested in and working in creative coding, scaffold conversations about learning and making with these tools, and to celebrate the ingenuity of artists and educators in a collaborative environment.
+Our ambition is to bring together groups and practitioners with different institutional affiliations, aesthetic approaches, and technical backgrounds to envision what a robust and well-supported computational art community might look like in Chicago.
 
 Any questions can be sent to [pcd@ccam.world](mailto:pcd@ccam.world)
 
-Get email updates: https://forms.gle/VP48crWGwovEZXGEA"
+Get email updates: [Registration](https://docs.google.com/forms/d/e/1FAIpQLSedabl8TPC3kXWfkaKvc7O17nV25Rmx9iJgaEcAj7f06SNUfg/viewform?usp=header)
