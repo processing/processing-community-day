@@ -17,3 +17,11 @@ Fear not, if you do not fit in this category as there are plenty other events yo
 Please do join us in this celebration! 
 
 This event was made possible with the support from the Generative Art Foundation and all our collaborators.
+
+Please sign up with the links below for the workshops or townhall event you wish to attend.
+1. https://www.tickettailor.com/events/peckhamdigital/2434101
+2. https://www.tickettailor.com/events/peckhamdigital/2429611
+3. https://www.tickettailor.com/events/peckhamdigital/2432574
+4. https://www.tickettailor.com/events/peckhamdigital/2434169
+5. https://www.tickettailor.com/events/peckhamdigital/2434190
+6. https://www.tickettailor.com/events/peckhamdigital/2439027
