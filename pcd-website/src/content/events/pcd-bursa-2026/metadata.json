@@ -1,0 +1,46 @@
+{
+  "id": "pcd-bursa-2026",
+  "uid": "68198a0",
+  "organizers": [
+    {
+      "name": "Bedirhan Ugur"
+    }
+  ],
+  "primary_contact": {
+    "name": "Bedirhan Ugur",
+    "email": "bedirxn@gmail.com"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "Meetup, code club, community group",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Bursa",
+  "event_location": {
+    "address": "",
+    "plus_code": "8GGF6277+6X"
+  },
+  "event_date": "",
+  "event_start_time": "14:00",
+  "event_end_time": "18:00",
+  "event_short_description": "",
+  "event_activities": [
+    "Show-and-tell",
+    "Hands-on workshops",
+    "Live coding",
+    "Beginner introductions to Processing or p5.js",
+    "Screening",
+    "Other"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-bursa-2026/49594",
+  "city": "Bursa",
+  "country": "Türkiye",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 340,
+    "submitted_by_github": "bedirxanugur",
+    "submitted_date": "2026-10-06",
+    "maintainer_notes": ""
+  }
+}
