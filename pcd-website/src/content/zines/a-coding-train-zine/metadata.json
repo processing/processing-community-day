@@ -1,0 +1,41 @@
+{
+  "id": "a-coding-train-zine",
+  "title": "A Coding Train Zine",
+  "topic": "p5.js code examples",
+  "created_by": "Dan Shiffman, Cy X",
+  "summary": "Curated and produced by Dan Shiffman, Coding Train founder, and Cy X, Coding Train Community Manager.",
+  "downloads": [
+    {
+      "file": "codingtrainzine_dan_031520.pdf",
+      "file_size": "7.2 MB",
+      "role": "reader-order"
+    },
+    {
+      "file": "codingtrainzine_dan_031520_imposed.pdf",
+      "file_size": "21.5 MB",
+      "role": "print-ready"
+    }
+  ],
+  "license": "CC BY-SA 4.0",
+  "intake": {
+    "issue_number": 348,
+    "submitted_by_github": "SableRaf",
+    "submitted_date": "2026-10-08",
+    "maintainer_notes": ""
+  },
+  "tags": [
+    "p5.js"
+  ],
+  "languages": [
+    "English"
+  ],
+  "created_by_url": "https://thecodingtrain.com/",
+  "cover": {
+    "src": "cover.png",
+    "alt": "A Coding Train Zine"
+  },
+  "activity_type": "Coding tutorials",
+  "zine_format": "Half page, Folio, 40 pages",
+  "duration": "1-2 hours",
+  "materials": "Computer, Internet connection"
+}
