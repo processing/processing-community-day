@@ -21,7 +21,7 @@
   },
   "organization_name": "Creative Coding Amsterdam & otheres",
   "organization_url": "https://cca.codes",
-  "organization_type": "Meetup, code club, community group",
+  "organization_type": "",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Amsterdam",
@@ -34,11 +34,11 @@
   "event_end_time": "18:00",
   "event_short_description": "a free afternoon at VU with a beginner workshop, community talks and a live coding session to wrap it all up",
   "event_activities": [
+    "Show-and-tell",
     "Hands-on workshops",
-    "Live coding",
-    "Beginner introductions to Processing or p5.js"
+    "Live coding"
   ],
-  "event_page_url": "https://analogue-intelligence.github.io/pcd-amsterdam/",
+  "event_page_url": "https://cca.codes/pcd-2026/",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-amsterdam-2026/48140",
   "city": "Amsterdam",
   "country": "Netherlands",
