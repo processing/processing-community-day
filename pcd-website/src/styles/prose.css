@@ -105,6 +105,17 @@
   height: auto;
 }
 
+:where(.prose, .docs-prose) .prose-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1000 / 730;
+  margin-block: var(--spacing-xl);
+  border: 0;
+  border-radius: 0.5rem;
+  background: #000;
+}
+
 :where(.prose, .docs-prose) p:has(+ p > .prose-figure-caption) {
   margin-bottom: var(--spacing-xs);
 }
