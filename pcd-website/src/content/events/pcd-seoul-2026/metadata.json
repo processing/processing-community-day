@@ -12,7 +12,7 @@
   },
   "organization_name": "Creative Computing Group",
   "organization_url": "https://creative-computing.org",
-  "organization_type": "",
+  "organization_type": "School, university, library",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Seoul 2026",
@@ -21,18 +21,15 @@
     "plus_code": "8Q98HW2V+H6"
   },
   "event_date": "2026-10-31",
-  "event_start_time": "",
-  "event_end_time": "",
-  "event_short_description": "",
+  "event_start_time": "12:30",
+  "event_end_time": "17:30",
+  "event_short_description": "Processing Community Day (PCD) @ Seoul 2026",
   "event_activities": [
     "Show-and-tell",
     "Hands-on workshops",
-    "Live coding",
     "Exhibition",
-    "Panel discussions",
-    "Creative coding jams or hack sessions",
     "Student project presentations",
-    "Screening"
+    "Other"
   ],
   "event_page_url": "",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-seoul-2026/48243",
