@@ -15,22 +15,20 @@
   },
   "organization_name": "D&A Community",
   "organization_url": "https://designanything.design/",
-  "organization_type": "School, university, library",
+  "organization_type": "",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Hangzhou",
   "event_location": {
-    "address": "",
-    "plus_code": "8Q22924P+WM9"
+    "address": "Shanghang District, Hangzhou City - One Direction Space",
+    "plus_code": "8Q22928G+XJ"
   },
-  "event_date": "",
+  "event_date": "2026-10-25",
   "event_start_time": "",
   "event_end_time": "",
   "event_short_description": "",
   "event_activities": [
-    "Show-and-tell",
-    "Creative coding jams or hack sessions",
-    "Student project presentations"
+    "Show-and-tell"
   ],
   "event_page_url": "",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-hangzhou-2026/48898",
