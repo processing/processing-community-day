@@ -11,24 +11,21 @@
     "email": "codecircles@proton.me"
   },
   "organization_name": "Code Circles",
-  "organization_url": "",
-  "organization_type": "Meetup, code club, community group",
+  "organization_url": "http://codecircles.neocities.org",
+  "organization_type": "",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Karachi",
   "event_location": {
-    "address": "",
-    "plus_code": "7JP9W42H+926"
+    "address": "Centre for Arts and Wellness (CFAW), 50/3 Maqboolabad, Sharfabad, Bahadurabad, Karachi, Sindh",
+    "plus_code": "7JP9V3P7+75"
   },
-  "event_date": "2026-10-16",
-  "event_start_time": "",
+  "event_date": "2026-10-30",
+  "event_start_time": "18:00",
   "event_end_time": "",
   "event_short_description": "Introduction to OpenProcessing",
   "event_activities": [
-    "Hands-on workshops",
-    "Live coding",
-    "Beginner introductions to Processing or p5.js",
-    "Creative coding jams or hack sessions"
+    "Beginner introductions to Processing or p5.js"
   ],
   "event_page_url": "",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-karachi-2026/48900",
