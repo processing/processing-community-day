@@ -1,0 +1,44 @@
+{
+  "id": "pcd-toronto-interaccess-2026",
+  "uid": "220f8be",
+  "organizers": [
+    {
+      "name": "Stephen Boyd (sspboyd)"
+    },
+    {
+      "name": "Nick Fox-Grieg"
+    }
+  ],
+  "primary_contact": {
+    "name": "Stephen Boyd (sspboyd)",
+    "email": "stephen@sspboyd.ca"
+  },
+  "organization_name": "InterAccess",
+  "organization_url": "https://www.interaccess.org",
+  "organization_type": "Nonprofit, foundation, association",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD Toronto @ InterAccess",
+  "event_location": {
+    "address": "32 Lisgar Street, Unit 4 & 5",
+    "plus_code": "87M2JHRG+RJ"
+  },
+  "event_date": "2026-10-20",
+  "event_start_time": "18:00",
+  "event_end_time": "21:00",
+  "event_short_description": "Processing Community Day at InterAccess is a show-and-tell for anyone using Processing.",
+  "event_activities": [
+    "Show-and-tell"
+  ],
+  "event_page_url": "https://luma.com/omjde84j",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-toronto-2026/48865/4?u=sspboyd",
+  "city": "Toronto",
+  "country": "Canada",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 367,
+    "submitted_by_github": "sspboyd",
+    "submitted_date": "2026-10-15",
+    "maintainer_notes": ""
+  }
+}
