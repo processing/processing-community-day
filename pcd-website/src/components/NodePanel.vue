@@ -362,7 +362,7 @@ const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEve
             <div class="info-card-date-details">
               <span v-if="node.date_tbd" class="date-tbd-pill">{{ t('panel.date_tbd') }}</span>
               <div v-else class="info-card-date-line">
-                <span class="info-card-date">{{ formatDateRange(node.event_date ?? '', node.event_end_date, false, locale) }}</span>
+                <span class="info-card-date">{{ formatDateRange(node.event_date ?? '', node.event_end_date, false, locale, true) }}</span>
                 <template v-if="isPastEvent(node)">
                   <span class="date-tbd-pill past-event-pill">{{ t('panel.past_event') }}</span>
                   <button type="button" class="hide-past-events-link" @click="emit('hide-past-events')">{{ t('filters.hide_past') }}</button>

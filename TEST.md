@@ -1,5 +1,13 @@
 # Tests
 
+## Event info card dates
+
+**File:** `.github/scripts/date-format.test.mjs`
+**Run:** `node --test .github/scripts/date-format.test.mjs`
+**Requires:** Node 22.18+ or Node 24 for native TypeScript imports.
+
+Covers weekdays on single dates and ranges, month and year boundaries, all nine supported locales, and unchanged compact popup formatting. Included in `scripts/run-tests.sh`. Run with `TZ=Pacific/Honolulu` and `TZ=Pacific/Kiritimati` to check that date-only weekdays do not shift with the visitor's time zone. Visually check single-day and multi-day event info cards on desktop and mobile.
+
 ## Organizer Kit and zine OG images
 
 **File:** `.github/scripts/og-images.test.mjs`

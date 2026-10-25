@@ -40,14 +40,19 @@ export function formatDate(dateString: string, abbrev = false, locale = 'en'): s
   }
 }
 
-export function formatDateRange(startDate: string, endDate?: string, abbrev = false, locale = 'en'): string {
-  if (!endDate || endDate === startDate) return formatDate(startDate, abbrev, locale);
+export function formatDateRange(startDate: string, endDate?: string, abbrev = false, locale = 'en', includeWeekday = false): string {
+  if (!includeWeekday && (!endDate || endDate === startDate)) return formatDate(startDate, abbrev, locale);
   try {
     const [sy, sm, sd] = startDate.split('-').map(Number);
-    const [ey, em, ed] = endDate.split('-').map(Number);
+    const [ey, em, ed] = (endDate || startDate).split('-').map(Number);
     const start = new Date(Date.UTC(sy, sm - 1, sd));
     const end = new Date(Date.UTC(ey, em - 1, ed));
     const intlLocale = toIntlLocale(locale);
+    if (includeWeekday) {
+      return new Intl.DateTimeFormat(intlLocale, {
+        weekday: abbrev ? 'short' : 'long', year: 'numeric', month: abbrev ? 'short' : 'long', day: 'numeric', timeZone: 'UTC',
+      }).formatRange(start, end);
+    }
     const monthStyle = abbrev ? 'short' : 'long';
     const sameYear = sy === ey;
     const sameMonth = sameYear && sm === em;
