@@ -8,7 +8,7 @@
   ],
   "primary_contact": {
     "name": "Bedirhan Ugur",
-    "email": "bedirxn@gmail.com"
+    "email": "hello@bedirxanugur.com"
   },
   "organization_name": "",
   "organization_url": "https://www.nilufer.bel.tr",
@@ -17,13 +17,13 @@
   "event_url": "",
   "event_name": "PCD @ Bursa",
   "event_location": {
-    "address": "Nilüfer İnovasyon Merkezi",
+    "address": "Nilüfer İnovasyon Merkezi - İhsaniye, Cumhuriyet Meydanı 2/A, D:2/B Blok, 16130 Nilüfer, Bursa, Türkiye",
     "plus_code": "8GGC6X8M+MV"
   },
-  "event_date": "2026-11-06",
-  "event_start_time": "14:00",
-  "event_end_time": "18:00",
-  "event_short_description": "",
+  "event_date": "2026-11-07",
+  "event_start_time": "13:00",
+  "event_end_time": "17:00",
+  "event_short_description": "An event exploring creative coding, generative art, algorithms, and machines through Processing and p5.js",
   "event_activities": [
     "Show-and-tell",
     "Hands-on workshops",
