@@ -1,0 +1,39 @@
+{
+  "id": "ctrrrl-zine",
+  "title": "CTRRRL-ZINE",
+  "topic": "Introduction to zines and creative coding",
+  "created_by": "Caroline Dinh",
+  "summary": "A punk guide to creative coding.",
+  "downloads": [
+    {
+      "file": "ctrrrl-zine-reader.pdf",
+      "file_size": "929.9 kB",
+      "role": "reader-order"
+    },
+    {
+      "file": "ctrrrl-zine-printready.pdf",
+      "file_size": "924.8 kB",
+      "role": "print-ready"
+    }
+  ],
+  "license": "CC BY-SA 4.0",
+  "intake": {
+    "issue_number": 383,
+    "submitted_by_github": "swecaroline",
+    "submitted_date": "2026-10-28",
+    "maintainer_notes": ""
+  },
+  "tags": [
+    "beginner",
+    "p5js"
+  ],
+  "languages": [
+    "English"
+  ],
+  "created_by_url": "https://urlocalcyb.org/",
+  "cover": {
+    "src": "cover.jpg",
+    "alt": "CTRRRL-ZINE"
+  },
+  "activity_type": "workshop, self-guided activity, template"
+}
