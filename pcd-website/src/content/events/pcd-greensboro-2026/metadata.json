@@ -11,10 +11,10 @@
     "email": "leileixiawork@gmail.com"
   },
   "organization_name": "University of North Carolina Greensboro",
-  "organization_url": "",
-  "organization_type": "",
+  "organization_url": "https://jtccp.uncg.edu/event/processing-community-day/",
+  "organization_type": "School, university, library",
   "online_event": false,
-  "event_url": "",
+  "event_url": "https://pcd-gso.framer.website",
   "event_name": "PCD @ Greensboro",
   "event_location": {
     "address": "The Jeanne Tannenbaum Center for Creative Practice,\n842 W Gate City Blvd, Greensboro, NC",
@@ -26,11 +26,13 @@
   "event_end_time": "18:00",
   "event_short_description": "",
   "event_activities": [
+    "Show-and-tell",
     "Hands-on workshops",
+    "Beginner introductions to Processing or p5.js",
     "Creative coding jams or hack sessions",
     "Student project presentations"
   ],
-  "event_page_url": "",
+  "event_page_url": "https://pcd-gso.framer.website",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-greensboro-2026/48142",
   "city": "Greensboro",
   "country": "USA",
