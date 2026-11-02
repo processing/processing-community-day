@@ -1,26 +1,36 @@
 {
   "id": "pcd-leon-2026",
   "uid": "b94361e",
-  "organizers": [],
+  "organizers": [
+    {
+      "name": "Edmundo Medel"
+    },
+    {
+      "name": "Machine Memories"
+    }
+  ],
   "primary_contact": {
     "name": "Edmundo Medel",
     "email": "edramede@gmail.com"
   },
   "organization_name": "Visuales Perros",
   "organization_url": "",
-  "organization_type": "Meetup, code club, community group",
+  "organization_type": "",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ León",
   "event_location": {
-    "address": "",
-    "plus_code": "75HW489H+CHM"
+    "address": "Hermanos Aldama 155, Centro, 37004 León de los Aldama, Gto.",
+    "plus_code": "75HW48F9+6V"
   },
-  "event_date": "",
-  "event_start_time": "",
-  "event_end_time": "",
-  "event_short_description": "",
-  "event_activities": [],
+  "event_date": "2026-11-14",
+  "event_start_time": "10:00",
+  "event_end_time": "15:00",
+  "event_short_description": "Encuentro sobre p5.js y el código libre.",
+  "event_activities": [
+    "Live coding",
+    "Creative coding jams or hack sessions"
+  ],
   "event_page_url": "",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-leon-mx-2026/48954",
   "city": "Leon",
