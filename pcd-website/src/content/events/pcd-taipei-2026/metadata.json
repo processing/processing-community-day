@@ -1,0 +1,51 @@
+{
+  "id": "pcd-taipei-2026",
+  "uid": "165666c",
+  "organizers": [
+    {
+      "name": "[Chappie](https://www.instagram.com/stories/whereischappie/)"
+    },
+    {
+      "name": "[ChihYu Chen](https://www.instagram.com/____cychen/)"
+    },
+    {
+      "name": "Chad"
+    }
+  ],
+  "primary_contact": {
+    "name": "Chih-Yu Chen",
+    "email": "ccctw2026@gmail.com"
+  },
+  "organization_name": "Creative Code Commons, Fluidnoise, c2x3",
+  "organization_url": "https://www.instagram.com/ccc.taiwan/",
+  "organization_type": "Meetup, code club, community group",
+  "online_event": false,
+  "event_url": "https://meet.google.com/tgf-rieh-opf",
+  "event_name": "PCD @ Taipei",
+  "event_location": {
+    "address": "108臺北市萬華區武昌街二段83之6號5樓, Taiwan",
+    "plus_code": "7QQ32GW4+63"
+  },
+  "event_date": "2026-11-07",
+  "event_start_time": "13:00",
+  "event_end_time": "18:00",
+  "event_short_description": "2026 PCDTaipei - Playground 「寫程式，我壓力山大！」",
+  "event_activities": [
+    "Show-and-tell",
+    "Live coding",
+    "Creative coding jams or hack sessions",
+    "Screening",
+    "Other"
+  ],
+  "event_page_url": "https://luma.com/1nwa9kne?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAcGRvZgJzcnRjBmFwcF9pZA85MzY2MTk3NDMzOTI0NTkAAaeUafBs0oVs-cRx9Rws3USvDHDYTGMOs2NzNrt26T8_VHV08YPLlGrdgj5Hdg_aem_A0tmMef1c46-706O_ygslA&utm_id=97760_v0_s00_e0_tv3_a1dennh8qfby2g",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-taipei-2026/49875",
+  "city": "Taipei",
+  "country": "Taiwan",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 389,
+    "submitted_by_github": "ccctw-hub",
+    "submitted_date": "2026-11-05",
+    "maintainer_notes": ""
+  }
+}
