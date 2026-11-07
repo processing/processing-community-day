@@ -15,6 +15,7 @@ tests=(
   ".github/scripts/plus-code.test.mjs"
   ".github/scripts/safe-storage.test.mjs"
   ".github/scripts/zines.test.mjs"
+  ".github/scripts/schema-org.test.mjs"
 )
 
 for test in "${tests[@]}"; do
@@ -25,11 +26,17 @@ done
 printf '\n=== .github/scripts/zine-build.test.mjs ===\n'
 node --test ".github/scripts/zine-build.test.mjs"
 
+printf '\n=== .github/scripts/schema-org-fixture-build.test.mjs ===\n'
+node --test ".github/scripts/schema-org-fixture-build.test.mjs"
+
 printf '\n=== Build data.json dependencies ===\n'
 npm --prefix "${root_dir}/pcd-website" run build
 
 printf '\n=== .github/scripts/data-json.test.mjs ===\n'
 node --test ".github/scripts/data-json.test.mjs"
+
+printf '\n=== .github/scripts/schema-org-build.test.mjs ===\n'
+node --test ".github/scripts/schema-org-build.test.mjs"
 
 printf '\n=== .github/scripts/og-images.test.mjs ===\n'
 node --test ".github/scripts/og-images.test.mjs"

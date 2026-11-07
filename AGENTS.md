@@ -37,13 +37,16 @@ node --test .github/scripts/plus-code.test.mjs
 node --test .github/scripts/zines.test.mjs
 node --test .github/scripts/zine-build.test.mjs
 node --test .github/scripts/process-new-zine-issue.test.mjs
+node --test .github/scripts/schema-org.test.mjs
+node --test .github/scripts/schema-org-fixture-build.test.mjs  # runs its own build with a placeholder fixture
 
 # Requires npm run build from pcd-website/ first:
 node --test .github/scripts/data-json.test.mjs
 node --test .github/scripts/og-images.test.mjs
+node --test .github/scripts/schema-org-build.test.mjs
 ```
 
-Need to run the tests end-to-end? `./scripts/run-tests.sh` executes the helper, event and zine intake, plus-code, and zine metadata suites; runs the zine fixture build; builds the Astro site via `npm --prefix pcd-website run build`; and then runs `data-json.test.mjs` in sequence. Run this script from the repo root after installing dependencies so you get the full battery of checks in one shot.
+Need to run the tests end-to-end? `./scripts/run-tests.sh` executes the helper, event and zine intake, plus-code, and zine metadata suites; runs the zine and schema.org placeholder fixture builds; builds the Astro site via `npm --prefix pcd-website run build`; and then runs `data-json.test.mjs`, `schema-org-build.test.mjs`, and `og-images.test.mjs` in sequence. Run this script from the repo root after installing dependencies so you get the full battery of checks in one shot.
 
 No install needed — `open-location-code` is already available at `pcd-website/node_modules/`.
 
@@ -98,6 +101,17 @@ The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anc
 
 **"Confirmed" events in data.json:** An event is included in the `/data.json` feed if it is present in `loadNodes()` and has no `placeholder: true` flag. There are currently no other event states (draft, hidden, etc.). If new states are added in future, the filter in `src/pages/data.json.ts` must be updated explicitly.
 
+### Structured data
+
+`src/lib/schema.mjs` builds Schema.org JSON-LD at build time from `loadNodes()` output; it is pure `.mjs` so `node --test` can import it, and it type-checks `Node` fields through a JSDoc typedef. Canonical, non-placeholder event pages (`/event/<slug>-<uid>/`) emit one `Event` in the head; redirect variants and placeholders emit none. The homepage emits an `@graph` of the Processing Foundation `Organization`, the `WebSite`, and the PCD `EventSeries` (names/URLs from `config.ts`) that each event references through `superEvent: { '@id' }`. `/events/` emits an `ItemList` of non-placeholder canonical event URLs; `SiteLayout.astro` forwards a `head` slot for this.
+
+- Every block must be serialized with `jsonLdScript()`, which escapes `<`, because `set:html` does not escape and descriptions come from GitHub issues.
+- Metadata has no timezone, so times carry no offset. Times are used only for single-day, non-online events with valid 0–23/0–59 values; an end time at or before the start is omitted rather than moved to the next day. Online and multi-day events use dates only. Dateless events omit `startDate`.
+- Location-TBD events keep their city/country `PostalAddress` but never emit `geo`, since the plus code only places the map pin.
+- Organizer and organization names go through `markdownToText()` (`src/lib/markdown-text.mjs`, shared with `nodes.ts`) because they may contain Markdown links; never use `*_html` fields. No `Person.url`, no `offers`, and never `primary_contact`.
+- `eventStatus` is always `EventScheduled` because withdrawn events are deleted. Adding a cancelled or postponed state requires updating `eventJsonLd()`.
+- Google event rich results require `startDate` and exclude online-only events, so dateless events and CC Fest are expected to be ineligible while still valid Schema.org. Location-TBD eligibility is unconfirmed. Event details render client-side, so verify eligibility with Google's Rich Results Test on a deployed URL.
+
 ### Key implementation details
 
 - **Favicons:** `public/favicon.svg` is the source artwork and primary favicon in `BaseLayout.astro`. The preceding ICO link provides a fallback using the same artwork at 16, 32, and 48 pixels. Both URLs use a `?v=` query derived from the SVG's SHA-256 content hash, so artwork changes automatically bust browser caches on the next build while unchanged artwork keeps stable URLs. After changing the SVG, run `node scripts/generate-favicon.mjs` from `pcd-website/` to regenerate `public/favicon.ico` using the existing Sharp dependency.
@@ -144,7 +158,7 @@ The map filter header (`.filter-panel-header`) and event detail header (`.panel-
 | `src/components/Footer.astro` | Shared site footer, policy links, community links, and sponsors |
 | `src/layouts/BaseLayout.astro` | Shared HTML document shell and metadata |
 | `src/layouts/MapLayout.astro` | Map-page shell and Leaflet stylesheet links |
-| `src/layouts/SiteLayout.astro` | Standard static content-page shell |
+| `src/layouts/SiteLayout.astro` | Standard static content-page shell; forwards a `head` slot to `BaseLayout` |
 | `src/layouts/DocsLayout.astro` | Organizer Kit shell with sidebar, page TOC, and footer |
 | `src/lib/analytics.ts` | `trackEvent()` Fathom helper + `AnalyticsEvent` type + event-name constants |
 | `src/lib/carto.ts` | Adds the optional local-development CARTO API key to basemap tile URLs |
@@ -152,6 +166,8 @@ The map filter header (`.filter-panel-header`) and event detail header (`.panel-
 | `src/lib/nodes.ts` | `Node` interface + `loadNodes()` |
 | `src/lib/format.ts` | `formatDate()`, `formatDateRange()`, `calendarLinks()`, etc. |
 | `src/lib/popup.ts` | Leaflet popup HTML generation (`makePopupContent()`) |
+| `src/lib/schema.mjs` | Build-time Schema.org JSON-LD for event pages, the homepage graph, and the `/events/` ItemList, plus the `jsonLdScript()` escaper |
+| `src/lib/markdown-text.mjs` | `markdownToText()` plain-text conversion shared by `nodes.ts` and `schema.mjs` |
 | `src/styles/base.css` | Shared design tokens, reset, typography, focus, and skip-link styles |
 | `src/styles/map.css` | Map layout, controls, popup styling, and Leaflet overrides |
 | `src/styles/prose.css` | Standard static content-page presentation styles |

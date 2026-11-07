@@ -1,0 +1,36 @@
+{
+  "id": "schema-placeholder-fixture",
+  "uid": "f1c7e00",
+  "organizers": [{ "name": "Fixture Organizer" }],
+  "primary_contact": {
+    "name": "Fixture Contact",
+    "email": "fixture@example.com"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "Schema Placeholder Fixture",
+  "event_location": {
+    "name": "Fixture Hall",
+    "address": "1 Fixture Street",
+    "plus_code": "9C3XGV2C+XX"
+  },
+  "event_date": "2026-10-24",
+  "event_start_time": "10:00",
+  "event_end_time": "16:00",
+  "event_short_description": "Placeholder event used by schema-org-fixture-build.test.mjs.",
+  "event_activities": [],
+  "event_page_url": "",
+  "forum_thread_url": "",
+  "city": "London",
+  "country": "UK",
+  "placeholder": true,
+  "intake": {
+    "issue_number": 0,
+    "submitted_by_github": "fixture",
+    "submitted_date": "2026-09-30",
+    "maintainer_notes": ""
+  }
+}

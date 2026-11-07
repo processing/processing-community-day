@@ -2,6 +2,7 @@ import { getCollection } from 'astro:content';
 import { OpenLocationCode } from 'open-location-code';
 import { micromark } from 'micromark';
 import { gfm, gfmHtml } from 'micromark-extension-gfm';
+import { markdownToText } from './markdown-text.mjs';
 
 export function canonicalEventId(node: Pick<Node, 'id' | 'uid'>): string {
   return `${node.id}-${node.uid}`;
@@ -109,22 +110,6 @@ function inlineMarkdownToHtml(text: string): string {
   if (!text) return '';
   const html = markdownToHtml(text).trim();
   return html.replace(/^<p>/, '').replace(/<\/p>$/, '');
-}
-
-function markdownToText(markdown: string): string {
-  return markdown
-    .replace(/```[\s\S]*?```/g, '')
-    .replace(/`([^`]+)`/g, '$1')
-    .replace(/!\[([^\]]*)\]\([^)]+\)/g, '$1')
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    .replace(/^#{1,6}\s+/gm, '')
-    .replace(/^\s*>\s?/gm, '')
-    .replace(/^\s*[-*+]\s+/gm, '')
-    .replace(/^\s*\d+\.\s+/gm, '')
-    .replace(/\*\*([^*]+)\*\*/g, '$1')
-    .replace(/\*([^*]+)\*/g, '$1')
-    .replace(/_([^_]+)_/g, '$1')
-    .trim();
 }
 
 export async function loadNodes(): Promise<Node[]> {

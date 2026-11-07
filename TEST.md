@@ -113,6 +113,22 @@ These tests cover the shared pure functions extracted into `event-issue-helpers.
 
 ---
 
+## Schema.org structured data
+
+**Files:** `.github/scripts/schema-org.test.mjs`, `.github/scripts/schema-org-build.test.mjs`, `.github/scripts/schema-org-fixture-build.test.mjs`
+**Run:** `node --test .github/scripts/schema-org.test.mjs`; then `npm --prefix pcd-website run build && node --test .github/scripts/schema-org-build.test.mjs`; `node --test .github/scripts/schema-org-fixture-build.test.mjs` runs its own build.
+**Requires:** The unit suite needs no build. The build-output suite reads `pcd-website/dist/`. The fixture suite temporarily adds a placeholder event from `.github/scripts/fixtures/events/`, builds the site, and removes the fixture; run it before the main build so `dist/` does not contain the fixture.
+
+| Suite | Cases |
+|---|---|
+| `schema-org.test.mjs` | `</script>` escaping; dateless, date-only, timed, multi-day, same-day end date, online, malformed, out-of-range, midnight, and end-before-start times; Markdown-free organizer names; organization precedence; omitted organizers; no primary contact; virtual, location-TBD (no `geo`), and confirmed physical locations; `superEvent` references the homepage `EventSeries`; ItemList positions |
+| `schema-org-build.test.mjs` | One parseable `Event` per canonical page with `url` equal to `data.json`'s `canonical_url`; `geo` only for confirmed physical locations; `startDate` follows `event_date` and is absent when dateless; no blocks on redirect pages; no contact emails or Markdown names anywhere; homepage `@graph`; `/events/` ItemList matches the feed |
+| `schema-org-fixture-build.test.mjs` | A placeholder event's canonical page has no JSON-LD and its URL is absent from the `/events/` ItemList |
+
+Google eligibility is a separate check from Schema.org validity: dateless and online-only events are expected to be ineligible for event rich results, and location-TBD eligibility is unconfirmed. After deployment, run the Rich Results Test on a dated in-person event URL and on `pcd-tokyo-2026-<uid>`, and confirm the rendered page shows the same details as the JSON-LD.
+
+---
+
 ## Zines
 
 **Files:** `.github/scripts/zines.test.mjs`, `.github/scripts/zine-build.test.mjs`, `.github/scripts/process-new-zine-issue.test.mjs`
@@ -129,7 +145,7 @@ These tests cover the shared pure functions extracted into `event-issue-helpers.
 
 ## Single-command test run
 
-Run `./scripts/run-tests.sh` from the repo root after installing dependencies (`pcd-website` already has `node_modules/` from `npm install`). The script executes the helper, event and zine intake, plus-code, and zine metadata suites; runs the zine fixture build; then builds the Astro site (`npm run build` inside `pcd-website/`) before running `data-json.test.mjs`. Use this single command whenever you want to verify the full test battery end to end.
+Run `./scripts/run-tests.sh` from the repo root after installing dependencies (`pcd-website` already has `node_modules/` from `npm install`). The script executes the helper, event and zine intake, plus-code, and zine metadata suites; runs the zine and schema.org placeholder fixture builds; then builds the Astro site (`npm run build` inside `pcd-website/`) before running `data-json.test.mjs`, `og-images.test.mjs`, and `schema-org-build.test.mjs`. Use this single command whenever you want to verify the full test battery end to end.
 
 ---
 
