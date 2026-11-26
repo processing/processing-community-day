@@ -1,0 +1,68 @@
+{
+  "id": "circle-or-square",
+  "title": "Circle or square?",
+  "topic": "A beginner p5.js activity that uses random() and if/else to fill a grid with circles or nested squares.",
+  "created_by": "Bedirhan Ugur",
+  "summary": "A one-sheet mini-zine that walks beginners through a p5.js sketch: set up a canvas, \nbuild a grid with nested loops, then let random() choose a circle or a nested square.",
+  "downloads": [
+    {
+      "file": "read-bw-en.pdf",
+      "file_size": "441.5 kB",
+      "role": "reader-order"
+    },
+    {
+      "file": "print-bw-en.pdf",
+      "file_size": "902.1 kB",
+      "role": "print-ready"
+    },
+    {
+      "file": "read-bw-tr.pdf",
+      "file_size": "683.7 kB"
+    },
+    {
+      "file": "print-bw-tr.pdf",
+      "file_size": "1.1 MB"
+    },
+    {
+      "file": "read-bw-fr.pdf",
+      "file_size": "429.1 kB"
+    },
+    {
+      "file": "print-bw-fr.pdf",
+      "file_size": "887.4 kB"
+    },
+    {
+      "file": "color.zip",
+      "file_size": "2.8 MB"
+    }
+  ],
+  "license": "CC BY-SA 4.0",
+  "intake": {
+    "issue_number": 393,
+    "submitted_by_github": "bedirxanugur",
+    "submitted_date": "2026-11-26",
+    "maintainer_notes": "Three language editions exist (Turkish, English, French).\n\nReader-order and Print-ready contain the black-and-white, white-background English edition (`read-bw-en.pdf`, `print-bw-en.pdf`), recommended for toner-friendly printing.\n\nAdditional files: black-and-white Turkish and French editions (`read-bw-tr.pdf`, `print-bw-tr.pdf`, `read-bw-fr.pdf`, `print-bw-fr.pdf`) and `color.zip`, containing the full-color reader-order and print-ready PDFs for all three languages (`read-en.pdf`, `print-en.pdf`, `read-tr.pdf`, `print-tr.pdf`, `read-fr.pdf`, `print-fr.pdf`).\n\nTypography: Space Grotesk and JetBrains Mono (SIL Open Font License)."
+  },
+  "tags": [
+    "beginner",
+    "p5.js",
+    "generative art",
+    "randomness",
+    "creative coding"
+  ],
+  "languages": [
+    "Turkish",
+    "English",
+    "French"
+  ],
+  "created_by_url": "https://www.bedirxanugur.com/",
+  "cover": {
+    "src": "cover.jpg",
+    "alt": "Circle or square?"
+  },
+  "activity_type": "Self-guided activity; also works as a short workshop or classroom exercise.",
+  "zine_format": "Single-sheet 8-page folded mini-zine on A4",
+  "duration": "45–60 minutes.",
+  "materials": "- A computer with a web browser\n- The p5.js Web Editor (editor.p5js.org), or Processing in p5.js mode\n- Optional, for the paper zine: a printer, one sheet of A4 paper, and scissors",
+  "attribution": "Circle or square? by Bedirhan Ugur, licensed under CC BY-SA 4.0."
+}
